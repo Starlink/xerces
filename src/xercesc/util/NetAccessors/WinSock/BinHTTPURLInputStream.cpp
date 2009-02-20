@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: BinHTTPURLInputStream.cpp 673440 2008-07-02 16:53:32Z amassari $
+ * $Id: BinHTTPURLInputStream.cpp 734988 2009-01-16 12:34:58Z johns $
  */
 
 
@@ -425,6 +425,10 @@ BinHTTPURLInputStream::BinHTTPURLInputStream(const XMLURL& urlSource, const XMLN
 
             XMLCh *newURLString = findHeader("Location");
             ArrayJanitor<XMLCh> janNewURLString(newURLString, memoryManager);
+
+            if(newURLString == 0 || *newURLString == 0) {
+                ThrowXMLwithMemMgr1(NetAccessorException, XMLExcepts::File_CouldNotOpenFile, url.getURLText(), memoryManager);
+            }
 
             XMLURL newURL(memoryManager);
             newURL.setURL(url, newURLString);

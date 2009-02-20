@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: MacOSUnicodeConverter.hpp 676954 2008-07-15 16:29:19Z dbertoni $
+ * $Id: MacOSUnicodeConverter.hpp 738907 2009-01-29 16:02:48Z amassari $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_MACOSUNICODECONVERTER_HPP)
@@ -104,7 +104,7 @@ protected :
     static bool IsMacOSUnicodeConverterSupported(void);
 	
 	// Copy from a C string to a Str255
-	static void MacOSUnicodeConverter::CopyCStringToPascal(const char* c, Str255 pas);
+	static void CopyCStringToPascal(const char* c, Str255 pas);
 
 private :
 	friend class XMLPlatformUtils;

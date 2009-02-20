@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ComplexTypeInfo.cpp 677396 2008-07-16 19:36:20Z amassari $
+ * $Id: ComplexTypeInfo.cpp 707375 2008-10-23 13:53:23Z amassari $
  */
 
 // ---------------------------------------------------------------------------
@@ -610,7 +610,7 @@ ContentSpecNode* ComplexTypeInfo::expandContentModel(ContentSpecNode* const spec
             ContentSpecNode::Loop
             , retNode
             , 0
-            , false
+            , true
             , true
             , fMemoryManager
         );

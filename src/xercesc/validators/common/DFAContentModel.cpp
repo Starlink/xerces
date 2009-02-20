@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DFAContentModel.cpp 679340 2008-07-24 10:28:29Z borisk $
+ * $Id: DFAContentModel.cpp 708914 2008-10-29 14:21:52Z amassari $
  */
 
 
@@ -1309,6 +1309,7 @@ CMNode* DFAContentModel::buildSyntaxTree(ContentSpecNode* const curNode
             )
             , curIndex
             , true
+            , fLeafCount
             , fMemoryManager
         );
         fLeafListType[curIndex] = curType;
