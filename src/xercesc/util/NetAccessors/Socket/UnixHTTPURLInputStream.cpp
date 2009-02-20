@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: UnixHTTPURLInputStream.cpp 676796 2008-07-15 05:04:13Z dbertoni $
+ * $Id: UnixHTTPURLInputStream.cpp 734988 2009-01-16 12:34:58Z johns $
  */
 
 #if HAVE_CONFIG_H
@@ -205,6 +205,10 @@ UnixHTTPURLInputStream::UnixHTTPURLInputStream(const XMLURL& urlSource, const XM
 
             XMLCh *newURLString = findHeader("Location");
             ArrayJanitor<XMLCh> janNewURLString(newURLString, memoryManager);
+
+            if(newURLString == 0 || *newURLString == 0) {
+                ThrowXMLwithMemMgr1(NetAccessorException, XMLExcepts::File_CouldNotOpenFile, url.getURLText(), memoryManager);
+            }
 
             XMLURL newURL(memoryManager);
             newURL.setURL(url, newURLString);

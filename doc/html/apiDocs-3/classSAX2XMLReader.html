@@ -402,7 +402,7 @@ Query the current state of any feature in a SAX2 XMLReader.
 Query the current value of a property in a SAX2 XMLReader. 
 <p>
 The parser owns the returned pointer. The memory allocated for the returned pointer will be destroyed when the parser is deleted.<p>
-To ensure assessiblity of the returned information after the parser is deleted, callers need to copy and store the returned information somewhere else; otherwise you may get unexpected result. Since the returned pointer is a generic void pointer, see <a href="http://xerces.apache.org/xerces-c/program-sax2.html#SAX2Properties">http://xerces.apache.org/xerces-c/program-sax2.html#SAX2Properties</a> to learn exactly what type of property value each property returns for replication.<p>
+To ensure assessiblity of the returned information after the parser is deleted, callers need to copy and store the returned information somewhere else; otherwise you may get unexpected result. Since the returned pointer is a generic void pointer, see <a href="http://xerces.apache.org/xerces-c/program-sax2-3.html#SAX2Properties">http://xerces.apache.org/xerces-c/program-sax2-3.html#SAX2Properties</a> to learn exactly what type of property value each property returns for replication.<p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>name</em>&nbsp;</td><td>The unique identifier (URI) of the property being set. </td></tr>
@@ -571,7 +571,7 @@ Applications may register a new or different handler in the middle of a parse, a
 Set the state of any feature in a SAX2 XMLReader. 
 <p>
 Supported features in SAX2 for xerces-c are: <br>
-(See <a href="http://xerces.apache.org/xerces-c/program-sax2.html#SAX2Features">http://xerces.apache.org/xerces-c/program-sax2.html#SAX2Features</a> for detail description).<p>
+(See <a href="http://xerces.apache.org/xerces-c/program-sax2-3.html#SAX2Features">http://xerces.apache.org/xerces-c/program-sax2-3.html#SAX2Features</a> for detail description).<p>
 <br>
 <a href="http://xml.org/sax/features/validation">http://xml.org/sax/features/validation</a> (default: true) <br>
 <a href="http://xml.org/sax/features/namespaces">http://xml.org/sax/features/namespaces</a> (default: true) <br>
@@ -628,15 +628,15 @@ Supported features in SAX2 for xerces-c are: <br>
 Set the value of any property in a SAX2 XMLReader. 
 <p>
 Supported properties in SAX2 for xerces-c are: <br>
-(See <a href="http://xerces.apache.org/xerces-c/program-sax2.html#SAX2Properties">http://xerces.apache.org/xerces-c/program-sax2.html#SAX2Properties</a> for detail description).<p>
+(See <a href="http://xerces.apache.org/xerces-c/program-sax2-3.html#SAX2Properties">http://xerces.apache.org/xerces-c/program-sax2-3.html#SAX2Properties</a> for detail description).<p>
 <br>
 <a href="http://apache.org/xml/properties/schema/external-schemaLocation">http://apache.org/xml/properties/schema/external-schemaLocation</a> <br>
 <a href="http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation.">http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation.</a><p>
-It takes a void pointer as the property value. Application is required to initialize this void pointer to a correct type. See <a href="http://xerces.apache.org/xerces-c/program-sax2.html#SAX2Properties">http://xerces.apache.org/xerces-c/program-sax2.html#SAX2Properties</a> to learn exactly what type of property value each property expects for processing. Passing a void pointer that was initialized with a wrong type will lead to unexpected result. If the same property is set more than once, the last one takes effect.<p>
+It takes a void pointer as the property value. Application is required to initialize this void pointer to a correct type. See <a href="http://xerces.apache.org/xerces-c/program-sax2-3.html#SAX2Properties">http://xerces.apache.org/xerces-c/program-sax2-3.html#SAX2Properties</a> to learn exactly what type of property value each property expects for processing. Passing a void pointer that was initialized with a wrong type will lead to unexpected result. If the same property is set more than once, the last one takes effect.<p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>name</em>&nbsp;</td><td>The unique identifier (URI) of the property being set. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>value</em>&nbsp;</td><td>The requested value for the property. See <a href="http://xerces.apache.org/xerces-c/program-sax2.html#SAX2Properties">http://xerces.apache.org/xerces-c/program-sax2.html#SAX2Properties</a> to learn exactly what type of property value each property expects for processing. Passing a void pointer that was initialized with a wrong type will lead to unexpected result. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>value</em>&nbsp;</td><td>The requested value for the property. See <a href="http://xerces.apache.org/xerces-c/program-sax2-3.html#SAX2Properties">http://xerces.apache.org/xerces-c/program-sax2-3.html#SAX2Properties</a> to learn exactly what type of property value each property expects for processing. Passing a void pointer that was initialized with a wrong type will lead to unexpected result. </td></tr>
   </table>
 </dl>
 <dl compact><dt><b>Exceptions:</b></dt><dd>
@@ -1631,7 +1631,7 @@ If no handler is installed, advanced callbacks are not invoked by the scanner. <
 </div><p>
 <hr>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="SAX2XMLReader_8hpp-source.html">SAX2XMLReader.hpp</a></ul>
-<hr size="1"><address style="text-align: right;"><small>Generated on Wed Sep 24 16:36:35 2008 for Xerces-C++ by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 18 07:56:11 2009 for Xerces-C++ by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.4 </small></address>
 </body>
