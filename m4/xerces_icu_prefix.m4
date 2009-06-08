@@ -21,7 +21,7 @@ AC_DEFUN([XERCES_ICU_PREFIX],
 	[	
 		xerces_cv_icu_prefix=
 		if test x"$with_icu" != x"no"; then
-			search_list="$with_icu /usr/local /usr"
+			search_list="$with_icu /usr /usr/local"
 			for i in $search_list; do			
 				if test -r $i/include/unicode/ucnv.h; then
 					xerces_cv_icu_prefix=$i
