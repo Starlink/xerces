@@ -23,7 +23,7 @@
 # $Id: configure.ac 744933 2009-02-16 15:13:42Z borisk $
 #
 
-AC_PREREQ(2.60)
+AC_PREREQ(2.5)
 AC_INIT([xerces-c],[3.0.1])
 AC_CONFIG_SRCDIR([src/Makefile.am])
 AC_CONFIG_LIBOBJ_DIR([src])
