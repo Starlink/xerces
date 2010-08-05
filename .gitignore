@@ -5,6 +5,7 @@ stamp-h?
 *.lo
 *.la
 *.loT
+.libs
 
 a.out.dSYM/
 config.h
