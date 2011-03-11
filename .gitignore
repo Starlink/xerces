@@ -11,6 +11,7 @@ a.out.dSYM/
 config.h
 config.log
 config.status
+configure.lineno
 libtool
 
 .dirstamp
@@ -18,3 +19,4 @@ libtool
 src/xercesc/util/Xerces_autoconf_config.hpp
 
 xerces-c.pc
+
