@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: MemBufInputSource.hpp 553941 2007-07-06 16:14:22Z amassari $
+ * $Id: MemBufInputSource.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 
@@ -76,7 +76,7 @@ public :
       *
       * Note that the system id provided serves two purposes. Firstly it is
       * going to be displayed in error messages as the source of the error.
-      * And secondly, any entities which are refered to from this entity
+      * And secondly, any entities which are referred to from this entity
       * via relative paths/URLs will be relative to this fake system id.
       *
       * @param  srcDocBytes     The actual data buffer to be parsed from.

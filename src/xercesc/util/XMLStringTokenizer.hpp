@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLStringTokenizer.hpp 555320 2007-07-11 16:05:13Z amassari $
+ * $Id: XMLStringTokenizer.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XMLSTRINGTOKENIZER_HPP)
@@ -153,7 +153,7 @@ private:
     //      The string to be parsed
 	//
     //  fDelimeters
-    //      A set of delimeter characters
+    //      A set of delimiter characters
     //
     //  fTokens
     //      A vector of the token strings

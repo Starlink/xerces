@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLDateTime.hpp 594002 2007-11-12 01:05:09Z cargilld $
+ * $Id: XMLDateTime.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XML_DATETIME_HPP)
@@ -80,7 +80,7 @@ public:
     // -----------------------------------------------------------------------
     // Implementation of Abstract Interface
     // -----------------------------------------------------------------------
-    
+
     virtual XMLCh*        getRawData() const;
 
     virtual const XMLCh*  getFormattedString() const;
@@ -130,7 +130,7 @@ public:
                                 , bool                    );
 
     static int            compareOrder(const XMLDateTime* const
-                                     , const XMLDateTime* const);                                    
+                                     , const XMLDateTime* const);
 
     /***
      * Support for Serialization/De-serialization
@@ -181,7 +181,7 @@ private:
     inline  void          copy(const XMLDateTime&);
 
     // allow multiple parsing
-    inline  void          initParser();
+    inline  bool          initParser();
 
     inline  bool          isNormalized()               const;
 
@@ -260,7 +260,7 @@ private:
     XMLSize_t    fEnd;
     XMLSize_t    fBufferMaxLen;
 
-    double       fMiliSecond;
+    double       fMilliSecond;
     bool         fHasTime;
 
     XMLCh*       fBuffer;
@@ -282,7 +282,7 @@ inline void XMLDateTime::setBuffer(const XMLCh* const aString)
     }
 
     if (fEnd > 0) {
-    
+
         if (fEnd > fBufferMaxLen)
         {
             fMemoryManager->deallocate(fBuffer);
@@ -300,7 +300,7 @@ inline void XMLDateTime::reset()
     for ( int i=0; i < TOTAL_SIZE; i++ )
         fValue[i] = 0;
 
-    fMiliSecond   = 0;
+    fMilliSecond   = 0;
     fHasTime      = false;
     fTimeZone[hh] = fTimeZone[mm] = 0;
     fStart = fEnd = 0;
@@ -314,7 +314,7 @@ inline void XMLDateTime::copy(const XMLDateTime& rhs)
     for ( int i = 0; i < TOTAL_SIZE; i++ )
         fValue[i] = rhs.fValue[i];
 
-    fMiliSecond   = rhs.fMiliSecond;
+    fMilliSecond   = rhs.fMilliSecond;
     fHasTime      = rhs.fHasTime;
     fTimeZone[hh] = rhs.fTimeZone[hh];
     fTimeZone[mm] = rhs.fTimeZone[mm];
@@ -334,23 +334,15 @@ inline void XMLDateTime::copy(const XMLDateTime& rhs)
     }
 }
 
-inline void XMLDateTime::assertBuffer() const
+inline bool XMLDateTime::initParser()
 {
-    if ( ( !fBuffer )            ||
-         ( fBuffer[0] == chNull ) )
-    {
-        ThrowXMLwithMemMgr(SchemaDateTimeException
-               , XMLExcepts::DateTime_Assert_Buffer_Fail
-               , fMemoryManager);
-    }
+    if (!fBuffer || fBuffer[0] == chNull)
+        return false;
 
-}
-
-inline void XMLDateTime::initParser()
-{
-    assertBuffer();
     fStart = 0;   // to ensure scan from the very first beginning
-                  // in case the pointer is updated accidentally by someone else.
+                  // in case the pointer is updated accidentally by
+                  // someone else.
+    return true;
 }
 
 inline bool XMLDateTime::isNormalized() const

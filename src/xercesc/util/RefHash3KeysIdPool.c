@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: RefHash3KeysIdPool.c 679340 2008-07-24 10:28:29Z borisk $
+ * $Id: RefHash3KeysIdPool.c 883368 2009-11-23 15:28:19Z amassari $
  */
 
 
@@ -73,10 +73,10 @@ RefHash3KeysIdPool<TVal, THasher>::RefHash3KeysIdPool(
     , fAdoptedElems(true)
     , fBucketList(0)
     , fHashModulus(modulus)
-    , fHasher(hasher)
     , fIdPtrs(0)
     , fIdPtrsCount(initSize)
     , fIdCounter(0)
+    , fHasher(hasher)
 {
     initialize(modulus);
 
@@ -130,10 +130,10 @@ RefHash3KeysIdPool<TVal, THasher>::RefHash3KeysIdPool(
     , fAdoptedElems(adoptElems)
     , fBucketList(0)
     , fHashModulus(modulus)
-    , fHasher(hasher)
     , fIdPtrs(0)
     , fIdPtrsCount(initSize)
     , fIdCounter(0)
+    , fHasher(hasher)
 {
     initialize(modulus);
 

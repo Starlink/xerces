@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMPrint.cpp 669844 2008-06-20 10:11:44Z borisk $
+ * $Id: DOMPrint.cpp 833057 2009-11-05 15:25:10Z borisk $
  */
 
 // ---------------------------------------------------------------------------
@@ -175,7 +175,7 @@ void usage()
             "    -?          Show this help.\n\n"
             "  * = Default if not provided explicitly.\n\n"
             "The parser has intrinsic support for the following encodings:\n"
-            "    UTF-8, USASCII, ISO8859-1, UTF-16[BL]E, UCS-4[BL]E,\n"
+            "    UTF-8, US-ASCII, ISO8859-1, UTF-16[BL]E, UCS-4[BL]E,\n"
             "    WINDOWS-1252, IBM1140, IBM037, IBM1047.\n"
           <<  XERCES_STD_QUALIFIER endl;
 }
@@ -381,6 +381,7 @@ int main(int argC, char* argV[])
     parser->setValidationScheme(gValScheme);
     parser->setDoNamespaces(gDoNamespaces);
     parser->setDoSchema(gDoSchema);
+    parser->setHandleMultipleImports (true);
     parser->setValidationSchemaFullChecking(gSchemaFullChecking);
     parser->setCreateEntityReferenceNodes(gDoCreate);
 

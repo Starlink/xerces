@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: MemBufFormatTarget.cpp 553937 2007-07-06 16:02:19Z amassari $
+ * $Id: MemBufFormatTarget.cpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #include <xercesc/framework/MemBufFormatTarget.hpp>
@@ -52,10 +52,13 @@ void MemBufFormatTarget::writeChars(const XMLByte* const toWrite
                                   , XMLFormatter * const)
 {
 
-    if (count) {
-        insureCapacity(count);
-        memcpy(&fDataBuf[fIndex], toWrite, count * sizeof(XMLByte));
-        fIndex += count;
+    if (count)
+    {
+      if (fIndex + count >= fCapacity)
+        ensureCapacity(count);
+
+      memcpy(&fDataBuf[fIndex], toWrite, count * sizeof(XMLByte));
+      fIndex += count;
     }
 
 }
@@ -81,12 +84,8 @@ void MemBufFormatTarget::reset()
 // ---------------------------------------------------------------------------
 //  MemBufFormatTarget: Private helper methods
 // ---------------------------------------------------------------------------
-void MemBufFormatTarget::insureCapacity(const XMLSize_t extraNeeded)
+void MemBufFormatTarget::ensureCapacity(const XMLSize_t extraNeeded)
 {
-    // If we can handle it, do nothing yet
-    if (fIndex + extraNeeded < fCapacity)
-        return;
-
     // Oops, not enough room. Calc new capacity and allocate new buffer
     const XMLSize_t newCap = ((fIndex + extraNeeded) * 2);
     XMLByte* newBuf = (XMLByte*) fMemoryManager->allocate
@@ -95,7 +94,7 @@ void MemBufFormatTarget::insureCapacity(const XMLSize_t extraNeeded)
     );//new XMLByte[newCap+4];
 
     // Copy over the old stuff
-    memcpy(newBuf, fDataBuf, fCapacity * sizeof(XMLByte) + 4);
+    memcpy(newBuf, fDataBuf, fIndex * sizeof(XMLByte));
 
     // Clean up old buffer and store new stuff
     fMemoryManager->deallocate(fDataBuf); //delete [] fDataBuf;
@@ -104,4 +103,3 @@ void MemBufFormatTarget::insureCapacity(const XMLSize_t extraNeeded)
 }
 
 XERCES_CPP_NAMESPACE_END
-

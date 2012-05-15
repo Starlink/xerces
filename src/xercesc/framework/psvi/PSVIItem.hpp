@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: PSVIItem.hpp 527149 2007-04-10 14:56:39Z amassari $
+ * $Id: PSVIItem.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_PSVIITEM_HPP)
@@ -132,7 +132,7 @@ public:
 
     /**
      * A list of error codes generated from validation attempts. 
-     * Need to find all the possible subclause reports that need reporting
+     * Need to find all the possible sub-clause reports that need reporting
      * 
      * @return list of error codes
      */

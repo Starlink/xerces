@@ -16,61 +16,20 @@
  */
 
 /*
- * $Id: XSTSHarnessHandlers.hpp 677563 2008-07-17 11:51:39Z amassari $
+ * $Id: XSTSHarnessHandlers.hpp 804211 2009-08-14 13:18:09Z amassari $
  */
 
 
 // ---------------------------------------------------------------------------
 //  Includes
 // ---------------------------------------------------------------------------
+#include "XSTSHarness.hpp"
 #include <xercesc/sax2/SAX2XMLReader.hpp>
 #include <xercesc/sax2/Attributes.hpp>
 #include <xercesc/sax2/DefaultHandler.hpp>
-#include <xercesc/util/XMLURL.hpp>
 #include <xercesc/util/RefVectorOf.hpp>
 
 XERCES_CPP_NAMESPACE_USE
-
-class XSTSErrorHandler : public ErrorHandler
-{
-public:
-    XSTSErrorHandler() : fSawErrors(false) {}
-
-    bool getSawErrors() const
-    {
-        return fSawErrors;
-    }
-    const XMLCh* getErrorText()
-    {
-        return fErrorText.getRawBuffer();
-    }
-
-    // -----------------------------------------------------------------------
-    //  Handlers for the SAX ErrorHandler interface
-    // -----------------------------------------------------------------------
-    void warning(const SAXParseException& exc)      {}
-    void error(const SAXParseException& exc);
-    void fatalError(const SAXParseException& exc);
-    void resetErrors()                              { fSawErrors=false; fErrorText.reset(); }
-
-private:
-    // -----------------------------------------------------------------------
-    //  Private data members
-    //
-    //  fSawErrors
-    //      This is set by the error handlers, and is queryable later to
-    //      see if any errors occured.
-    // -----------------------------------------------------------------------
-    bool            fSawErrors;
-    XMLBuffer       fErrorText;
-};
-
-typedef enum
-{
-    unknown,
-    invalid,
-    valid
-} ValidityOutcome;
 
 class XSTSTest
 {
@@ -91,7 +50,7 @@ public:
     bool            fSkipped;
 };
 
-class XSTSHarnessHandlers : public DefaultHandler
+class XSTSHarnessHandlers : public BaseHarnessHandlers 
 {
 public:
     // -----------------------------------------------------------------------
@@ -100,50 +59,16 @@ public:
     XSTSHarnessHandlers(const XMLCh* baseURL);
     ~XSTSHarnessHandlers();
 
-    unsigned int getTotalTests() const
-    {
-        return fTests;
-    }
-    unsigned int getFailedTests() const
-    {
-        return fFailures;
-    }
-
-    bool getSawErrors() const
-    {
-        return fSawErrors;
-    }
-
     // -----------------------------------------------------------------------
     //  Handlers for the SAX ContentHandler interface
     // -----------------------------------------------------------------------
     void startElement(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const Attributes& attrs);
     void endElement(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname);
 
-    // -----------------------------------------------------------------------
-    //  Handlers for the SAX ErrorHandler interface
-    // -----------------------------------------------------------------------
-	void warning(const SAXParseException& exc);
-    void error(const SAXParseException& exc);
-    void fatalError(const SAXParseException& exc);
-    void resetErrors();
-
-protected:
-    void printFile(XMLURL& url);
-
 private:
-    // -----------------------------------------------------------------------
-    //  Private data members
-    //
-    //  fSawErrors
-    //      This is set by the error handlers, and is queryable later to
-    //      see if any errors occured.
-    // -----------------------------------------------------------------------
-    bool                fSawErrors;
     XSTSTest            fCurrentTest;
-    XMLURL              fBaseURL;
-    unsigned int        fFailures, fTests;
     SAX2XMLReader*      fParser;
-    XSTSErrorHandler    fErrorHandler;
+    BaseErrorHandler    fErrorHandler;
+    BaseEntityResolver  fEntityResolver;
 };
 

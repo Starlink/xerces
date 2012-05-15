@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: SAXParser.cpp 673975 2008-07-04 09:23:56Z borisk $
+ * $Id: SAXParser.cpp 882548 2009-11-20 13:44:14Z borisk $
  */
 
 
@@ -307,6 +307,11 @@ SecurityManager* SAXParser::getSecurityManager() const
     return fScanner->getSecurityManager();
 }
 
+XMLSize_t SAXParser::getLowWaterMark() const
+{
+    return fScanner->getLowWaterMark();
+}
+
 bool SAXParser::getLoadExternalDTD() const
 {
     return fScanner->getLoadExternalDTD();
@@ -463,6 +468,11 @@ void SAXParser::setSecurityManager(SecurityManager* const securityManager)
         ThrowXMLwithMemMgr(IOException, XMLExcepts::Gen_ParseInProgress, fMemoryManager);
 
     fScanner->setSecurityManager(securityManager);
+}
+
+void SAXParser::setLowWaterMark(XMLSize_t lwm)
+{
+    fScanner->setLowWaterMark(lwm);
 }
 
 void SAXParser::setLoadExternalDTD(const bool newState)
@@ -1335,6 +1345,7 @@ void SAXParser::resetInProgress()
 void SAXParser::resetCachedGrammarPool()
 {
     fGrammarResolver->resetCachedGrammar();
+    fScanner->resetCachedGrammar();
 }
 
 XERCES_CPP_NAMESPACE_END

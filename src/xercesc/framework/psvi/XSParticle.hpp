@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XSParticle.hpp 674012 2008-07-04 11:18:21Z borisk $
+ * $Id: XSParticle.hpp 883665 2009-11-24 11:41:38Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XSPARTICLE_HPP)
@@ -75,6 +75,7 @@ public:
       * @param  particleTerm
       * @param  minOccurs
       * @param  maxOccurs
+      * @param  unbounded
       * @param  manager     The configurable memory manager
       */
     XSParticle

@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: SchemaGrammar.hpp 678409 2008-07-21 13:08:10Z borisk $
+ * $Id: SchemaGrammar.hpp 883376 2009-11-23 15:45:23Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_SCHEMAGRAMMAR_HPP)
@@ -170,6 +170,7 @@ public:
     DatatypeValidatorFactory* getDatatypeRegistry();
     RefHash2KeysTableOf<ElemVector>* getValidSubstitutionGroups() const;
 
+    // @deprecated
     ValidationContext*          getValidationContext() const;
 
     // -----------------------------------------------------------------------
@@ -235,6 +236,18 @@ public:
       */
     RefHashTableOf<XSAnnotation, PtrHasher>*  getAnnotations();
     const RefHashTableOf<XSAnnotation, PtrHasher>*  getAnnotations() const;
+
+    /**
+     * Get/set scope count.
+     */
+    unsigned int getScopeCount () const;
+    void setScopeCount (unsigned int);
+
+    /**
+     * Get/set anonymous type count.
+     */
+    unsigned int getAnonTypeCount () const;
+    void setAnonTypeCount (unsigned int);
 
     /***
      * Support for Serialization/De-serialization
@@ -317,6 +330,7 @@ private:
     RefHashTableOf<XercesGroupInfo>*         fGroupInfoRegistry;
     RefHashTableOf<XercesAttGroupInfo>*      fAttGroupInfoRegistry;
     RefHash2KeysTableOf<ElemVector>*         fValidSubstitutionGroups;
+    // @deprecated
     ValidationContext*                       fValidationContext;
     MemoryManager*                           fMemoryManager;
     XMLSchemaDescription*                    fGramDesc;
@@ -324,6 +338,9 @@ private:
 
     bool                                   fValidated;
     DatatypeValidatorFactory               fDatatypeRegistry;
+
+    unsigned int                             fScopeCount;
+    unsigned int                             fAnonTypeCount;
 };
 
 
@@ -376,6 +393,7 @@ SchemaGrammar::getValidSubstitutionGroups() const {
     return fValidSubstitutionGroups;
 }
 
+// @deprecated
 inline ValidationContext* SchemaGrammar::getValidationContext() const {
 
     return fValidationContext;
@@ -589,6 +607,30 @@ inline bool SchemaGrammar::getValidated() const
 inline void SchemaGrammar::setValidated(const bool newState)
 {
     fValidated = newState;
+}
+
+inline unsigned int
+SchemaGrammar::getScopeCount () const
+{
+  return fScopeCount;
+}
+
+inline void
+SchemaGrammar::setScopeCount (unsigned int scopeCount)
+{
+  fScopeCount = scopeCount;
+}
+
+inline unsigned int
+SchemaGrammar::getAnonTypeCount () const
+{
+  return fAnonTypeCount;
+}
+
+inline void
+SchemaGrammar::setAnonTypeCount (unsigned int count)
+{
+  fAnonTypeCount = count;
 }
 
 XERCES_CPP_NAMESPACE_END

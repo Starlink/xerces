@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ICUMsgLoader.cpp 633955 2008-03-05 18:14:04Z borisk $
+ * $Id: ICUMsgLoader.cpp 883612 2009-11-24 07:24:53Z borisk $
  */
 
 
@@ -51,8 +51,8 @@ XERCES_CPP_NAMESPACE_BEGIN
  *  The application (this *.cpp) references that symbol here, and will pass the data address to ICU, which
  *  will then  be able to fetch resources from the data.
  */
-#define ENTRY_POINT xercesc_messages_3_0_dat
-#define BUNDLE_NAME "xercesc_messages_3_0"
+#define ENTRY_POINT xercesc_messages_3_1_dat
+#define BUNDLE_NAME "xercesc_messages_3_1"
 
 extern "C" void U_IMPORT *ENTRY_POINT;
 
@@ -199,7 +199,6 @@ ICUMsgLoader::ICUMsgLoader(const XMLCh* const  msgDomain)
     {
         XMLPlatformUtils::panic(PanicHandler::Panic_CantLoadMsgDomain);
     }
-
 }
 
 ICUMsgLoader::~ICUMsgLoader()

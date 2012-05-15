@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMAttrNSImpl.cpp 678709 2008-07-22 10:56:56Z borisk $
+ * $Id: DOMAttrNSImpl.cpp 901107 2010-01-20 08:45:02Z borisk $
  */
 
 #include <xercesc/util/XMLUniDefs.hpp>
@@ -133,10 +133,10 @@ void DOMAttrNSImpl::setPrefix(const XMLCh *prefix)
     const XMLCh * xmlURI = DOMNodeImpl::getXmlURIString();
     const XMLCh * xmlnsURI = DOMNodeImpl::getXmlnsURIString();
 
-    if (XMLString::equals(prefix, xml)&&
-        !XMLString::equals(fNamespaceURI, xmlURI)||
-        XMLString::equals(prefix, xmlns)&&
-        !XMLString::equals(fNamespaceURI, xmlnsURI))
+    if ((XMLString::equals(prefix, xml) &&
+         !XMLString::equals(fNamespaceURI, xmlURI))
+        || (XMLString::equals(prefix, xmlns) &&
+            !XMLString::equals(fNamespaceURI, xmlnsURI)))
         throw DOMException(DOMException::NAMESPACE_ERR, 0, GetDOMNodeMemoryManager);
 
     if (XMLString::indexOf(prefix, chColon) != -1) {

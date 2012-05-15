@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ReaderMgr.hpp 696218 2008-09-17 09:31:41Z borisk $
+ * $Id: ReaderMgr.hpp 833045 2009-11-05 13:21:27Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_READERMGR_HPP)
@@ -89,7 +89,8 @@ public :
     XMLCh peekNextChar();
     bool skipIfQuote(XMLCh& chGotten);
     void skipPastChar(const XMLCh toSkip);
-    bool skipPastSpaces(bool inDecl = false);
+    void skipPastSpaces(bool& skippedSomething, bool inDecl = false);
+    void skipPastSpaces();
     void skipToChar(const XMLCh toSkipTo);
     bool skippedChar(const XMLCh toSkip);
     bool skippedSpace();
@@ -113,6 +114,7 @@ public :
         , const XMLReader::Types    type
         , const XMLReader::Sources  source
         , const bool                calcSrsOfs = true
+        ,       XMLSize_t           lowWaterMark = 100
     );
     XMLReader* createReader
     (
@@ -124,6 +126,7 @@ public :
         , const XMLReader::Sources  source
         ,       InputSource*&       srcToFill
         , const bool                calcSrcOfs = true
+        ,       XMLSize_t           lowWaterMark = 100
         , const bool                disableDefaultEntityResolution = false
     );
     XMLReader* createReader
@@ -137,6 +140,7 @@ public :
         , const XMLReader::Sources  source
         ,       InputSource*&       srcToFill
         , const bool                calcSrcOfs = true
+        ,       XMLSize_t           lowWaterMark = 100
         , const bool                disableDefaultEntityResolution = false
     );
     XMLReader* createIntEntReader
@@ -148,6 +152,7 @@ public :
         , const XMLSize_t           dataLen
         , const bool                copyBuf
         , const bool                calcSrcOfs = true
+        ,       XMLSize_t           lowWaterMark = 100
     );
     bool isScanningPERefOutOfLiteral() const;
     bool pushReader

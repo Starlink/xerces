@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMemory.hpp 527149 2007-04-10 14:56:39Z amassari $
+ * $Id: XMemory.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XMEMORY_HPP)
@@ -33,7 +33,7 @@ class MemoryManager;
  *  This class makes it possible to override the C++ memory management by
  *  adding new/delete operators to this base class.
  *
- *  This class is used in conjuction with the pluggable memory manager. It
+ *  This class is used in conjunction with the pluggable memory manager. It
  *  allows applications to control Xerces memory management.
  */
 

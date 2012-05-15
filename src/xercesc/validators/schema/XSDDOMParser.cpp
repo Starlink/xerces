@@ -16,7 +16,7 @@
  */
 
 /**
-  * $Id: XSDDOMParser.cpp 678766 2008-07-22 14:00:16Z borisk $
+  * $Id: XSDDOMParser.cpp 729944 2008-12-29 17:03:32Z amassari $
   */
 
 
@@ -276,7 +276,7 @@ void XSDDOMParser::startElement( const XMLElementDecl&       elemDecl
     }
 
     DOMElementImpl *elemImpl = (DOMElementImpl *) elem;
-    for (unsigned int index = 0; index < attrCount; ++index)
+    for (XMLSize_t index = 0; index < attrCount; ++index)
     {
         const XMLAttr* oneAttrib = attrList.elementAt(index);
         unsigned int attrURIId = oneAttrib->getURIId();
@@ -319,7 +319,7 @@ void XSDDOMParser::startElement( const XMLElementDecl&       elemDecl
         XMLAttDef* attr = 0;
         DOMAttrImpl * insertAttr = 0;
 
-        for (unsigned int i=0; i<defAttrs->getAttDefCount(); i++)
+        for (XMLSize_t i=0; i<defAttrs->getAttDefCount(); i++)
         {
             attr = &defAttrs->getAttDef(i);
 

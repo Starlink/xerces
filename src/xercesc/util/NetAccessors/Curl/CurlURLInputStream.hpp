@@ -16,15 +16,15 @@
  */
 
 /*
- * $Id: CurlURLInputStream.hpp 675241 2008-07-09 16:01:01Z borisk $
+ * $Id: CurlURLInputStream.hpp 835245 2009-11-12 05:57:31Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_CURLURLINPUTSTREAM_HPP)
 #define XERCESC_INCLUDE_GUARD_CURLURLINPUTSTREAM_HPP
 
-#include <curl.h>
-#include <multi.h>
-#include <easy.h>
+#include <curl/curl.h>
+#include <curl/multi.h>
+#include <curl/easy.h>
 
 #include <xercesc/util/XMLURL.hpp>
 #include <xercesc/util/XMLExceptMsgs.hpp>
@@ -103,10 +103,10 @@ private :
     
     XMLURL				fURLSource;
     
-    unsigned long       fTotalBytesRead;
+    XMLSize_t           fTotalBytesRead;
     XMLByte*			fWritePtr;
-    unsigned long		fBytesRead;
-    unsigned long		fBytesToRead;
+    XMLSize_t           fBytesRead;
+    XMLSize_t           fBytesToRead;
     bool				fDataAvailable;
     
     // Overflow buffer for when curl writes more data to us

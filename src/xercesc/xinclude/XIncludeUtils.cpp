@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XIncludeUtils.cpp 674027 2008-07-04 12:18:26Z borisk $
+ * $Id: XIncludeUtils.cpp 933212 2010-04-12 12:17:58Z amassari $
  */
 
 #include <xercesc/xinclude/XIncludeUtils.hpp>
@@ -247,6 +247,7 @@ XIncludeUtils::doDOMNodeXInclude(DOMNode *xincludeNode, DOMDocument *parsedDocum
         return false;
     }
 
+    RefVectorOf<DOMNode> delayedProcessing(12,false);
     if (includedDoc == NULL && includedText == NULL){
         /* there was an error - this is now a resource error
            let's see if there is a fallback */
@@ -289,10 +290,18 @@ XIncludeUtils::doDOMNodeXInclude(DOMNode *xincludeNode, DOMDocument *parsedDocum
                         }
                     }
                     DOMNode *newChild = frag->appendChild(newNode);
-                    parseDOMNodeDoingXInclude(newChild, parsedDocument, entityResolver);
+                    // don't process the node now, wait until it is placed in the final position
+                    delayedProcessing.addElement(newChild);
+                    //parseDOMNodeDoingXInclude(newChild, parsedDocument, entityResolver);
                 }
                 includeParent->replaceChild(frag, xincludeNode);
                 frag->release();
+
+                for(XMLSize_t i=0;i<delayedProcessing.size();i++)
+                {
+                    DOMNode* childNode=delayedProcessing.elementAt(i);
+                    parseDOMNodeDoingXInclude(childNode, parsedDocument, entityResolver);
+                }
                 modifiedNode = true;
             } else {
                 /* empty fallback element - simply remove it! */
@@ -378,10 +387,18 @@ XIncludeUtils::doDOMNodeXInclude(DOMNode *xincludeNode, DOMDocument *parsedDocum
                 }
                 DOMNode *newNode = parsedDocument->importNode(child, true);
                 DOMNode *newChild = frag->appendChild(newNode);
-                parseDOMNodeDoingXInclude(newChild, parsedDocument, entityResolver);
+                // don't process the node now, wait until it is placed in the final position
+                delayedProcessing.addElement(newChild);
+                //parseDOMNodeDoingXInclude(newChild, parsedDocument, entityResolver);
             }
             includeParent->replaceChild(frag, xincludeNode);
             frag->release();
+
+            for(XMLSize_t i=0;i<delayedProcessing.size();i++)
+            {
+                DOMNode* childNode=delayedProcessing.elementAt(i);
+                parseDOMNodeDoingXInclude(childNode, parsedDocument, entityResolver);
+            }
             popFromCurrentInclusionHistoryStack(NULL);
             modifiedNode = true;
         } else if (includedText){
@@ -687,14 +704,12 @@ XIncludeUtils::popFromCurrentInclusionHistoryStack(const XMLCh * /*toPop*/){
         historyCursor = historyCursor->next;
     }
 
-    if (penultimateCursor == fIncludeHistoryHead){
-        historyCursor = fIncludeHistoryHead;
+    if (historyCursor == fIncludeHistoryHead){
         fIncludeHistoryHead = NULL;
     } else {
         penultimateCursor->next = NULL;
     }
 
-    // XERCES_STD_QUALIFIER cerr << "poppinURIofStack " << XMLString::transcode(historyCursor->URI) << XERCES_STD_QUALIFIER endl;
     XMLString::release(&(historyCursor->URI));
     XMLPlatformUtils::fgMemoryManager->deallocate((void *)historyCursor);
     return NULL;
@@ -705,8 +720,8 @@ XIncludeUtils::freeInclusionHistory(){
     XIncludeHistoryNode *historyCursor = XIncludeUtils::fIncludeHistoryHead;
     while (historyCursor != NULL){
         XIncludeHistoryNode *next = historyCursor->next;
-        /* XMLString::release(&(historyCursor->URI));
-           XMLPlatformUtils::fgMemoryManager->deallocate((void *)historyCursor); */
+        XMLString::release(&(historyCursor->URI));
+        XMLPlatformUtils::fgMemoryManager->deallocate((void *)historyCursor);
         historyCursor = next;
     }
     XIncludeUtils::fIncludeHistoryHead = NULL;

@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: TraverseSchema.hpp 678409 2008-07-21 13:08:10Z borisk $
+ * $Id: TraverseSchema.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_TRAVERSESCHEMA_HPP)
@@ -81,11 +81,14 @@ public:
         , XMLStringPool* const    uriStringPool
         , SchemaGrammar* const    schemaGrammar
         , GrammarResolver* const  grammarResolver
+        , RefHash2KeysTableOf<SchemaInfo>* cachedSchemaInfoList
+        , RefHash2KeysTableOf<SchemaInfo>* schemaInfoList
         , XMLScanner* const       xmlScanner
         , const XMLCh* const      schemaURL
         , XMLEntityHandler* const entityHandler
         , XMLErrorReporter* const errorReporter
         , MemoryManager* const    manager = XMLPlatformUtils::fgMemoryManager
+        , bool multipleImport = false
     );
 
     ~TraverseSchema();
@@ -237,7 +240,13 @@ private:
     //  Private Helper methods
     // -----------------------------------------------------------------------
     /**
-      * Retrived the Namespace mapping from the schema element
+      * Keep track of the xs:import found
+      */
+    bool isImportingNS(const int namespaceURI);
+    void addImportedNS(const int namespaceURI);
+
+    /**
+      * Retrieved the Namespace mapping from the schema element
       */
     bool retrieveNamespaceMapping(const DOMElement* const elem);
 
@@ -433,7 +442,7 @@ private:
       */
     const XMLCh* getElementAttValue(const DOMElement* const elem,
                                     const XMLCh* const attName,
-                                    const bool toTrim = false);
+                                    const DatatypeValidator::ValidatorType attType = DatatypeValidator::UnKnown);
 
     /* return minOccurs */
     int checkMinMax(ContentSpecNode* const specNode,
@@ -756,12 +765,14 @@ private:
     ValueVectorOf<const DOMElement*>*              fDeclStack;
     ValueVectorOf<unsigned int>**                  fGlobalDeclarations;
     ValueVectorOf<DOMNode*>*                       fNonXSAttList;
+    ValueVectorOf<int>*                            fImportedNSList;
     RefHashTableOf<ValueVectorOf<DOMElement*>, PtrHasher>* fIC_NodeListNS;
     RefHash2KeysTableOf<XMLCh>*                    fNotationRegistry;
     RefHash2KeysTableOf<XMLCh>*                    fRedefineComponents;
     RefHash2KeysTableOf<IdentityConstraint>*       fIdentityConstraintNames;
     RefHash2KeysTableOf<ElemVector>*               fValidSubstitutionGroups;
     RefHash2KeysTableOf<SchemaInfo>*               fSchemaInfoList;
+    RefHash2KeysTableOf<SchemaInfo>*               fCachedSchemaInfoList;
     XSDDOMParser*                                  fParser;
     XSDErrorReporter                               fXSDErrorReporter;
     XSDLocator*                                    fLocator;
@@ -811,35 +822,6 @@ inline const XMLCh* TraverseSchema::getLocalPart(const XMLCh* const rawName) {
     return fStringPool->getValueForId(fStringPool->addOrFind(fBuffer.getRawBuffer()));
 }
 
-inline
-const XMLCh* TraverseSchema::getElementAttValue(const DOMElement* const elem,
-                                                const XMLCh* const attName,
-                                                const bool toTrim) {
-
-    DOMAttr* attNode = elem->getAttributeNode(attName);
-
-    if (attNode == 0) {
-        return 0;
-    }
-
-    const XMLCh* attValue = attNode->getValue();
-
-    if (toTrim) {
-
-        fBuffer.set(attValue);
-        XMLCh* bufValue = fBuffer.getRawBuffer();
-        XMLString::trim(bufValue);
-
-        if (!bufValue || !*bufValue) {
-            return XMLUni::fgZeroLenString;
-        }
-
-        return fStringPool->getValueForId(fStringPool->addOrFind(bufValue));
-    }
-
-    return attValue;
-}
-
 inline void
 TraverseSchema::checkForEmptyTargetNamespace(const DOMElement* const elem) {
 
@@ -880,7 +862,7 @@ inline const XMLCh* TraverseSchema::genAnonTypeName(const XMLCh* const prefix) {
 
     XMLCh anonCountStr[16]; // a count of 15 digits should be enough
 
-    XMLString::binToText(fAnonXSTypeCount++, anonCountStr, 15, 10, fMemoryManager);
+    XMLString::sizeToText(fAnonXSTypeCount++, anonCountStr, 15, 10, fMemoryManager);
     fBuffer.set(prefix);
     fBuffer.append(anonCountStr);
 
@@ -914,6 +896,24 @@ inline void TraverseSchema::getRedefineNewTypeName(const XMLCh* const oldTypeNam
     for (int i=0; i < redefineCounter; i++) {
         newTypeName.append(SchemaSymbols::fgRedefIdentifier);
     }
+}
+
+inline bool TraverseSchema::isImportingNS(const int namespaceURI) {
+
+    if (!fImportedNSList)
+        return false;
+
+    return (fImportedNSList->containsElement(namespaceURI));
+}
+
+inline void TraverseSchema::addImportedNS(const int namespaceURI) {
+
+    if (!fImportedNSList) {
+        fImportedNSList = new (fMemoryManager) ValueVectorOf<int>(4, fMemoryManager);
+    }
+
+    if (!fImportedNSList->containsElement(namespaceURI))
+        fImportedNSList->addElement(namespaceURI);
 }
 
 XERCES_CPP_NAMESPACE_END

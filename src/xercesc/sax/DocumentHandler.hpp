@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DocumentHandler.hpp 557282 2007-07-18 14:54:15Z amassari $
+ * $Id: DocumentHandler.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_DOCUMENTHANDLER_HPP)
@@ -190,9 +190,9 @@ public:
     ) = 0;
 
     /**
-    * Reset the Docuemnt object on its reuse
+    * Reset the Document object on its reuse
     *
-    * <p>This method helps in reseting the document implementational
+    * <p>This method helps in reseting the document implementation
     * defaults each time the document is begun.</p>
     *
     */

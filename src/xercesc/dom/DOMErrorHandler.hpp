@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMErrorHandler.hpp 527149 2007-04-10 14:56:39Z amassari $
+ * $Id: DOMErrorHandler.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_DOMERRORHANDLER_HPP)
@@ -83,12 +83,12 @@ public:
     /** @name Functions introduced in DOM Level 3 */
     //@{
     /**
-     * This method is called on the error handler when an error occures.
+     * This method is called on the error handler when an error occurs.
      * If an exception is thrown from this method, it is considered to be equivalent of returning <code>true</code>.
      *
      * @param domError The error object that describes the error, this object
      *                 may be reused by the DOM implementation across multiple
-     *                 calls to the handleEvent method.
+     *                 calls to the handleError method.
      * @return If the handleError method returns <code>true</code> the DOM
      *         implementation should continue as if the error didn't happen
      *         when possible, if the method returns <code>false</code> then the

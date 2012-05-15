@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XercesGroupInfo.hpp 676911 2008-07-15 13:27:32Z amassari $
+ * $Id: XercesGroupInfo.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XERCESGROUPINFO_HPP)
@@ -92,7 +92,7 @@ public:
 
 private:
     // -----------------------------------------------------------------------
-    //  Unimplemented contstructors and operators
+    //  Unimplemented constructors and operators
     // -----------------------------------------------------------------------
     XercesGroupInfo(const XercesGroupInfo& elemInfo);
     XercesGroupInfo& operator= (const XercesGroupInfo& other);

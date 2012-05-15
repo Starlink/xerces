@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: SAXPrint.cpp 471735 2006-11-06 13:53:58Z amassari $
+ * $Id: SAXPrint.cpp 833057 2009-11-05 15:25:10Z borisk $
  */
 
 
@@ -85,7 +85,7 @@ static void usage()
              "    -?          Show this help.\n\n"
              "  * = Default if not provided explicitly.\n\n"
              "The parser has intrinsic support for the following encodings:\n"
-             "    UTF-8, USASCII, ISO8859-1, UTF-16[BL]E, UCS-4[BL]E,\n"
+             "    UTF-8, US-ASCII, ISO8859-1, UTF-16[BL]E, UCS-4[BL]E,\n"
              "    WINDOWS-1252, IBM1140, IBM037, IBM1047.\n"
          <<  XERCES_STD_QUALIFIER endl;
 }
@@ -217,6 +217,7 @@ int main(int argC, char* argV[])
     parser->setValidationScheme(valScheme);
     parser->setDoNamespaces(doNamespaces);
     parser->setDoSchema(doSchema);
+    parser->setHandleMultipleImports (true);
     parser->setValidationSchemaFullChecking(schemaFullChecking);
 
     //
@@ -263,4 +264,3 @@ int main(int argC, char* argV[])
     else
         return 0;
 }
-

@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XSAXMLScanner.cpp 696218 2008-09-17 09:31:41Z borisk $
+ * $Id: XSAXMLScanner.cpp 833045 2009-11-05 13:21:27Z borisk $
  */
 
 
@@ -267,7 +267,7 @@ bool XSAXMLScanner::scanStartTag(bool& gotData)
     //  Now, since we might have to update the namespace map for this element,
     //  but we don't have the element decl yet, we just tell the element stack
     //  to expand up to get ready.
-    unsigned int elemDepth = fElemStack.addLevel();
+    XMLSize_t elemDepth = fElemStack.addLevel();
     fElemStack.setValidationFlag(fValidate);
     fElemStack.setPrefixColonPos(prefixColonPos);
 
@@ -343,9 +343,10 @@ bool XSAXMLScanner::scanStartTag(bool& gotData)
 
     //  We do something different here according to whether we found the
     //  element or not.
+    bool bXsiTypeSet= (fValidator)?((SchemaValidator*)fValidator)->getIsXsiTypeSet():false;
     if (wasAdded || !elemDecl->isDeclared())
     {
-        if (laxThisOne) {
+        if (laxThisOne && !bXsiTypeSet) {
             fValidate = false;
             fElemStack.setValidationFlag(fValidate);
         }
@@ -357,10 +358,11 @@ bool XSAXMLScanner::scanStartTag(bool& gotData)
             // faulted-in, was not an element in the grammar pool originally
             elemDecl->setCreateReason(XMLElementDecl::JustFaultIn);
 
-            fValidator->emitError
-            (
-                XMLValid::ElementNotDefined, elemDecl->getFullName()
-            );
+            if(!bXsiTypeSet)
+                fValidator->emitError
+                (
+                    XMLValid::ElementNotDefined, elemDecl->getFullName()
+                );
         }
     }
 
@@ -433,7 +435,7 @@ bool XSAXMLScanner::scanStartTag(bool& gotData)
     {
         // clean up after ourselves:
         // clear the map used to detect duplicate attributes
-        fUndeclaredAttrRegistryNS->removeAll();
+        fUndeclaredAttrRegistry->removeAll();
     }
 
     // Since the element may have default values, call start tag now regardless if it is empty or not
@@ -573,6 +575,7 @@ void XSAXMLScanner::scanReset(const InputSource& src)
         , XMLReader::Type_General
         , XMLReader::Source_External
         , fCalculateSrcOfs
+        , fLowWaterMark
     );
 
     if (!newReader) {
@@ -603,7 +606,7 @@ void XSAXMLScanner::scanReset(const InputSource& src)
         // though their buckets will still be tied up
         resetUIntPool();
     }
-    fUndeclaredAttrRegistryNS->removeAll();
+    fUndeclaredAttrRegistry->removeAll();
 }
 
 
@@ -661,12 +664,25 @@ void XSAXMLScanner::scanRawAttrListforNameSpaces(XMLSize_t attCount)
                 const XMLCh* valuePtr = curPair->getValue();
                 const XMLCh* suffPtr = attName.getLocalPart();
 
-                if (XMLString::equals(suffPtr, SchemaSymbols::fgXSI_TYPE)) {
-                    fXsiType.set(valuePtr);
+                if (XMLString::equals(suffPtr, SchemaSymbols::fgXSI_TYPE)) 
+                {
+                    // normalize the attribute according to schema whitespace facet
+                    DatatypeValidator* tempDV = DatatypeValidatorFactory::getBuiltInRegistry()->get(SchemaSymbols::fgDT_QNAME);
+                    ((SchemaValidator*) fValidator)->normalizeWhiteSpace(tempDV, valuePtr, fXsiType, true);
                 }
-                else if (XMLString::equals(suffPtr, SchemaSymbols::fgATT_NILL)
-                         && XMLString::equals(valuePtr, SchemaSymbols::fgATTVAL_TRUE)) {
-                    ((SchemaValidator*)fValidator)->setNillable(true);
+                else if (XMLString::equals(suffPtr, SchemaSymbols::fgATT_NILL))
+                {
+                    // normalize the attribute according to schema whitespace facet
+                    XMLBuffer& fXsiNil = fBufMgr.bidOnBuffer();
+                    DatatypeValidator* tempDV = DatatypeValidatorFactory::getBuiltInRegistry()->get(SchemaSymbols::fgDT_BOOLEAN);
+                    ((SchemaValidator*) fValidator)->normalizeWhiteSpace(tempDV, valuePtr, fXsiNil, true);
+                    if(XMLString::equals(fXsiNil.getRawBuffer(), SchemaSymbols::fgATTVAL_TRUE))
+                        ((SchemaValidator*)fValidator)->setNillable(true);
+                    else if(XMLString::equals(fXsiNil.getRawBuffer(), SchemaSymbols::fgATTVAL_FALSE))
+                        ((SchemaValidator*)fValidator)->setNillable(false);
+                    else
+                        emitError(XMLErrs::InvalidAttValue, fXsiNil.getRawBuffer(), valuePtr);
+                    fBufMgr.releaseBuffer(fXsiNil);
                 }
             }
         }

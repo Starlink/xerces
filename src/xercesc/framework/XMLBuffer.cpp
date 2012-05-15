@@ -16,7 +16,7 @@
  */
 
 /**
- * $Id: XMLBuffer.cpp 555320 2007-07-11 16:05:13Z amassari $
+ * $Id: XMLBuffer.cpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 
@@ -33,7 +33,7 @@ XERCES_CPP_NAMESPACE_BEGIN
 //  XMLBuffer: Buffer management
 // ---------------------------------------------------------------------------
 
-void XMLBuffer::insureCapacity(const XMLSize_t extraNeeded)
+void XMLBuffer::ensureCapacity(const XMLSize_t extraNeeded)
 {    
     // If we can't handle it, try doubling the buffer size.
     XMLSize_t newCap = (fIndex + extraNeeded) * 2;

@@ -7,7 +7,7 @@ dnl @author James Berry
 dnl @version 2005-05-23
 dnl @license AllPermissive
 dnl
-dnl $Id: xerces_transcoder_selection.m4 697787 2008-09-22 11:55:10Z borisk $
+dnl $Id: xerces_transcoder_selection.m4 835245 2009-11-12 05:57:31Z borisk $
 
 AC_DEFUN([XERCES_TRANSCODER_SELECTION],
 	[
@@ -23,7 +23,19 @@ AC_DEFUN([XERCES_TRANSCODER_SELECTION],
 
 	# Check for GNU iconv support
 	no_GNUiconv=false
-	AC_CHECK_HEADERS([iconv.h wchar.h string.h stdlib.h stdio.h ctype.h locale.h errno.h endian.h], [], [no_GNUiconv=true])
+	AC_CHECK_HEADERS([iconv.h wchar.h string.h stdlib.h stdio.h ctype.h locale.h errno.h], [], [no_GNUiconv=true])
+        # The code in iconv needs just on of these include files
+	AC_CHECK_HEADER([endian.h],
+                        [],
+                        [
+                         AC_CHECK_HEADER([machine/endian.h],
+                                         [],
+                                         [
+                                          AC_CHECK_HEADER([arpa/nameser_compat.h],
+                                                          [],
+                                                          [no_GNUiconv=true])
+                                         ])
+                        ])
 	AC_CHECK_FUNCS([iconv_open iconv_close iconv], [], [no_GNUiconv=true])
 	AC_MSG_CHECKING([whether we can support the GNU iconv Transcoder])
 	list_add=
@@ -63,7 +75,7 @@ AC_DEFUN([XERCES_TRANSCODER_SELECTION],
 	AC_REQUIRE([XERCES_ICU_PREFIX])
 	AC_MSG_CHECKING([whether we can support the ICU Transcoder])
 	list_add=
-	AS_IF([test x"$xerces_cv_icu_prefix" != x], [
+	AS_IF([test x"$xerces_cv_icu_present" != x"no"], [
 		AC_ARG_ENABLE([transcoder-icu],
 			AS_HELP_STRING([--enable-transcoder-icu],
 				[Enable icu-based transcoder support]),
@@ -151,8 +163,7 @@ AC_DEFUN([XERCES_TRANSCODER_SELECTION],
 		*-icu-*)
 			transcoder=icu
 			AC_DEFINE([XERCES_USE_TRANSCODER_ICU], 1, [Define to use the ICU-based transcoder])
-			AC_SUBST([ICU_CXXFLAGS], [-I$xerces_cv_icu_prefix/include])
-			LIBS="${LIBS} -L${xerces_cv_icu_prefix}/lib -licuuc -licudata"
+			LIBS="${LIBS} ${xerces_cv_icu_libs}"
 			break
 			;;
 

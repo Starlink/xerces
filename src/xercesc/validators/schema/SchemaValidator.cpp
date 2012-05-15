@@ -15,6 +15,10 @@
  * limitations under the License.
  */
 
+/*
+ * $Id: SchemaValidator.cpp 806488 2009-08-21 10:36:58Z amassari $
+ */
+
 // ---------------------------------------------------------------------------
 //  Includes
 // ---------------------------------------------------------------------------
@@ -52,16 +56,18 @@ SchemaValidator::SchemaValidator( XMLErrorReporter* const errReporter
     , fGrammarResolver(0)
     , fXsiType(0)
     , fNil(false)
+    , fNilFound(false)
     , fCurrentDatatypeValidator(0)
     , fNotationBuf(0)
     , fDatatypeBuffer(1023, manager)
+    , fTrailing(false)
+    , fSeenNonWhiteSpace(false)
     , fSeenId(false)
     , fTypeStack(0)
     , fMostRecentAttrValidator(0)
     , fErrorOccurred(false)
     , fElemIsSpecified(false)
 {
-    fTrailingSeenNonWhiteSpace.flags = 0;
     fTypeStack = new (fMemoryManager) ValueStackOf<ComplexTypeInfo*>(8, fMemoryManager);
 }
 
@@ -133,7 +139,9 @@ bool SchemaValidator::checkContent (XMLElementDecl* const elemDecl
         }
         else {
             // Get the element's content model or fault it in
-            XMLContentModel* elemCM = currType->getContentModel();
+            XMLContentModel* elemCM = (currType)
+                    ? currType->getContentModel()
+                    : ((SchemaElementDecl*)elemDecl)->getContentModel();
 
             // Ask it to validate and return its return
             unsigned int emptyNS = getScanner()->getEmptyNamespaceId();
@@ -168,114 +176,104 @@ bool SchemaValidator::checkContent (XMLElementDecl* const elemDecl
             XMLCh* value = fDatatypeBuffer.getRawBuffer();
             XMLCh* elemDefaultValue = ((SchemaElementDecl*) elemDecl)->getDefaultValue();
 
-			if (fCurrentDatatypeValidator)
+            if (fNil)
             {
-                if (fNil)
+                if ((!XMLString::equals(value, XMLUni::fgZeroLenString))
+                    || elemDefaultValue)
                 {
-                    if ((!XMLString::equals(value, XMLUni::fgZeroLenString))
-                        || elemDefaultValue)
-                    {
-                        emitError(XMLValid::NilAttrNotEmpty, elemDecl->getFullName());
-                        fErrorOccurred = true;
+                    emitError(XMLValid::NilAttrNotEmpty, elemDecl->getFullName());
+                    fErrorOccurred = true;
+                }
+            }
+			else if (fCurrentDatatypeValidator)
+            {
+                DatatypeValidator::ValidatorType eleDefDVType = fCurrentDatatypeValidator->getType();
+                bool validateCanonical = false;
+                if (eleDefDVType == DatatypeValidator::NOTATION)
+                {
+                    // if notation, need to bind URI to notation first
+                    if (!fNotationBuf)
+                        fNotationBuf = new (fMemoryManager) XMLBuffer(1023, fMemoryManager);
+
+                    //  Make sure that this value maps to one of the
+                    //  notation values in the enumList parameter. We don't have to
+                    //  look it up in the notation pool (if a notation) because we
+                    //  will look up the enumerated values themselves. If they are in
+                    //  the notation pool (after the Grammar is parsed), then obviously
+                    //  this value will be legal since it matches one of them.
+                    int colonPos = -1;
+                    unsigned int uriId = getScanner()->resolveQName(value, *fNotationBuf, ElemStack::Mode_Element, colonPos);
+
+                    const XMLCh* uriText = getScanner()->getURIText(uriId);
+                    if (uriText && *uriText) {
+                        fNotationBuf->set(uriText);
+                        fNotationBuf->append(chColon);
+                        fNotationBuf->append(&value[colonPos + 1]);
+                        value = fNotationBuf->getRawBuffer();
                     }
                 }
-                else
+
+                if (elemDefaultValue)
                 {
-                    DatatypeValidator::ValidatorType eleDefDVType = fCurrentDatatypeValidator->getType();
-                    bool validateCanonical = false;
-                    if (eleDefDVType == DatatypeValidator::NOTATION)
+                    if (XMLString::equals(value, XMLUni::fgZeroLenString))
                     {
-                        // if notation, need to bind URI to notation first
-                        if (!fNotationBuf)
-                            fNotationBuf = new (fMemoryManager) XMLBuffer(1023, fMemoryManager);
+                        fElemIsSpecified = true;
+                        // if this element didn't specified any value
+                        // use default value
+                        if (getScanner()->getDocHandler())
+                            getScanner()->getDocHandler()->docCharacters(elemDefaultValue, XMLString::stringLen(elemDefaultValue), false);
 
-                        //  Make sure that this value maps to one of the
-                        //  notation values in the enumList parameter. We don't have to
-                        //  look it up in the notation pool (if a notation) because we
-                        //  will look up the enumerated values themselves. If they are in
-                        //  the notation pool (after the Grammar is parsed), then obviously
-                        //  this value will be legal since it matches one of them.
-                        int colonPos = -1;
-                        unsigned int uriId = getScanner()->resolveQName(value, *fNotationBuf, ElemStack::Mode_Element, colonPos);
-
-                        const XMLCh* uriText = getScanner()->getURIText(uriId);
-                        if (uriText && *uriText) {
-                            fNotationBuf->set(uriText);
-                            fNotationBuf->append(chColon);
-                            fNotationBuf->append(&value[colonPos + 1]);
-                            value = fNotationBuf->getRawBuffer();
-                        }
-                    }
-
-                    if (elemDefaultValue)
-                    {
-                        if (XMLString::equals(value, XMLUni::fgZeroLenString))
-                        {
-                            fElemIsSpecified = true;
-                            // if this element didn't specified any value
-                            // use default value
-                            if (getScanner()->getDocHandler())
-                                getScanner()->getDocHandler()->docCharacters(elemDefaultValue, XMLString::stringLen(elemDefaultValue), false);
-
-                            // Normally for default value, it has been validated already during TraverseSchema
-                            // But if there was a xsi:type and this validator is fXsiTypeValidator,
-                            // need to validate again
-                            // we determine this if the current content dataype validator
-                            // is neither the one in the element nor the one in the current
-                            // complex type (if any)
-                            if ((fCurrentDatatypeValidator != ((SchemaElementDecl*)elemDecl)->getDatatypeValidator())
-                                && (!fTypeStack->peek() || (fCurrentDatatypeValidator != fTypeStack->peek()->getDatatypeValidator()))) {
-                                value = elemDefaultValue;
-                                validateCanonical = true;
-                            }
-                            else
-                                value = 0;
+                        // Normally for default value, it has been validated already during TraverseSchema
+                        // But if there was a xsi:type and this validator is fXsiTypeValidator,
+                        // need to validate again
+                        // we determine this if the current content dataype validator
+                        // is neither the one in the element nor the one in the current
+                        // complex type (if any)
+                        if ((fCurrentDatatypeValidator != ((SchemaElementDecl*)elemDecl)->getDatatypeValidator())
+                            && (!fTypeStack->peek() || (fCurrentDatatypeValidator != fTypeStack->peek()->getDatatypeValidator()))) {
+                            value = elemDefaultValue;
+                            validateCanonical = true;
                         }
                         else
-                        {
-                            // this element has specified some value
-                            // if the flag is FIXED, then this value must be same as default value
-                            if ((((SchemaElementDecl*)elemDecl)->getMiscFlags() & SchemaSymbols::XSD_FIXED) != 0)
-                            {
-                                if (fCurrentDatatypeValidator->compare(value, elemDefaultValue, fMemoryManager) != 0 )
-                                {
-                                    emitError(XMLValid::FixedDifferentFromActual, elemDecl->getFullName());
-                                    fErrorOccurred = true;
-                                }
-                            }
-                        }
+                            value = 0;
                     }
                     else
                     {
-                        // no default value, then check nillable
-                        if (XMLString::equals(value, XMLUni::fgZeroLenString)
-                            && (((SchemaElementDecl*)elemDecl)->getMiscFlags() & SchemaSymbols::XSD_NILLABLE) != 0)
-                                value = 0;
-                    }
-
-                    if ((!fErrorOccurred) && value)
-                    {
-                        try {
-                            fCurrentDatatypeValidator->validate(value, getScanner()->getValidationContext(), fMemoryManager);
-                            if (validateCanonical) {
-                                XMLCh* canonical = (XMLCh*) fCurrentDatatypeValidator->getCanonicalRepresentation(value, fMemoryManager);
-                                ArrayJanitor<XMLCh> tempCanonical(canonical, fMemoryManager);
-                                fCurrentDatatypeValidator->validate(canonical, getScanner()->getValidationContext(), fMemoryManager);
+                        // this element has specified some value
+                        // if the flag is FIXED, then this value must be same as default value
+                        if ((((SchemaElementDecl*)elemDecl)->getMiscFlags() & SchemaSymbols::XSD_FIXED) != 0)
+                        {
+                            if (fCurrentDatatypeValidator->compare(value, elemDefaultValue, fMemoryManager) != 0 )
+                            {
+                                emitError(XMLValid::FixedDifferentFromActual, elemDecl->getFullName());
+                                fErrorOccurred = true;
                             }
                         }
-                        catch (XMLException& idve)
-                        {
-                            emitError (XMLValid::DatatypeError, idve.getCode(), idve.getMessage());
-                            fErrorOccurred = true;
+                    }
+                }
+
+                if ((!fErrorOccurred) && value)
+                {
+                    try {
+                        fCurrentDatatypeValidator->validate(value, getScanner()->getValidationContext(), fMemoryManager);
+                        if (validateCanonical) {
+                            XMLCh* canonical = (XMLCh*) fCurrentDatatypeValidator->getCanonicalRepresentation(value, fMemoryManager);
+                            ArrayJanitor<XMLCh> tempCanonical(canonical, fMemoryManager);
+                            fCurrentDatatypeValidator->validate(canonical, getScanner()->getValidationContext(), fMemoryManager);
                         }
-                        catch(const OutOfMemoryException&) {
-                            throw;
-                        }
-                        catch (...)
-                        {
-                            emitError(XMLValid::GenericError);
-                            throw;
-                        }
+                    }
+                    catch (XMLException& idve)
+                    {
+                        emitError (XMLValid::DatatypeError, idve.getCode(), idve.getMessage());
+                        fErrorOccurred = true;
+                    }
+                    catch(const OutOfMemoryException&) {
+                        throw;
+                    }
+                    catch (...)
+                    {
+                        emitError(XMLValid::GenericError);
+                        throw;
                     }
                 }
             }
@@ -307,7 +305,9 @@ bool SchemaValidator::checkContent (XMLElementDecl* const elemDecl
     // must rely on scanner to clear fDatatypeBuffer
     // since it may need to query its contents after this method completes
     fNil = false;
-    fTrailingSeenNonWhiteSpace.flags = 0;
+    fNilFound = false;
+    fTrailing=false;
+    fSeenNonWhiteSpace = false;
     fCurrentDatatypeValidator = 0;
 
     // Went ok, so return success
@@ -336,13 +336,15 @@ void SchemaValidator::faultInAttr (XMLAttr&    toFill, const XMLAttDef&  attDef)
 
 void SchemaValidator::reset()
 {
-    fTrailingSeenNonWhiteSpace.flags = 0;
+    fTrailing = false;
+    fSeenNonWhiteSpace = false;
     fSeenId = false;
 	fTypeStack->removeAllElements();
     delete fXsiType;
     fXsiType = 0;
     fCurrentDatatypeValidator = 0;
     fNil = false;
+    fNilFound = false;
     fDatatypeBuffer.reset();
     fErrorOccurred = false;
 }
@@ -522,7 +524,8 @@ void SchemaValidator::validateAttrValue (const XMLAttDef*      attDef
     if(fErrorOccurred) {
         fMostRecentAttrValidator = DatatypeValidatorFactory::getBuiltInRegistry()->get(SchemaSymbols::fgDT_ANYSIMPLETYPE);
     }
-    fTrailingSeenNonWhiteSpace.flags = 0;
+    fTrailing = false;
+    fSeenNonWhiteSpace = false;
 }
 
 void SchemaValidator::validateElement(const   XMLElementDecl*  elemDef)
@@ -567,10 +570,11 @@ void SchemaValidator::validateElement(const   XMLElementDecl*  elemDef)
                             emitError(XMLValid::NonDerivedXsiType, fXsiType->getRawName(), elemDef->getFullName());
                             fErrorOccurred = true;
                         }
-                        else {
+                        else if(fCurrentDatatypeValidator != xsiTypeDV) 
+                        {
                             // the type is derived from ancestor
-                            if (((SchemaElementDecl*)elemDef)->getBlockSet() == SchemaSymbols::XSD_RESTRICTION) {
-                                emitError(XMLValid::NoSubforBlock, fXsiType->getRawName(), elemDef->getFullName());
+                            if ((((SchemaElementDecl*)elemDef)->getBlockSet() & SchemaSymbols::XSD_RESTRICTION) != 0) {
+                                emitError(XMLValid::ElemNoSubforBlock, elemDef->getFullName());
                                 fErrorOccurred = true;
                             }
                             if (elemDef->hasAttDefs()) {
@@ -629,11 +633,22 @@ void SchemaValidator::validateElement(const   XMLElementDecl*  elemDef)
                                     emitError(XMLValid::NonDerivedXsiType, fXsiType->getRawName(), elemDef->getFullName());
                                     fErrorOccurred = true;
                                 }
-                                else {
-                                    int derivationMethod = typeInfo->getDerivedBy();
-                                    if ((((SchemaElementDecl*)elemDef)->getBlockSet() & derivationMethod) != 0) {
-                                        emitError(XMLValid::NoSubforBlock, fXsiType->getRawName(), elemDef->getFullName());
-                                        fErrorOccurred = true;
+                                else if(elemTypeInfo != typeInfo) {
+                                    // perform the check on the entire inheritance chain
+                                    ComplexTypeInfo* tempType = typeInfo;
+                                    while (tempType) {
+                                        if (tempType == elemTypeInfo)
+                                            break;
+                                        int derivationMethod = tempType->getDerivedBy();
+                                        if ((((SchemaElementDecl*)elemDef)->getBlockSet() & derivationMethod) != 0) {
+                                            emitError(XMLValid::ElemNoSubforBlock, elemDef->getFullName());
+                                            fErrorOccurred = true;
+                                        }
+                                        if ((elemTypeInfo->getBlockSet() & derivationMethod) != 0) {
+                                            emitError(XMLValid::TypeNoSubforBlock, elemTypeInfo->getTypeName());
+                                            fErrorOccurred = true;
+                                        }
+                                        tempType = tempType->getBaseComplexTypeInfo();
                                     }
                                 }
                             }
@@ -670,16 +685,25 @@ void SchemaValidator::validateElement(const   XMLElementDecl*  elemDef)
                                 emitError(XMLValid::NonDerivedXsiType, fXsiType->getRawName(), elemDef->getFullName());
                                 fErrorOccurred = true;
                             }
-                            else {
-                                // the type is derived from ancestor
-                                if (((SchemaElementDecl*)elemDef)->getBlockSet() == SchemaSymbols::XSD_RESTRICTION) {
-                                    emitError(XMLValid::NoSubforBlock, fXsiType->getRawName(), elemDef->getFullName());
-                                    fErrorOccurred = true;
+                            else if(fCurrentDatatypeValidator != xsiTypeDV)
+                            {
+                                DatatypeValidator::ValidatorType derivedType=xsiTypeDV->getType();
+                                if((derivedType == DatatypeValidator::List || derivedType == DatatypeValidator::Union) && fCurrentDatatypeValidator==0)
+                                {
+                                    // the substitution is always allowed if the type is list or union and the base type was xs:anySimpleType
                                 }
-                                if (elemDef->hasAttDefs()) {
-                                    // if we have an attribute but xsi:type's type is simple, we have a problem...
-                                    emitError(XMLValid::NonDerivedXsiType, fXsiType->getRawName(), elemDef->getFullName());
-                                    fErrorOccurred = true;
+                                else
+                                {
+                                    // the type is derived from ancestor
+                                    if ((((SchemaElementDecl*)elemDef)->getBlockSet() & SchemaSymbols::XSD_RESTRICTION) != 0) {
+                                        emitError(XMLValid::ElemNoSubforBlock, elemDef->getFullName());
+                                        fErrorOccurred = true;
+                                    }
+                                    if (elemDef->hasAttDefs()) {
+                                        // if we have an attribute but xsi:type's type is simple, we have a problem...
+                                        emitError(XMLValid::NonDerivedXsiType, fXsiType->getRawName(), elemDef->getFullName());
+                                        fErrorOccurred = true;
+                                    }
                                 }
                             }
 
@@ -716,14 +740,16 @@ void SchemaValidator::validateElement(const   XMLElementDecl*  elemDef)
     //
     // Check whether this element allows Nillable
     //
-    if (fNil && (miscFlags & SchemaSymbols::XSD_NILLABLE) == 0 ) {
+    if (fNilFound && (miscFlags & SchemaSymbols::XSD_NILLABLE) == 0 ) {
         fNil = false;
+        fNilFound = false;
         emitError(XMLValid::NillNotAllowed, elemDef->getFullName());
         fErrorOccurred = true;
     }
 
     fDatatypeBuffer.reset();
-    fTrailingSeenNonWhiteSpace.flags = 0;
+    fTrailing = false;
+    fSeenNonWhiteSpace = false;
     fSeenId = false;
 }
 
@@ -808,7 +834,7 @@ void SchemaValidator::preContentValidation(bool,
                 XMLAttDefList& attDefList = curElem.getAttDefList();
                 bool seenId = false;
 
-                for(unsigned int i=0; i<attDefList.getAttDefCount(); i++)
+                for(XMLSize_t i=0; i<attDefList.getAttDefCount(); i++)
                 {
                     const XMLAttDef& curAttDef = attDefList.getAttDef(i);
 
@@ -949,15 +975,18 @@ void SchemaValidator::postParseValidation()
 //            contiguous sequences of #x20s are collapsed to a single #x20,
 //            and initial and/or final #x20s are deleted.
 //
-void SchemaValidator::normalizeWhiteSpace(DatatypeValidator* dV, const XMLCh* const value, XMLBuffer& toFill)
+void SchemaValidator::normalizeWhiteSpace(DatatypeValidator* dV, const XMLCh* const value, XMLBuffer& toFill, bool bStandalone /*= false*/)
 {
-    short wsFacet = dV->getWSFacet();
-
     toFill.reset();
 
     //empty string
     if (!*value)
         return;
+
+    if(bStandalone)
+        fTrailing = fSeenNonWhiteSpace = false;
+
+    short wsFacet = dV->getWSFacet();
 
     //  Loop through the chars of the source value and normalize it
     //  according to the whitespace facet
@@ -984,7 +1013,7 @@ void SchemaValidator::normalizeWhiteSpace(DatatypeValidator* dV, const XMLCh* co
             , InContent
         };
 
-        States curState = (fTrailingSeenNonWhiteSpace.flags & 0x01) ? InWhitespace : InContent;
+        States curState = fTrailing ? InWhitespace : InContent;
         while (*srcPtr)
         {
             nextCh = *srcPtr++;
@@ -995,26 +1024,28 @@ void SchemaValidator::normalizeWhiteSpace(DatatypeValidator* dV, const XMLCh* co
                     curState = InWhitespace;
                     continue;
                 }
-                fTrailingSeenNonWhiteSpace.flags |= 0x02;
+                fSeenNonWhiteSpace = true;
             }
             else if (curState == InWhitespace)
             {
                 if (fCurReader->isWhitespace(nextCh))
                     continue;
-                if (fTrailingSeenNonWhiteSpace.flags & 0x02)
+                if (fSeenNonWhiteSpace)
                     toFill.append(chSpace);
                 curState = InContent;
-                fTrailingSeenNonWhiteSpace.flags |= 0x02;
+                fSeenNonWhiteSpace = true;
             }
             // Add this char to the target buffer
             toFill.append(nextCh);
         }
 
         if (fCurReader->isWhitespace(*(srcPtr-1)))
-          fTrailingSeenNonWhiteSpace.flags |= 0x01; // set
+          fTrailing = true;
         else
-          fTrailingSeenNonWhiteSpace.flags &= 0x02; // clear
+          fTrailing = false;
     }
+    if(bStandalone)
+        fTrailing = fSeenNonWhiteSpace = false;
 }
 
 

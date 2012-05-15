@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: BMPattern.hpp 678879 2008-07-22 20:05:05Z amassari $
+ * $Id: BMPattern.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_BMPATTERN_HPP)
@@ -40,7 +40,7 @@ public:
     //@{
 
     /**
-      * This is the onstructor which takes the pattern information. A default
+      * This is the constructor which takes the pattern information. A default
       * shift table size is used.
       *
       * @param  pattern     The pattern to match against.

@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMDocumentFragment.hpp 527149 2007-04-10 14:56:39Z amassari $
+ * $Id: DOMDocumentFragment.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_DOMDOCUMENTFRAGMENT_HPP)
@@ -38,7 +38,7 @@ XERCES_CPP_NAMESPACE_BEGIN
  * document by moving fragments around. It is desirable to have an object
  * which can hold such fragments and it is quite natural to use a DOMNode for
  * this purpose. While it is true that a <code>DOMDocument</code> object could
- * fulfil this role,  a <code>DOMDocument</code> object can potentially be a
+ * fulfill this role,  a <code>DOMDocument</code> object can potentially be a
  * heavyweight  object, depending on the underlying implementation. What is
  * really needed for this is a very lightweight object.
  * <code>DOMDocumentFragment</code> is such an object.

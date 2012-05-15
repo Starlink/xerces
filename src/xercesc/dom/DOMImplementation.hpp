@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMImplementation.hpp 671894 2008-06-26 13:29:21Z borisk $
+ * $Id: DOMImplementation.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_DOMIMPLEMENTATION_HPP)
@@ -57,7 +57,7 @@ private:
     // -----------------------------------------------------------------------
     /** @name Unimplemented constructors and operators */
     //@{
-        DOMImplementation(const DOMImplementation &);   // no copy construtor.
+        DOMImplementation(const DOMImplementation &);   // no copy constructor.
         DOMImplementation & operator = (const DOMImplementation &);  // No Assignment
     //@}
 

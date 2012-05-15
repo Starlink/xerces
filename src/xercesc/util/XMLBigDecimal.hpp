@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLBigDecimal.hpp 555320 2007-07-11 16:05:13Z amassari $
+ * $Id: XMLBigDecimal.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XML_BIGDECIMAL_HPP)
@@ -123,7 +123,7 @@ private:
     void  cleanUp();
     
     // -----------------------------------------------------------------------
-    //  Unimplemented contstructors and operators
+    //  Unimplemented constructors and operators
     // -----------------------------------------------------------------------       
     XMLBigDecimal(const XMLBigDecimal& other);
     XMLBigDecimal& operator=(const XMLBigDecimal& other);        
@@ -135,7 +135,7 @@ private:
     //     sign
     //
     //  fTotalDigits
-    //     the total number of didits 
+    //     the total number of digits 
     //
     //  fScale
     //     the number of digits to the right of the decimal point

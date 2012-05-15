@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: RangeToken.cpp 678879 2008-07-22 20:05:05Z amassari $
+ * $Id: RangeToken.cpp 901107 2010-01-20 08:45:02Z borisk $
  */
 
 // ---------------------------------------------------------------------------
@@ -55,7 +55,7 @@ const unsigned int RangeToken::INITIALSIZE = 16;
 //  RangeToken: Constructors and Destructors
 // ---------------------------------------------------------------------------
 RangeToken::RangeToken(const Token::tokType tkType,
-                       MemoryManager* const manager) 
+                       MemoryManager* const manager)
     : Token(tkType, manager)
     , fSorted(false)
     , fCompacted(false)
@@ -72,6 +72,12 @@ RangeToken::RangeToken(const Token::tokType tkType,
 
 RangeToken::~RangeToken() {
 
+    // TODO(dbertoni) This is a temporary hack until we can change the ABI.
+    // See Jira issue XERCESC-1866 for more details.
+    if (fCaseIToken && fCaseIToken->fCaseIToken == this)
+    {
+        fCaseIToken->fCaseIToken = 0;
+    }
     fMemoryManager->deallocate(fMap);//delete [] fMap;
     fMemoryManager->deallocate(fRanges);//delete[] fRanges;
 }
@@ -152,13 +158,12 @@ RangeToken* RangeToken::getCaseInsensitiveToken(TokenFactory* const tokFactory) 
 
         bool isNRange = (getTokenType() == T_NRANGE) ? true : false;
         RangeToken* lwrToken = tokFactory->createRange(isNRange);
-        unsigned int exceptIndex = 0;
 
 #if XERCES_USE_TRANSCODER_ICU && ((U_ICU_VERSION_MAJOR_NUM > 2) || (U_ICU_VERSION_MAJOR_NUM == 2 && U_ICU_VERSION_MINOR_NUM >=4))
         UChar* rangeStr=(UChar*)fMemoryManager->allocate(40*fElemCount*sizeof(UChar));
         ArrayJanitor<UChar> janRange(rangeStr, fMemoryManager);
         int c=0;
-        rangeStr[c++] = chOpenSquare;        
+        rangeStr[c++] = chOpenSquare;
         for (unsigned int i = 0;  i < fElemCount - 1;  i += 2) {
             XMLCh buffer[10];
             XMLSize_t len, j;
@@ -212,6 +217,8 @@ RangeToken* RangeToken::getCaseInsensitiveToken(TokenFactory* const tokFactory) 
             uset_close(range);
         }
 #else
+        unsigned int exceptIndex = 0;
+
         for (unsigned int i = 0;  i < fElemCount - 1;  i += 2) {
             for (XMLInt32 ch = fRanges[i];  ch <= fRanges[i + 1];  ++ch) {
 #if XERCES_USE_TRANSCODER_ICU
@@ -286,6 +293,12 @@ RangeToken* RangeToken::getCaseInsensitiveToken(TokenFactory* const tokFactory) 
         lwrToken->createMap();
 
         fCaseIToken = lwrToken;
+        // TODO(dbertoni) This is a temporary hack until we can change the ABI.
+        // See Jira issue XERCESC-1866 for more details.
+        // Overload the fCaseIToken data member to be the case-insensitive token
+        // that's caching the case-insensitive one.  We need this because tokens
+        // have varying lifetimes.
+        fCaseIToken->setCaseInsensitiveToken(this);
     }
 
     return fCaseIToken;

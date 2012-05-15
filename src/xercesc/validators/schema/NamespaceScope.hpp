@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: NamespaceScope.hpp 527149 2007-04-10 14:56:39Z amassari $
+ * $Id: NamespaceScope.hpp 729944 2008-12-29 17:03:32Z amassari $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_NAMESPACESCOPE_HPP)
@@ -100,6 +100,7 @@ public :
     // -----------------------------------------------------------------------
     bool isEmpty() const;
     void reset(const unsigned int emptyId);
+    unsigned int getEmptyNamespaceId() const;
 
 
 private :
@@ -151,6 +152,12 @@ inline bool NamespaceScope::isEmpty() const
 {
     return (fStackTop == 0);
 }
+
+inline unsigned int NamespaceScope::getEmptyNamespaceId() const
+{
+    return fEmptyNamespaceId;
+}
+
 
 XERCES_CPP_NAMESPACE_END
 

@@ -44,14 +44,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="ws2_32.lib advapi32.lib "
-				OutputFile="$(OutDir)\xerces-c_3_0.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1.dll"
 				LinkIncremental="0"
 				AdditionalLibraryDirectories="$(OutDir)"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0.fullpdb"
-				StripPrivateSymbols="$(OutDir)\xerces-c_3_0.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1.fullpdb"
+				StripPrivateSymbols="$(OutDir)\xerces-c_3_1.pdb"
 				GenerateMapFile="TRUE"
-				MapFileName="$(IntDir)\xerces-c_3_0.map"
+				MapFileName="$(IntDir)\xerces-c_3_1.map"
 				SubSystem="2"
 				OptimizeReferences="2"
 				SetChecksum="TRUE"
@@ -62,7 +62,7 @@
 				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\..\..\..\Build\Win32\VC7.1\Release/XercesLib.tlb"/>
+				TypeLibraryName="$(OutDir)\XercesLib.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -113,11 +113,11 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="ws2_32.lib advapi32.lib "
-				OutputFile="$(OutDir)\xerces-c_3_0D.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1D.dll"
 				LinkIncremental="0"
 				AdditionalLibraryDirectories="$(OutDir)"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0D.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1D.pdb"
 				SubSystem="2"
 				SetChecksum="TRUE"
 				BaseAddress="0x12000000"
@@ -127,7 +127,7 @@
 				PreprocessorDefinitions="_DEBUG"
 				MkTypLibCompatible="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\..\..\..\Build\Win32\VC7.1\Debug/XercesLib.tlb"/>
+				TypeLibraryName="$(OutDir)\XercesLib.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -183,7 +183,7 @@
 				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\..\..\..\Build\Win32\VC7.1\StaticRelease/XercesLib.tlb"/>
+				TypeLibraryName="$(OutDir)\XercesLib.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -221,7 +221,7 @@
 				PrecompiledHeaderFile="$(IntDir)\XercesLib.pch"
 				AssemblerListingLocation="$(IntDir)\"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="$(OutDir)\XercesLib_vc71D.pdb"
+				ProgramDataBaseFileName="$(OutDir)\xerces-c_static_3D.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="0"/>
@@ -235,7 +235,7 @@
 				PreprocessorDefinitions="_DEBUG"
 				MkTypLibCompatible="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\..\..\..\Build\Win32\VC7.1\StaticDebug/XercesLib.tlb"/>
+				TypeLibraryName="$(OutDir)\XercesLib.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -284,11 +284,11 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="ws2_32.lib advapi32.lib icuuc.lib"
-				OutputFile="$(OutDir)\xerces-c_3_0D.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1D.dll"
 				LinkIncremental="0"
 				AdditionalLibraryDirectories="$(OutDir)"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0D.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1D.pdb"
 				SubSystem="2"
 				SetChecksum="TRUE"
 				BaseAddress="0x12000000"
@@ -298,7 +298,7 @@
 				PreprocessorDefinitions="_DEBUG"
 				MkTypLibCompatible="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\..\..\..\Build\Win32\VC7.1\Debug/XercesLib.tlb"/>
+				TypeLibraryName="$(OutDir)\XercesLib.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -352,14 +352,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="ws2_32.lib advapi32.lib icuuc.lib"
-				OutputFile="$(OutDir)\xerces-c_3_0.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1.dll"
 				LinkIncremental="0"
 				AdditionalLibraryDirectories="$(OutDir)"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0.fullpdb"
-				StripPrivateSymbols="$(OutDir)\xerces-c_3_0.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1.fullpdb"
+				StripPrivateSymbols="$(OutDir)\xerces-c_3_1.pdb"
 				GenerateMapFile="TRUE"
-				MapFileName="$(IntDir)\xerces-c_3_0.map"
+				MapFileName="$(IntDir)\xerces-c_3_1.map"
 				SubSystem="2"
 				OptimizeReferences="2"
 				SetChecksum="TRUE"
@@ -370,7 +370,7 @@
 				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\..\..\..\Build\Win32\VC7.1\Release/XercesLib.tlb"/>
+				TypeLibraryName="$(OutDir)\XercesLib.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -401,9 +401,6 @@
 			Filter=".cpp,.hpp">
 			<File
 				RelativePath="..\..\..\..\..\src\xercesc\util\ArrayIndexOutOfBoundsException.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\src\xercesc\util\AutoSense.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\src\xercesc\util\Base64.cpp">
@@ -461,6 +458,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\src\xercesc\util\FlagJanitor.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\xercesc\util\Hash2KeysSetOf.hpp"
+				>
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\src\xercesc\util\Hashers.hpp">
@@ -1425,6 +1426,12 @@
 				RelativePath="..\..\..\..\..\src\xercesc\framework\XMLGrammarDescription.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\..\src\xercesc\framework\XMLGrammarPoolImpl.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\xercesc\framework\XMLGrammarPoolImpl.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\src\xercesc\framework\XMLNotationDecl.cpp">
 			</File>
 			<File
@@ -1710,12 +1717,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\src\xercesc\internal\WFXMLScanner.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\src\xercesc\framework\XMLGrammarPoolImpl.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\src\xercesc\framework\XMLGrammarPoolImpl.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\src\xercesc\internal\XMLInternalErrorHandler.hpp">

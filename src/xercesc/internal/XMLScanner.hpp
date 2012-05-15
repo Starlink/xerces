@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLScanner.hpp 679340 2008-07-24 10:28:29Z borisk $
+ * $Id: XMLScanner.hpp 882548 2009-11-20 13:44:14Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XMLSCANNER_HPP)
@@ -197,13 +197,6 @@ public :
     virtual const XMLCh* getName() const = 0;
     virtual NameIdPool<DTDEntityDecl>* getEntityDeclPool() = 0;
     virtual const NameIdPool<DTDEntityDecl>* getEntityDeclPool() const = 0;
-    virtual unsigned int resolveQName
-    (
-        const   XMLCh* const        qName
-        ,       XMLBuffer&          prefixBufToFill
-        , const short               mode
-        ,       int&                prefixColonPos
-    ) = 0;
     virtual void scanDocument
     (
         const   InputSource&    src
@@ -215,6 +208,8 @@ public :
         , const short           grammarType
         , const bool            toCache = false
     ) = 0;
+
+    virtual void resetCachedGrammar ();
 
     // -----------------------------------------------------------------------
     //  Getter methods
@@ -278,6 +273,11 @@ public :
     ValueVectorOf<PrefMapElem*>* getNamespaceContext() const;
     unsigned int getPrefixId(const XMLCh* const prefix) const;
     const XMLCh* getPrefixForId(unsigned int prefId) const;
+
+    // Return is a reference so that we can return it as void* from
+    // getProperty.
+    //
+    const XMLSize_t& getLowWaterMark() const;
 
     bool getGenerateSyntheticAnnotations() const;
     bool getValidateAnnotations() const;
@@ -350,6 +350,7 @@ public :
     // -----------------------------------------------------------------------
     //  Setter methods
     // -----------------------------------------------------------------------
+    void addGlobalPrefix(const XMLCh* const prefix, const unsigned int uriId);
     void setDocHandler(XMLDocumentHandler* const docHandler);
     void setDocTypeHandler(DocTypeHandler* const docTypeHandler);
     void setDoNamespaces(const bool doNamespaces);
@@ -381,6 +382,7 @@ public :
     void setParseSettings(XMLScanner* const refScanner);
     void setStandardUriConformant(const bool newValue);
     void setInputBufferSize(const XMLSize_t bufferSize);
+    void setLowWaterMark(XMLSize_t newValue);
 
     void setGenerateSyntheticAnnotations(const bool newValue);
     void setValidateAnnotations(const bool newValue);
@@ -446,6 +448,17 @@ public :
         , const bool            toCache = false
     );
 
+    // -----------------------------------------------------------------------
+    //  Helper methods
+    // -----------------------------------------------------------------------
+    unsigned int resolveQName
+    (
+        const   XMLCh* const        qName
+        ,       XMLBuffer&          prefixBufToFill
+        , const ElemStack::MapModes mode
+        ,       int&                prefixColonPos
+    );
+
 protected:
     // -----------------------------------------------------------------------
     //  Protected pure virtual methods
@@ -490,6 +503,18 @@ protected:
     unsigned int *getNewUIntPtr();
     void resetUIntPool();
     void recreateUIntPool();
+    unsigned int resolvePrefix
+    (
+        const   XMLCh* const        prefix
+        , const ElemStack::MapModes mode
+    );
+    unsigned int resolveQNameWithColon
+    (
+        const   XMLCh* const        qName
+        ,       XMLBuffer&          prefixBufToFill
+        , const ElemStack::MapModes mode
+        , const int                 prefixColonPos
+    );
 
     inline
     void setAttrDupChkRegistry
@@ -503,6 +528,9 @@ protected:
     //
     //  fBufferSize
     //      Maximum input buffer size
+    //
+    //  fLowWaterMark
+    //      The low water mark for the raw byte buffer.
     //
     //  fAttrList
     //      Every time we get a new element start tag, we have to pass to
@@ -728,6 +756,7 @@ protected:
     //
     // -----------------------------------------------------------------------
     XMLSize_t                   fBufferSize;
+    XMLSize_t                   fLowWaterMark;
     bool                        fStandardUriConformant;
     bool                        fCalculateSrcOfs;
     bool                        fDoNamespaces;
@@ -1116,6 +1145,11 @@ inline bool XMLScanner::getValidateAnnotations() const
     return fValidateAnnotations;
 }
 
+inline const XMLSize_t& XMLScanner::getLowWaterMark() const
+{
+    return fLowWaterMark;
+}
+
 inline bool XMLScanner::getIgnoreCachedDTD() const
 {
     return fIgnoreCachedDTD;
@@ -1144,6 +1178,11 @@ inline bool XMLScanner::getHandleMultipleImports() const
 // ---------------------------------------------------------------------------
 //  XMLScanner: Setter methods
 // ---------------------------------------------------------------------------
+inline void XMLScanner::addGlobalPrefix(const XMLCh* const prefix, const unsigned int uriId)
+{
+    fElemStack.addGlobalPrefix(prefix, uriId);
+}
+
 inline void XMLScanner::setDocHandler(XMLDocumentHandler* const docHandler)
 {
     fDocHandler = docHandler;
@@ -1313,6 +1352,11 @@ inline void XMLScanner::setInputBufferSize(const XMLSize_t bufferSize)
 {
     fBufferSize = bufferSize;
     fCDataBuf.setFullHandler(this, fBufferSize);
+}
+
+inline void XMLScanner::setLowWaterMark(XMLSize_t newValue)
+{
+    fLowWaterMark = newValue;
 }
 
 inline void XMLScanner::setIgnoredCachedDTD(const bool newValue)

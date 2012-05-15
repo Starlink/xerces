@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DatatypeValidatorFactory.cpp 678409 2008-07-21 13:08:10Z borisk $
+ * $Id: DatatypeValidatorFactory.cpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 
@@ -538,33 +538,33 @@ void DatatypeValidatorFactory::initCanRepRegistory()
                         new  XMLCanRepGroup(XMLCanRepGroup::Decimal));
 
      fCanRepRegistry->put((void*) getDatatypeValidator(SchemaSymbols::fgDT_INTEGER),
-                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derivated_signed));
+                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derived_signed));
      fCanRepRegistry->put((void*) getDatatypeValidator(SchemaSymbols::fgDT_LONG),
-                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derivated_signed));
+                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derived_signed));
      fCanRepRegistry->put((void*) getDatatypeValidator(SchemaSymbols::fgDT_INT),
-                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derivated_signed));
+                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derived_signed));
      fCanRepRegistry->put((void*) getDatatypeValidator(SchemaSymbols::fgDT_SHORT),
-                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derivated_signed));
+                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derived_signed));
      fCanRepRegistry->put((void*) getDatatypeValidator(SchemaSymbols::fgDT_BYTE),
-                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derivated_signed));
+                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derived_signed));
      fCanRepRegistry->put((void*) getDatatypeValidator(SchemaSymbols::fgDT_NONNEGATIVEINTEGER),
-                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derivated_signed));
+                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derived_signed));
      fCanRepRegistry->put((void*) getDatatypeValidator(SchemaSymbols::fgDT_POSITIVEINTEGER),
-                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derivated_signed));
+                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derived_signed));
 
      fCanRepRegistry->put((void*) getDatatypeValidator(SchemaSymbols::fgDT_NEGATIVEINTEGER),
-                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derivated_unsigned));
+                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derived_unsigned));
      fCanRepRegistry->put((void*) getDatatypeValidator(SchemaSymbols::fgDT_ULONG),
-                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derivated_unsigned));
+                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derived_unsigned));
      fCanRepRegistry->put((void*) getDatatypeValidator(SchemaSymbols::fgDT_UINT),
-                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derivated_unsigned));
+                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derived_unsigned));
      fCanRepRegistry->put((void*) getDatatypeValidator(SchemaSymbols::fgDT_USHORT),
-                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derivated_unsigned));
+                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derived_unsigned));
      fCanRepRegistry->put((void*) getDatatypeValidator(SchemaSymbols::fgDT_UBYTE),
-                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derivated_unsigned));
+                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derived_unsigned));
 
      fCanRepRegistry->put((void*) getDatatypeValidator(SchemaSymbols::fgDT_NONPOSITIVEINTEGER),
-                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derivated_npi));
+                        new  XMLCanRepGroup(XMLCanRepGroup::Decimal_Derived_npi));
 }
 
 /***

@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMNode.hpp 671894 2008-06-26 13:29:21Z borisk $
+ * $Id: DOMNode.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_DOMNODE_HPP)
@@ -172,7 +172,7 @@ public:
     // -----------------------------------------------------------------------
     //  Class Types
     // -----------------------------------------------------------------------
-    /** @name Public Contants */
+    /** @name Public Constants */
     //@{
     /**
      * NodeType

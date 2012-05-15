@@ -20,11 +20,11 @@
 #
 
 #
-# $Id: configure.ac 744933 2009-02-16 15:13:42Z borisk $
+# $Id: configure.ac 935350 2010-04-18 15:02:36Z borisk $
 #
 
 AC_PREREQ(2.60)
-AC_INIT([xerces-c],[3.0.1])
+AC_INIT([xerces-c],[3.1.1])
 AC_CONFIG_SRCDIR([src/Makefile.am])
 AC_CONFIG_LIBOBJ_DIR([src])
 AC_CONFIG_AUX_DIR([config])
@@ -32,7 +32,6 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h src/xercesc/util/Xerces_autoconf_config.hpp])
 AC_CONFIG_FILES([Makefile \
                  src/Makefile \
-                 src/xercesc/util/MsgLoaders/ICU/resources/Makefile \
                  src/xercesc/util/MsgLoaders/MsgCatalog/Makefile \
                  tests/Makefile \
                  samples/Makefile \
@@ -55,7 +54,8 @@ AC_MSG_RESULT($xerces_cv_rpath)
 
 # Checks for programs.
 AC_PROG_CXX
-AC_PROG_CC
+# Use the C++ compiler for the compile tests
+AC_LANG(C++)
 # used by "make check"
 AC_PROG_SED
 #it would be nice to also check for PERL...
@@ -74,13 +74,15 @@ AS_IF([test x$AR = xfalse],
 	AC_MSG_ERROR([Cannot find a valid 'ar' tool]))
 
 # Patch libtool to not use rpath if requested.
-if test "$xerces_cv_rpath" = "no"; then
- AC_MSG_RESULT([Patching libtool to not use rpath.])
- sed < libtool > libtool-2 \
-   's/^hardcode_libdir_flag_spec.*$'/'hardcode_libdir_flag_spec=" -D__LIBTOOL_NO_RPATH__ "/'
- mv libtool-2 libtool
- chmod 755 libtool
-fi
+#
+AC_CONFIG_COMMANDS([libtool-rpath-patch],
+[if test "$libtool_patch_use_rpath" = "no"; then
+   echo config.status: patching libtool to not use rpath
+   sed < libtool > libtool-2 's/^hardcode_libdir_flag_spec.*$'/'hardcode_libdir_flag_spec=" -D__LIBTOOL_NO_RPATH__ "/'
+   mv libtool-2 libtool
+   chmod 755 libtool
+fi],
+[libtool_patch_use_rpath=$xerces_cv_rpath])
 
 # Export information on whether we are building static/shared libraries.
 # enable_shared and enable_static are defined by AC_PROG_LIBTOOL.
@@ -97,7 +99,7 @@ AC_CHECK_HEADERS([arpa/inet.h fcntl.h float.h inttypes.h langinfo.h limits.h loc
                   sys/param.h sys/socket.h sys/time.h sys/timeb.h \
                   unistd.h wchar.h wctype.h \
                   CoreServices/CoreServices.h \
-                  endian.h machine/endian.h \
+                  endian.h machine/endian.h arpa/nameser_compat.h \
                  ])
 
 # Checks for typedefs, structures, and compiler characteristics.
@@ -156,7 +158,7 @@ AC_COMPILE_IFELSE(  [AC_LANG_PROGRAM([[#include <wchar.h>]],
                  )
 AC_MSG_CHECKING([for wcsrtombs])
 AC_COMPILE_IFELSE(  [AC_LANG_PROGRAM([[#include <wchar.h>]],
-                                     [[mbstate_t st; char buffer[2]; wchar_t src[2]; wcsrtombs(buffer, &src, 2, &st);]])],
+                                     [[mbstate_t st; char buffer[2]; const wchar_t* src=0; wcsrtombs(buffer, &src, 2, &st);]])],
                     [
                       AC_MSG_RESULT([yes])
                       AC_DEFINE_UNQUOTED([HAVE_WCSRTOMBS], 1, [Define to 1 if you have the `wcsrtombs' function.])
@@ -168,7 +170,7 @@ AC_COMPILE_IFELSE(  [AC_LANG_PROGRAM([[#include <wchar.h>]],
                  )
 AC_MSG_CHECKING([for mbsrtowcs])
 AC_COMPILE_IFELSE(  [AC_LANG_PROGRAM([[#include <wchar.h>]],
-                                     [[mbstate_t st; wchar_t buffer[2]; char src[2]; mbsrtowcs(buffer, &src, 2, &st);]])],
+                                     [[mbstate_t st; wchar_t buffer[2]; const char* src=0; mbsrtowcs(buffer, &src, 2, &st);]])],
                     [
                       AC_MSG_RESULT([yes])
                       AC_DEFINE_UNQUOTED([HAVE_MBSRTOWCS], 1, [Define to 1 if you have the `mbsrtowcs' function.])
@@ -179,6 +181,25 @@ AC_COMPILE_IFELSE(  [AC_LANG_PROGRAM([[#include <wchar.h>]],
                     ]
                  )
 
+AC_MSG_CHECKING([if iconv uses const pointers])
+AC_COMPILE_IFELSE(  [AC_LANG_PROGRAM([[#include <iconv.h>]],
+                                     [[
+                                       const char *fromPtr=0;
+                                       size_t     fromLen=0;
+                                       char       *toPtr=0;
+                                       size_t     toLen=0;
+                                       iconv_t    cv=0;
+                                       iconv(cv, &fromPtr, &fromLen, &toPtr, &toLen);
+                                      ]])],
+                    [
+                      AC_MSG_RESULT([yes])
+                      AC_DEFINE_UNQUOTED([ICONV_USES_CONST_POINTER], 1, [Define to 1 if you have to use const char* with iconv, to 0 if you must use char*.])
+                    ],
+                    [
+                      AC_MSG_RESULT([no])
+                      AC_DEFINE_UNQUOTED([ICONV_USES_CONST_POINTER], 0, [Define to 1 if you have to use const char* with iconv, to 0 if you must use char*.])
+                    ]
+                 )
 
 AC_SUBST([SHREXT], [$shrext_cmds])
 
@@ -208,16 +229,22 @@ XERCES_FILEMGR_SELECTION
 # Allow the user to specify the pkgconfig directory.
 #
 AC_ARG_WITH(pkgconfigdir,
-	AC_HELP_STRING([--with-pkgconfigdir=DIR],
-	[Specify location of pkgconfig dir (default is libdir/pkgconfig)]),
+	AC_HELP_STRING([--with-pkgconfigdir=DIR],[Specify location of pkgconfig dir (default is libdir/pkgconfig)]),
 	[pkgconfigdir=${withval}],
 	[pkgconfigdir='${libdir}/pkgconfig'])
 
 AC_SUBST([pkgconfigdir])
 
+# Allow the user to disable the SSE2 support
+#
+AC_ARG_ENABLE(sse2,
+    AC_HELP_STRING([--disable-sse2],[disable SSE2 optimizations]),
+    [have_sse2=${enableval}],
+    [have_sse2=yes])
+
 ######################################################
 # Define some namespace-protected macros for use in the
-# publicly visible XercesConfig.h file.
+# publicly visible Xerces_autoconf_config.h file.
 ######################################################
 
 AC_DEFINE([XERCES_AUTOCONF], 1, [Define to true if autoconf is used in this configuration])
@@ -255,16 +282,159 @@ AC_COMPILE_IFELSE(  [AC_LANG_PROGRAM([[#include <windows.h>
                                      [[DeleteFileW(file);]])],
                     [
                       xerces_cv_type_xmlch=wchar_t
-                   	  AC_MSG_RESULT([yes])
+                      AC_MSG_RESULT([yes])
                       AC_DEFINE_UNQUOTED([XERCES_INCLUDE_WCHAR_H], 1, [Define to have Xerces_autoconf_config.hpp include wchar.h])
                     ],
-	                [
+                    [
                       xerces_cv_type_xmlch=$xerces_cv_type_u16bit_int
                       AC_MSG_RESULT([no])
                     ]
                  )
 
 AC_DEFINE_UNQUOTED([XERCES_XMLCH_T], [$xerces_cv_type_xmlch], [Define to the 16 bit type used to represent Xerces UTF-16 characters])
+
+AC_MSG_CHECKING([whether the compiler chokes on a placement operator delete])
+AC_COMPILE_IFELSE(  [AC_LANG_PROGRAM([[#include <stdlib.h>
+
+                                        class XMemory
+                                        {
+                                        public :
+                                            void* operator new(size_t s) { return 0; }
+                                            void* operator new(size_t s, void* ptr) { return 0; }
+                                            void operator delete(void* p) {}
+                                            void operator delete(void* p, void* ptr) {}
+                                        };]],
+                                     [[ ]])],
+                    [
+                      AC_MSG_RESULT([no])
+                    ],
+                    [
+                      AC_MSG_RESULT([yes])
+                      AC_DEFINE_UNQUOTED([XERCES_NO_MATCHING_DELETE_OPERATOR], 1, [Define to have XMemory.hpp avoid declaring a matching operator delete for the placement operator new])
+                    ]
+                 )
+
+if test "$have_sse2" = "yes"; then
+    no_sse2_CXXFLAGS="$CXXFLAGS"
+
+    save_CXXFLAGS="$CXXFLAGS"
+    CXXFLAGS="$CXXFLAGS -msse2"
+	AC_MSG_CHECKING([whether we need to add -msse2])
+	AC_COMPILE_IFELSE(  [AC_LANG_PROGRAM([[#include <emmintrin.h>]], [[__m128i one;]])],
+						[msse2_ok=yes],
+						[msse2_ok=no]
+					 )
+    AC_MSG_RESULT($msse2_ok)
+    if test x"$msse2_ok" = xno; then
+        CXXFLAGS="$save_CXXFLAGS"
+    fi
+# Sun CC option test. Currently disabled since it doesn't work. Also note
+# that Sun CC will accept -msse2 (i.e., it won't fail) but will keep issuing
+# warnings. So if enabled this test needs to be moved before -msse2 and if
+# it passes, then -msse2 should be skipped.
+#
+#    save_CXXFLAGS="$CXXFLAGS"
+#    CXXFLAGS="$CXXFLAGS -xarch=sse2"
+#      AC_MSG_CHECKING([whether we need to add -xarch=sse2])
+#      AC_COMPILE_IFELSE(  [AC_LANG_PROGRAM([[#include <emmintrin.h>]], [[__m128i one;]])],
+#						[xarchsse2_ok=yes],
+#						[xarchsse2_ok=no]
+#					 )
+#    AC_MSG_RESULT($xarchsse2_ok)
+#    if test x"$xarchsse2_ok" = xno; then
+#        CXXFLAGS="$save_CXXFLAGS"
+#    fi
+
+    AC_MSG_CHECKING([for intrin.h usability])
+    AC_COMPILE_IFELSE(  [AC_LANG_PROGRAM([[#include <intrin.h>]],
+                                         [[]])],
+                        [
+                          AC_MSG_RESULT([yes])
+                          AC_DEFINE_UNQUOTED([XERCES_HAVE_INTRIN_H], 1, [Define to 1 if you have intrin.h])
+                        ],
+                        [
+                          AC_MSG_RESULT([no])
+                        ]
+                     )
+    AC_MSG_CHECKING([for emmintrin.h usability])
+    AC_COMPILE_IFELSE(  [AC_LANG_PROGRAM([[#include <emmintrin.h>]],
+                                         [[]])],
+                        [
+                          AC_MSG_RESULT([yes])
+                          AC_DEFINE_UNQUOTED([XERCES_HAVE_EMMINTRIN_H], 1, [Define to 1 if you have emmintrin.h])
+                        ],
+                        [
+                          AC_MSG_RESULT([no])
+                        ]
+                     )
+    AC_MSG_CHECKING([for cpuid.h usability])
+    AC_COMPILE_IFELSE(  [AC_LANG_PROGRAM([[#include <cpuid.h>]],
+                                         [[]])],
+                        [
+                          AC_MSG_RESULT([yes])
+                          AC_DEFINE_UNQUOTED([HAVE_CPUID_H], 1, [Define to 1 if you have cpuid.h])
+                        ],
+                        [
+                          AC_MSG_RESULT([no])
+                        ]
+                     )
+
+	AC_MSG_CHECKING([whether the compiler has the CPUID intrinsic])
+	AC_COMPILE_IFELSE(  [AC_LANG_PROGRAM([[#include <intrin.h>]],
+										 [[int CPUInfo[4];
+										   __cpuid(CPUInfo, 1);
+										 ]])],
+						[
+						  AC_MSG_RESULT([yes])
+						  AC_DEFINE_UNQUOTED([XERCES_HAVE_CPUID_INTRINSIC], 1, [Define to have SSE2 instruction support detected at runtime using __cpuid])
+						],
+						[
+						  AC_MSG_RESULT([no])
+						]
+					 )
+
+	AC_MSG_CHECKING([whether the compiler has the _get_cpuid intrinsic])
+	AC_COMPILE_IFELSE(  [AC_LANG_PROGRAM([[#include <cpuid.h>]],
+										 [[unsigned int eax, ebx, ecx, edx;
+                                           __get_cpuid (1, &eax, &ebx, &ecx, &edx);
+										 ]])],
+						[
+						  AC_MSG_RESULT([yes])
+						  AC_DEFINE_UNQUOTED([XERCES_HAVE_GETCPUID], 1, [Define to have SSE2 instruction support detected at runtime using __get_cpuid])
+						],
+						[
+						  AC_MSG_RESULT([no])
+						]
+					 )
+
+	AC_MSG_CHECKING([whether the compiler has the SSE2 intrinsic])
+	AC_COMPILE_IFELSE(  [AC_LANG_PROGRAM([[#include <emmintrin.h>]],
+										 [[__m128i* one=(__m128i*)_mm_malloc(4, 16);
+										   __m128i* two=(__m128i*)_mm_malloc(4, 16);
+										   __m128i xmm1 = _mm_load_si128(one);
+										   __m128i xmm2 = _mm_load_si128(two);
+										   __m128i xmm3 = _mm_or_si128(xmm1, xmm2);
+										   _mm_store_si128(one, xmm3);
+										   _mm_free(one);
+										   _mm_free(two);
+										 ]])],
+						[
+						  AC_MSG_RESULT([yes])
+						  sse2_usable=yes
+						  AC_DEFINE_UNQUOTED([XERCES_HAVE_SSE2_INTRINSIC], 1, [Define to have SSE2 instruction used at runtime])
+						],
+						[
+						  AC_MSG_RESULT([no])
+                                                  sse2_usable=no
+						]
+
+					 )
+  # Restore original CXXFLAGS if SSE2 is not usable.
+  #
+  if test "$sse2_usable" = "no"; then
+    CXXFLAGS="$no_sse2_CXXFLAGS"
+  fi
+fi
 
 AS_IF([test x$ac_cv_type_size_t = xyes],
 	AC_DEFINE([XERCES_SIZE_T], [size_t], [Define as the appropriate size_t type]),

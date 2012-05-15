@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: SchemaGrammar.cpp 679340 2008-07-24 10:28:29Z borisk $
+ * $Id: SchemaGrammar.cpp 883376 2009-11-23 15:45:23Z borisk $
  */
 
 // ---------------------------------------------------------------------------
@@ -58,6 +58,8 @@ SchemaGrammar::SchemaGrammar(MemoryManager* const manager) :
     , fAnnotations(0)
     , fValidated(false)
     , fDatatypeRegistry(manager)
+    , fScopeCount (0)
+    , fAnonTypeCount (0)
 {
     CleanupType cleanup(this, &SchemaGrammar::cleanUp);
 

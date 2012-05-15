@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: AttributeList.hpp 672273 2008-06-27 13:57:00Z borisk $
+ * $Id: AttributeList.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_ATTRIBUTELIST_HPP)
@@ -137,7 +137,7 @@ public:
     *
     * If the parser has not read a declaration for the attribute,
     * or if the parser does not report attribute types, then it must
-    * return the value "CDATA" as stated in the XML 1.0 Recommentation
+    * return the value "CDATA" as stated in the XML 1.0 Recommendation
     * (clause 3.3.3, "Attribute-Value Normalization").
     *
     * For an enumerated attribute that is not a notation, the

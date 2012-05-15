@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMLSParserImpl.hpp 673679 2008-07-03 13:50:10Z borisk $
+ * $Id: DOMLSParserImpl.hpp 830538 2009-10-28 13:41:11Z amassari $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_DOMBUILDERIMPL_HPP)
@@ -29,6 +29,7 @@
 #include <xercesc/dom/DOMConfiguration.hpp>
 #include <xercesc/util/XercesDefs.hpp>
 #include <xercesc/util/RefVectorOf.hpp>
+#include <xercesc/util/ValueHashTableOf.hpp>
 
 XERCES_CPP_NAMESPACE_BEGIN
 
@@ -155,7 +156,7 @@ public :
     /**
       * @see DOMLSParser#parseWithContext
       */
-    virtual void parseWithContext
+    virtual DOMNode* parseWithContext
     (
         const   DOMLSInput*     source
         ,       DOMNode*        contextNode
@@ -555,6 +556,10 @@ public :
         const   XMLCh* const    target
         , const XMLCh* const    data
     );
+    virtual void startEntityReference
+    (
+        const   XMLEntityDecl&  entDecl
+    );
     virtual void endElement
     (
         const   XMLElementDecl& elemDecl
@@ -573,12 +578,27 @@ public :
         , const bool                    isRoot
     );
 
+    // overriden callbacks to implement parseWithContext behavior
+    virtual void startDocument();
+    virtual void XMLDecl
+    (
+        const   XMLCh* const    versionStr
+        , const XMLCh* const    encodingStr
+        , const XMLCh* const    standaloneStr
+        , const XMLCh* const    actualEncStr
+    );
+
 
 private :
     // -----------------------------------------------------------------------
     //  Initialize/Cleanup methods
     // -----------------------------------------------------------------------
     void resetParse();
+
+    // -----------------------------------------------------------------------
+    //  Helper methods
+    // -----------------------------------------------------------------------
+    void applyFilter(DOMNode* node);
 
     // -----------------------------------------------------------------------
     //  Private data members
@@ -607,6 +627,21 @@ private :
     //      A list of the parameters that can be set, including the ones
     //      specific of Xerces
 	//
+    //  fFilterAction
+    //      A map of elements rejected by the DOMLSParserFilter::startElement
+    //      callback, used to avoid invoking DOMLSParserFilter::acceptNode
+    //      on its children
+	//
+    //  fFilterDelayedTextNodes
+    //      As text nodes are filled incrementally, store them in a map
+    //      so that we ask DOMLSParserFilter::acceptNode only once, when it
+    //      is completely created
+	//
+    //  fWrapNodesInDocumentFragment
+    //  fWrapNodesContext
+    //  fWrapNodesAction
+    //      Variables used to keep the state for parseWithContext API 
+    //
     //-----------------------------------------------------------------------
     DOMLSResourceResolver*      fEntityResolver;
     XMLEntityResolver*          fXMLEntityResolver;
@@ -615,6 +650,11 @@ private :
     bool                        fCharsetOverridesXMLEncoding;
     bool                        fUserAdoptsDocument;
     DOMStringListImpl*          fSupportedParameters;
+    ValueHashTableOf<DOMLSParserFilter::FilterAction, PtrHasher>*   fFilterAction;
+    ValueHashTableOf<bool, PtrHasher>*                              fFilterDelayedTextNodes;
+    DOMDocumentFragment*        fWrapNodesInDocumentFragment;
+    DOMNode*                    fWrapNodesContext;
+    ActionType                  fWrapNodesAction;
 
     // -----------------------------------------------------------------------
     // Unimplemented constructors and operators

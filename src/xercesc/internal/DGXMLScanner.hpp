@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DGXMLScanner.hpp 678409 2008-07-21 13:08:10Z borisk $
+ * $Id: DGXMLScanner.hpp 810580 2009-09-02 15:52:22Z amassari $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_DGXMLSCANNER_HPP)
@@ -25,6 +25,7 @@
 #include <xercesc/internal/XMLScanner.hpp>
 #include <xercesc/util/ValueVectorOf.hpp>
 #include <xercesc/util/NameIdPool.hpp>
+#include <xercesc/util/Hash2KeysSetOf.hpp>
 #include <xercesc/validators/common/Grammar.hpp>
 
 XERCES_CPP_NAMESPACE_BEGIN
@@ -65,13 +66,6 @@ public :
     virtual const XMLCh* getName() const;
     virtual NameIdPool<DTDEntityDecl>* getEntityDeclPool();
     virtual const NameIdPool<DTDEntityDecl>* getEntityDeclPool() const;
-    virtual unsigned int resolveQName
-    (
-        const   XMLCh* const        qName
-        ,       XMLBuffer&          prefixBufToFill
-        , const short               mode
-        ,       int&                prefixColonPos
-    );
     virtual void scanDocument
     (
         const   InputSource&    src
@@ -124,11 +118,6 @@ private :
         ,       XMLElementDecl*             elemDecl
         ,       RefVectorOf<XMLAttr>&       toFill
     );
-    unsigned int resolvePrefix
-    (
-        const   XMLCh* const        prefix
-        , const ElemStack::MapModes mode
-    );
     void updateNSMap
     (
         const   XMLCh* const attrPrefix
@@ -176,7 +165,7 @@ private :
     //      mapping from XMLAttDef instances to the count of the last
     //      start tag where they were utilized.
     // fUndeclaredAttrRegistry
-    //      mapping of attr QNames to the count of the last start tag in which they occurred
+    //      mapping of attr QNames to detect duplicates
     //
     // -----------------------------------------------------------------------
     ValueVectorOf<XMLAttr*>*    fAttrNSList;
@@ -185,7 +174,7 @@ private :
     NameIdPool<DTDElementDecl>* fDTDElemNonDeclPool;
     unsigned int                fElemCount;
     RefHashTableOf<unsigned int, PtrHasher>* fAttDefRegistry;
-    RefHashTableOf<unsigned int>* fUndeclaredAttrRegistry;
+    Hash2KeysSetOf<StringHasher>*            fUndeclaredAttrRegistry;
 };
 
 inline const XMLCh* DGXMLScanner::getName() const

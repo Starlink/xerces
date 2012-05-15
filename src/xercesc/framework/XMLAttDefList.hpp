@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLAttDefList.hpp 673679 2008-07-03 13:50:10Z borisk $
+ * $Id: XMLAttDefList.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XMLATTDEFLIST_HPP)
@@ -117,7 +117,7 @@ public:
     /** Get the memory manager
       *
       * This method returns the configurable memory manager used by the
-      * element declaration for dynamic allocation/deacllocation.
+      * element declaration for dynamic allocation/deallocation.
       *
       * @return the memory manager
       */

@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMXPathNamespace.hpp 527149 2007-04-10 14:56:39Z amassari $
+ * $Id: DOMXPathNamespace.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_DOMXPATHNAMESPACE_HPP)
@@ -48,7 +48,7 @@ class DOMElement;
  * nodeValue is the same as namespaceURI.
  * adoptNode, cloneNode, and importNode fail on this node type by raising a DOMException with the code NOT_SUPPORTED_ERR.
  * Note: In future versions of the XPath specification, the definition of a namespace node may
- * be changed incomatibly, in which case incompatible changes to field values may be required to
+ * be changed incompatibly, in which case incompatible changes to field values may be required to
  * implement versions beyond XPath 1.0.
  * @since DOM Level 3
  */

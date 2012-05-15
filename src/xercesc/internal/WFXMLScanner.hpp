@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: WFXMLScanner.hpp 676911 2008-07-15 13:27:32Z amassari $
+ * $Id: WFXMLScanner.hpp 810580 2009-09-02 15:52:22Z amassari $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_WFXMLSCANNER_HPP)
@@ -62,13 +62,6 @@ public :
     virtual const XMLCh* getName() const;
     virtual NameIdPool<DTDEntityDecl>* getEntityDeclPool();
     virtual const NameIdPool<DTDEntityDecl>* getEntityDeclPool() const;
-    virtual unsigned int resolveQName
-    (
-        const   XMLCh* const        qName
-        ,       XMLBuffer&          prefixBufToFill
-        , const short               mode
-        ,       int&                prefixColonPos
-    );
     virtual void scanDocument
     (
         const   InputSource&    src
@@ -112,11 +105,6 @@ private :
     // -----------------------------------------------------------------------
     void commonInit();
     void cleanUp();
-    unsigned int resolvePrefix
-    (
-        const   XMLCh* const        prefix
-        , const ElemStack::MapModes mode
-    );
 
     // -----------------------------------------------------------------------
     //  Private scanning methods

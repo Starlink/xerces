@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ICUMsgLoader.hpp 570552 2007-08-28 19:57:36Z amassari $
+ * $Id: ICUMsgLoader.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_ICUMSGLOADER_HPP)
@@ -90,7 +90,7 @@ private :
     //
     //  fLocaleBundle
     //      pointer to the required locale specific resource bundle,
-	//           or to the default locale resrouce bundle in case the required
+	//           or to the default locale resource bundle in case the required
 	//              locale specific resource bundle unavailable.
     //
     //  fDomainBundle

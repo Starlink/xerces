@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLUni.hpp 673960 2008-07-04 08:50:12Z borisk $
+ * $Id: XMLUni.hpp 833045 2009-11-05 13:21:27Z borisk $
  */
 
 
@@ -106,6 +106,7 @@ public :
     static const XMLCh fgUCS4EncodingString2[];
     static const XMLCh fgUCS4EncodingString3[];
     static const XMLCh fgUCS4EncodingString4[];
+    static const XMLCh fgUCS4EncodingString5[];
     static const XMLCh fgUCS4BEncodingString[];
     static const XMLCh fgUCS4BEncodingString2[];
     static const XMLCh fgUCS4LEncodingString[];
@@ -235,7 +236,8 @@ public :
     static const XMLCh fgXercesSkipDTDValidation[];
     static const XMLCh fgXercesEntityResolver[];
     static const XMLCh fgXercesHandleMultipleImports[];
-	static const XMLCh fgXercesDoXInclude[];
+    static const XMLCh fgXercesDoXInclude[];
+    static const XMLCh fgXercesLowWaterMark[];
 
     // SAX2 features/properties names
     static const XMLCh fgSAX2CoreValidation[];

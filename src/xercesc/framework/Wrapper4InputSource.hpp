@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: Wrapper4InputSource.hpp 527149 2007-04-10 14:56:39Z amassari $
+ * $Id: Wrapper4InputSource.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_WRAPPER4INPUTSOURCE_HPP)
@@ -87,7 +87,7 @@ public:
     //@{
   /**
     * An input source can be set to force the parser to assume a particular
-    * encoding for the data that input source reprsents, via the setEncoding()
+    * encoding for the data that input source represents, via the setEncoding()
     * method. This method will delegate to the wrapped input source to return
     * name of the encoding that is to be forced. If the encoding has never
     * been forced, it returns a null pointer.

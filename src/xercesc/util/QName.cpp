@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: QName.cpp 649096 2008-04-17 13:40:51Z amassari $
+ * $Id: QName.cpp 810580 2009-09-02 15:52:22Z amassari $
  */
 
 #include <xercesc/util/Janitor.hpp>
@@ -308,7 +308,7 @@ void QName::setName(const XMLCh* const    rawName
     else
     {
         // No colon, so we just have a name with no prefix
-        setPrefix(XMLUni::fgZeroLenString);
+        setNPrefix(XMLUni::fgZeroLenString, 0);
 
         // And clean up any QName and leave it undone until/if asked for again
         if (fRawName)
@@ -319,23 +319,6 @@ void QName::setName(const XMLCh* const    rawName
 
     // And finally store the URI id parameter
     fURIId = uriId;
-}
-
-void QName::setPrefix(const XMLCh* prefix)
-{
-    if (!fPrefixBufSz || !XMLString::copyNString(fPrefix, prefix, fPrefixBufSz))
-    {
-        XMLSize_t newLen = XMLString::stringLen(prefix);
-        fMemoryManager->deallocate(fPrefix); //delete [] fPrefix;
-        fPrefix = 0;
-        fPrefixBufSz = newLen + 8;
-        fPrefix = (XMLCh*) fMemoryManager->allocate
-        (
-            (fPrefixBufSz + 1) * sizeof(XMLCh)
-        ); //new XMLCh[fPrefixBufSz + 1];
-        XMLString::moveChars(fPrefix, prefix, newLen);
-        fPrefix[newLen] = chNull;
-    }
 }
 
 void QName::setNPrefix(const XMLCh* prefix, const XMLSize_t newLen)
@@ -352,23 +335,6 @@ void QName::setNPrefix(const XMLCh* prefix, const XMLSize_t newLen)
     }
     XMLString::moveChars(fPrefix, prefix, newLen);
     fPrefix[newLen] = chNull;
-}
-
-void QName::setLocalPart(const XMLCh* localPart)
-{
-    if (!fLocalPartBufSz || !XMLString::copyNString(fLocalPart, localPart, fLocalPartBufSz))
-    {
-        XMLSize_t newLen = XMLString::stringLen(localPart);
-        fMemoryManager->deallocate(fLocalPart); //delete [] fLocalPart;
-        fLocalPart = 0;
-        fLocalPartBufSz = newLen + 8;
-        fLocalPart = (XMLCh*) fMemoryManager->allocate
-        (
-            (fLocalPartBufSz + 1) * sizeof(XMLCh)
-        ); //new XMLCh[fLocalPartBufSz + 1];
-        XMLString::moveChars(fLocalPart, localPart, newLen);
-        fLocalPart[newLen] = chNull;
-    }
 }
 
 void QName::setNLocalPart(const XMLCh* localPart, const XMLSize_t newLen)
@@ -399,6 +365,10 @@ void QName::setValues(const QName& qname)
 // -----------------------------------------------------------------------
 bool QName::operator==(const QName& qname) const
 {
+    // if we are an unitialized QName, check that the other is unitialized too
+    if (!fLocalPart && !fPrefix)
+        return !qname.fLocalPart && !qname.fPrefix;
+
     if (fURIId == 0) // null URI
         return (XMLString::equals(getRawName(),qname.getRawName()));
 

@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: FieldValueMap.cpp 676911 2008-07-15 13:27:32Z amassari $
+ * $Id: FieldValueMap.cpp 708224 2008-10-27 16:02:26Z amassari $
  */
 
 // ---------------------------------------------------------------------------
@@ -107,6 +107,16 @@ bool FieldValueMap::indexOf(const IC_Field* const key, XMLSize_t& location) cons
     }
 
     return false;
+}
+
+void FieldValueMap::clear()
+{
+    if(fFields)
+        fFields->removeAllElements();
+    if(fValidators)
+        fValidators->removeAllElements();
+    if(fValues)
+        fValues->removeAllElements();
 }
 
 XERCES_CPP_NAMESPACE_END

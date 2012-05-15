@@ -58,15 +58,6 @@
 			</ul>
 		</s3>
 
-		<s3 title='Implementation of DOM Level 3 Load and Save'>
-		    <p>The following are NOT implemented in &XercesCName; &XercesC3Version;.</p>
-			<ul>
-			    <li>
-			        <code>DOMLSParser</code>: parseWithContext().
-			    </li>
-			</ul>
-
-		</s3>
 	</s2>
 
     <anchor name="UsingDOMAPI"/>
@@ -807,6 +798,26 @@
             </table>
             <p/>
 
+            <table>
+                <tr><th
+                colspan="2"><em>setLowWaterMark(XMLSize_t)</em></th></tr>
+                <tr><th><em>Description</em></th>
+                <td>
+                    If the number of available bytes in the raw buffer is less than
+                    the low water mark the parser will attempt to read more data before
+                    continuing parsing. By default the value for this parameter is 100
+                    bytes. You may want to set this parameter to 0 if you would like
+                    the parser to parse the available data immediately without
+                    potentially blocking while waiting for more date.
+                </td></tr>
+                <tr><th><em>Value</em></th>
+                <td>
+                    New low water mark.
+                </td></tr>
+                <tr><th><em>Value Type</em></th><td> XMLSize_t </td></tr>
+            </table>
+            <p/>
+
         </s3>
 
     </s2>
@@ -911,7 +922,7 @@
         provides some framework classes for specialized types of input source (i.e. LocalFileInputSource, etc.) that are
         derived from the SAX InputSource. In DOM L3, to allow users implementing their own DOMLSResourceResolver(s), which return
         a DOMLSInput, to utilize these framework classes, we need to provide a mechanism to map a SAX InputSource to a
-        DOMInputSource. Two wrapper classes are available to interchange DOMLSInput and SAX InputSource:
+        DOMLSInput. Two wrapper classes are available to interchange DOMLSInput and SAX InputSource:
         </p>
 
            <s4 title="Wrapper4DOMLSInput">
@@ -1097,7 +1108,7 @@
                 <tr><th colspan="2"><em>namespaces</em></th></tr>
                 <tr><th><em>true:</em></th><td> Perform Namespace processing </td></tr>
                 <tr><th><em>false:</em></th><td> Do not perform Namespace processing</td></tr>
-                <tr><th><em>default:</em></th><td> false </td></tr>
+                <tr><th><em>default:</em></th><td> true </td></tr>
                 <tr><th><em>XMLUni Predefined Constant:</em></th><td> fgDOMNamespaces </td></tr>
                 <tr><th><em>note:</em></th><td> If the validation is on, then the
                 document must contain a grammar that supports the use of namespaces </td></tr>
@@ -1613,6 +1624,27 @@
                 </td></tr>
                 <tr><th><em>Value Type</em></th><td> SecurityManager* </td></tr>
                 <tr><th><em>XMLUni Predefined Constant:</em></th><td> fgXercesSecurityManager </td></tr>
+            </table>
+
+            <p/>
+            <table>
+                <tr><th
+                colspan="2"><em>http://apache.org/xml/properties/low-water-mark</em></th></tr>
+                <tr><th><em>Description</em></th>
+                <td>
+                    If the number of available bytes in the raw buffer is less than
+                    the low water mark the parser will attempt to read more data before
+                    continuing parsing. By default the value for this parameter is 100
+                    bytes. You may want to set this parameter to 0 if you would like
+                    the parser to parse the available data immediately without
+                    potentially blocking while waiting for more date.
+                </td></tr>
+                <tr><th><em>Value</em></th>
+                <td>
+                    New low water mark.
+                </td></tr>
+                <tr><th><em>Value Type</em></th><td> XMLSize_t* </td></tr>
+		<tr><th><em>XMLUni Predefined Constant:</em></th><td> fgXercesLowWaterMark </td></tr>
             </table>
             <p/>
 

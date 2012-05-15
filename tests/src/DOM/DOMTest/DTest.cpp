@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DTest.cpp 679344 2008-07-24 10:38:08Z borisk $
+ * $Id: DTest.cpp 830538 2009-10-28 13:41:11Z amassari $
  */
 
 
@@ -32,12 +32,14 @@
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/util/XMLException.hpp>
 #include <xercesc/util/XMLString.hpp>
+#include <xercesc/util/BinInputStream.hpp>
 #include <xercesc/parsers/XercesDOMParser.hpp>
 #include <xercesc/dom/DOMException.hpp>
 #include <xercesc/dom/DOMLSException.hpp>
 #include <xercesc/dom/DOMLSParserFilter.hpp>
 #include <xercesc/util/OutOfMemoryException.hpp>
 #include <xercesc/framework/MemBufInputSource.hpp>
+#include <xercesc/validators/common/CMStateSet.hpp>
 
 #define UNUSED(x) { if(x!=0){} }
 
@@ -874,30 +876,30 @@ int main(int /*argc*/, char ** /*argv*/)
          // docDocType->getEntities()->setNamedItem(docEntity);
 
          XMLString::transcode("d", tempStr3, 3999);
-         OK = test.docBuilder(d, tempStr3);
+         OK &= test.docBuilder(d, tempStr3);
 
          test.findTestNodes((DOMNode*)d);
 
-         OK = test.testAttr(d);
-         OK = test.testCDATASection(d);
-         OK = test.testCharacterData(d);
-         OK = test.testChildNodeList(d);
-         OK = test.testComment(d);
-         OK = test.testDeepNodeList(d);
-         OK = test.testDocument(d);
-         OK = test.testDocumentFragment(d);
-         OK = test.testDocumentType(d);
-         OK = test.testDOMImplementation(d);
-         OK = test.testElement(d);
-//         OK = test.testEntity(d);  // Can not test entities;  only parser can create them.
-         OK = test.testEntityReference(d);
-         OK = test.testNode(d);
-         OK = test.testNotation(d);
-         OK = test.testPI(d);
-         OK = test.testText(d);
-         OK = test.testDOMerrors(d);
-         OK = test.testXPath(d);
-         OK = test.testRegex();
+         OK &= test.testAttr(d);
+         OK &= test.testCDATASection(d);
+         OK &= test.testCharacterData(d);
+         OK &= test.testChildNodeList(d);
+         OK &= test.testComment(d);
+         OK &= test.testDeepNodeList(d);
+         OK &= test.testDocument(d);
+         OK &= test.testDocumentFragment(d);
+         OK &= test.testDocumentType(d);
+         OK &= test.testDOMImplementation(d);
+         OK &= test.testElement(d);
+//         OK &= test.testEntity(d);  // Can not test entities;  only parser can create them.
+         OK &= test.testEntityReference(d);
+         OK &= test.testNode(d);
+         OK &= test.testNotation(d);
+         OK &= test.testPI(d);
+         OK &= test.testText(d);
+         OK &= test.testDOMerrors(d);
+         OK &= test.testXPath(d);
+         OK &= test.testRegex();
 
          // Null out the static object references in class DOMTest,
          // which will recover their storage.
@@ -913,6 +915,33 @@ int main(int /*argc*/, char ** /*argv*/)
          DOMTest::testDocumentTypeNode = 0;
          DOMTest::testDocumentFragmentNode = 0;
          DOMTest::testNotationNode = 0;
+
+        // test release of attributes
+        DOMElement* elt = d->createElement(tempStr3);
+        elt->setAttribute(tempStr3, tempStr3);
+        elt->release();
+        
+        elt = d->createElement(tempStr3);
+        DOMAttr *attr = d->createAttribute(tempStr3);
+        attr->setValue(tempStr3);
+        elt->setAttributeNode(attr);
+        elt->setIdAttributeNode(attr, true);
+
+        DOMElement *eleTest = d->getElementById(tempStr3);
+        if(eleTest==NULL)
+        {
+            fprintf(stderr, "getElementById test failed at line %i\n", __LINE__);
+            OK = false;
+        }
+
+        //all good until here
+        elt->release();
+        eleTest = d->getElementById(tempStr3);
+        if(eleTest!=NULL)
+        {
+            fprintf(stderr, "getElementById test failed at line %i\n", __LINE__);
+            OK = false;
+        }
 
         // we couldn't really test the user data handler call as the userhandler is already
         // deleted when the release() is done, but still set it to test the code internally
@@ -930,22 +959,27 @@ int main(int /*argc*/, char ** /*argv*/)
         parser->setDoSchema(true);
         parser->setCreateEntityReferenceNodes(true);
 
-        OK = test.testBaseURI(parser);
+        OK &= test.testBaseURI(parser);
 
         parser->setCreateEntityReferenceNodes(false);
-        OK = test.testBaseURI(parser);
+        OK &= test.testBaseURI(parser);
 
         parser->setDoNamespaces(false);
         parser->setDoSchema(false);
-        OK = test.testBaseURI(parser);
+        OK &= test.testBaseURI(parser);
 
         parser->setCreateEntityReferenceNodes(true);
-        OK = test.testBaseURI(parser);
+        OK &= test.testBaseURI(parser);
 
-		OK = test.testWholeText(parser);
+		OK &= test.testWholeText(parser);
+        OK &= test.testScanner(parser);
         delete parser;
 
-        OK = test.testLSExceptions();
+        OK &= test.testLSExceptions();
+
+        OK &= test.testElementTraversal();
+
+        OK &= test.testUtilFunctions();
     }
 
     XMLPlatformUtils::Terminate();
@@ -1745,7 +1779,7 @@ bool DOMTest::testCharacterData(DOMDocument* document)
 //    EXCEPTIONSTEST(charData->deleteData(2, -1), DOMException::INDEX_SIZE_ERR, OK, 102 );
     EXCEPTIONSTEST(charData->deleteData(100, 5), DOMException::INDEX_SIZE_ERR, OK,103 );
 
-//can't set negative unsigned int in c++ compiler
+//can't set negative XMLSize_t in c++ compiler
 
   //  EXCEPTIONSTEST(charData->insertData(-1, "Stuff inserted"), DOMException::INDEX_SIZE_ERR, OK, 104 );
     XMLString::transcode("Stuff inserted", tempStr, 3999);
@@ -2739,11 +2773,27 @@ bool DOMTest::testDOMerrors(DOMDocument* document) {
         OK = false; \
     }
 
+#include <xercesc/framework/StdOutFormatTarget.hpp>
+
 bool DOMTest::testXPath(DOMDocument* document) {
     bool OK = true;
 
+#if 0
+            XMLCh tempLS[3] = {chLatin_L, chLatin_S, chNull};
+            DOMImplementation *impl          = DOMImplementationRegistry::getDOMImplementation(tempLS);
+            DOMLSSerializer   *theSerializer = ((DOMImplementationLS*)impl)->createLSSerializer();
+            DOMLSOutput       *theOutputDesc = ((DOMImplementationLS*)impl)->createLSOutput();
+            StdOutFormatTarget myFormTarget;
+            theOutputDesc->setByteStream(&myFormTarget);
+            theSerializer->getDomConfig()->setParameter(XMLUni::fgDOMWRTFormatPrettyPrint, true);
+            theSerializer->write(document, theOutputDesc);
+
+            theOutputDesc->release();
+            theSerializer->release();
+#endif
+
     TEST_VALID_XPATH("*", 1, __LINE__);
-    TEST_VALID_XPATH("dFirstElement/dTestBody/dBodyLevel24", 1, __LINE__);
+    TEST_VALID_XPATH("dTestBody/dBodyLevel24", 1, __LINE__);
     TEST_VALID_XPATH("//dBodyLevel34", 1, __LINE__);
     TEST_VALID_XPATH("/*", 1, __LINE__);
     TEST_VALID_XPATH("/dFirstElement/dTestBody/dBodyLevel24", 1, __LINE__);
@@ -4892,7 +4942,28 @@ public:
     DOMLSInput* m_input;
 };
 
+class ParserSkipper : public DOMLSParserFilter
+{
+public:
+    ParserSkipper() : fCallbackCalls(0) { }
+
+    virtual FilterAction acceptNode(DOMNode* node) { fCallbackCalls++; return DOMLSParserFilter::FILTER_ACCEPT;}
+    virtual FilterAction startElement(DOMElement* node) 
+    {
+        XMLCh elem[]={chLatin_e, chLatin_l, chLatin_e, chLatin_m, chNull };
+        if(XMLString::equals(node->getNodeName(), elem))
+            return DOMLSParserFilter::FILTER_REJECT; 
+        else
+            return DOMLSParserFilter::FILTER_ACCEPT; 
+    }
+    virtual DOMNodeFilter::ShowType getWhatToShow() const { return DOMNodeFilter::SHOW_ALL; }
+
+    unsigned int fCallbackCalls;
+};
+
 bool DOMTest::testLSExceptions() {
+    bool OK = true;
+
 	const char* sXml="<?xml version='1.0'?>"
 				"<!DOCTYPE root["
                 "<!ENTITY ent1 'Dallas. &ent3; #5668'>"
@@ -4906,7 +4977,6 @@ bool DOMTest::testLSExceptions() {
                   "<elem>Home </elem>"
                   "<elem>Test: &ent5;</elem>"
                 "</root>";
-	MemBufInputSource is((XMLByte*)sXml, strlen(sXml), "bufId");
 
     static const XMLCh gLS[] = { chLatin_L, chLatin_S, chNull };
     DOMImplementationLS *impl = (DOMImplementationLS*)DOMImplementationRegistry::getDOMImplementation(gLS);
@@ -4921,14 +4991,14 @@ bool DOMTest::testLSExceptions() {
         DOMDocument* doc=domBuilder->parse(input);
 
         fprintf(stderr, "checking testLSExceptions failed at line %i\n",  __LINE__);
-        return false;
+        OK=false;
     }
     catch(DOMLSException& e)
     {
         if(e.code!=DOMLSException::PARSE_ERR)
         {
             fprintf(stderr, "checking testLSExceptions failed at line %i\n",  __LINE__);
-            return false;
+            OK=false;
         }
     }
 
@@ -4939,16 +5009,257 @@ bool DOMTest::testLSExceptions() {
         DOMDocument* doc=domBuilder->parse(input);
 
         fprintf(stderr, "checking testLSExceptions failed at line %i\n",  __LINE__);
-        return false;
+        OK=false;
     }
     catch(DOMException& e)
     {
         if(e.code!=DOMException::INVALID_STATE_ERR)
         {
             fprintf(stderr, "checking testLSExceptions failed at line %i\n",  __LINE__);
-            return false;
+            OK=false;
         }
     }
+
+    try
+    {
+        ParserSkipper skipper;
+        domBuilder->setFilter(&skipper);
+        domBuilder->getDomConfig()->setParameter(XMLUni::fgDOMEntities, false);
+        DOMDocument* doc=domBuilder->parse(input);
+
+        // verify that we get only 3 calls: for the text node, the CDATA section and the root element
+        if(doc==NULL || doc->getDocumentElement()==NULL || doc->getDocumentElement()->getChildElementCount()!=0 || skipper.fCallbackCalls!=3)
+        {
+            fprintf(stderr, "checking testLSExceptions failed at line %i\n",  __LINE__);
+            OK=false;
+        }
+    }
+    catch(DOMException&)
+    {
+        fprintf(stderr, "checking testLSExceptions failed at line %i\n",  __LINE__);
+        OK=false;
+    }
+
+    // this XML should trigger reuse of DOMElement
+	const char* sXml2="<?xml version='1.0'?>"
+                "<root xmlns:x='urn:yyy'>"
+                  "<elem xmlns:x='urn:xxx'>Home</elem>"
+                  "<elem2>Test</elem2>"
+                  "<elem>Home</elem>"
+                  "<elem2>Test</elem2>"
+                "</root>";
+    XMLString::transcode(sXml2, tempStr, 3999);
+    input->setStringData(tempStr);
+    try
+    {
+        ParserSkipper skipper;
+        domBuilder->setFilter(&skipper);
+        DOMDocument* doc=domBuilder->parse(input);
+
+        // verify that we get only 5 calls: for the root element, the two elem2 and the two text nodes under them
+        if(doc==NULL || doc->getDocumentElement()==NULL || doc->getDocumentElement()->getChildElementCount()!=2 || skipper.fCallbackCalls!=5)
+        {
+            fprintf(stderr, "checking testLSExceptions failed at line %i\n",  __LINE__);
+            OK=false;
+        }
+    }
+    catch(DOMException&)
+    {
+        fprintf(stderr, "checking testLSExceptions failed at line %i\n",  __LINE__);
+        OK=false;
+    }
+
+    // test for parseWithContext
+    try
+    {
+        XMLString::transcode("root", tempStr2, 3999);
+        domBuilder->setFilter(NULL);
+        DOMDocument* doc=domBuilder->parse(input);
+        domBuilder->parseWithContext(input, doc->getDocumentElement()->getFirstElementChild(), DOMLSParser::ACTION_APPEND_AS_CHILDREN);
+        // the first 'elem' child of 'root' must have a 'root' child
+        if(!XMLString::equals(doc->getDocumentElement()->getFirstElementChild()->getFirstElementChild()->getNodeName(), tempStr2))
+        {
+            fprintf(stderr, "checking testLSExceptions failed at line %i\n",  __LINE__);
+            OK=false;
+        }
+
+        doc=domBuilder->parse(input);
+        domBuilder->parseWithContext(input, doc->getDocumentElement()->getFirstElementChild(), DOMLSParser::ACTION_REPLACE_CHILDREN);
+        // the first 'elem' child of 'root' must have a 'root' child
+        if(!XMLString::equals(doc->getDocumentElement()->getFirstElementChild()->getFirstElementChild()->getNodeName(), tempStr2))
+        {
+            fprintf(stderr, "checking testLSExceptions failed at line %i\n",  __LINE__);
+            OK=false;
+        }
+
+        doc=domBuilder->parse(input);
+        domBuilder->parseWithContext(input, doc->getDocumentElement()->getFirstElementChild(), DOMLSParser::ACTION_INSERT_BEFORE);
+        // the first child of 'root' must be another 'root' child
+        if(!XMLString::equals(doc->getDocumentElement()->getFirstElementChild()->getNodeName(), tempStr2))
+        {
+            fprintf(stderr, "checking testLSExceptions failed at line %i\n",  __LINE__);
+            OK=false;
+        }
+
+        doc=domBuilder->parse(input);
+        domBuilder->parseWithContext(input, doc->getDocumentElement()->getFirstElementChild(), DOMLSParser::ACTION_INSERT_AFTER);
+        // the node after the first child of 'root' must be another 'root' child
+        if(!XMLString::equals(doc->getDocumentElement()->getFirstElementChild()->getNextElementSibling()->getNodeName(), tempStr2))
+        {
+            fprintf(stderr, "checking testLSExceptions failed at line %i\n",  __LINE__);
+            OK=false;
+        }
+
+        doc=domBuilder->parse(input);
+        domBuilder->parseWithContext(input, doc->getDocumentElement()->getFirstElementChild(), DOMLSParser::ACTION_REPLACE);
+        // the first child of 'root' must be another 'root' child
+        if(!XMLString::equals(doc->getDocumentElement()->getFirstElementChild()->getNodeName(), tempStr2))
+        {
+            fprintf(stderr, "checking testLSExceptions failed at line %i\n",  __LINE__);
+            OK=false;
+        }
+
+        // verify that namespaces are in scope
+        doc=domBuilder->parse(input);
+	    const char* sXml3="<x:root/>";
+        XMLString::transcode(sXml3, tempStr2, 3999);
+        input->setStringData(tempStr2);
+        domBuilder->parseWithContext(input, doc->getDocumentElement()->getFirstElementChild(), DOMLSParser::ACTION_APPEND_AS_CHILDREN);
+        // the first 'elem' child of 'root' must have a 'x:root' child
+        XMLString::transcode("urn:xxx", tempStr2, 3999);
+        if(!XMLString::equals(doc->getDocumentElement()->getFirstElementChild()->getFirstElementChild()->getNamespaceURI(), tempStr2))
+        {
+            fprintf(stderr, "checking testLSExceptions failed at line %i\n",  __LINE__);
+            OK=false;
+        }
+    }
+    catch(DOMException&)
+    {
+        fprintf(stderr, "checking testLSExceptions failed at line %i\n",  __LINE__);
+        OK=false;
+    }
+
+    input->release();
+    domBuilder->release();
+
+    return OK;
+}
+
+bool DOMTest::testElementTraversal() {
+	const char* sXml="<?xml version='1.0'?>"
+				"<!DOCTYPE g ["
+                "<!ENTITY ent1 '<nestedEl>&ent2;</nestedEl>'>"
+                "<!ENTITY ent2 'text'>"
+                "]>"
+				"<g id='shapeGroup'>\n"
+                "\n"
+                "\t<rect id='rect1' x='5' y='5' width='310' height='220' rx='15' ry='15' fill='skyblue'/>\n"
+                "\t<rect id='rect2' x='15' y='15' width='210' height='180' rx='15' ry='15' fill='cornflowerblue'/>\n"
+                "\n"
+                "\t<ellipse id='ellipse1' cx='90' cy='70' rx='50' ry='30' fill='yellow' stroke='orange'/>\n"
+                "\n"
+                "\t<path id='path1' stroke-width='15' stroke='orange' fill='none' stroke-linecap='round'\n"
+                "\t\td='M25,150 C180,180 290,0 400,140 S420,100 460,90'/>\n"
+                "\t<text id='text1' x='0' y='0' font-size='35' fill='yellow' stroke='orange'\n"
+                "\t\tstroke-width='2' stroke-linejoin='round' font-weight='bold'>\n"
+                "\t\t<textPath id='textPath1' href='#path1'>&ent1;&ent2;&ent1;</textPath></text>\n"
+                "</g>";
+	MemBufInputSource is((XMLByte*)sXml, strlen(sXml), "bufId");
+
+    static const XMLCh gLS[] = { chLatin_L, chLatin_S, chNull };
+    DOMImplementationLS *impl = (DOMImplementationLS*)DOMImplementationRegistry::getDOMImplementation(gLS);
+    DOMLSParser       *domBuilder = impl->createLSParser(DOMImplementationLS::MODE_SYNCHRONOUS, 0);
+    DOMLSInput        *input = impl->createLSInput();
+    XMLString::transcode(sXml, tempStr, 3999);
+    input->setStringData(tempStr);
+    try
+    {
+        DOMDocument* doc=domBuilder->parse(input);
+
+        XMLSize_t c = doc->getDocumentElement()->getChildNodes()->getLength();
+	    if(c!=11)
+	    {
+            fprintf(stderr, "checking ElementTraversal failed at line %i\n",  __LINE__);
+		    return false;
+	    }
+        DOMNode* firstNode = doc->getDocumentElement()->getFirstChild();
+        if(firstNode==NULL || firstNode->getNodeType()!=DOMNode::TEXT_NODE || *firstNode->getNodeValue()=='\r')
+	    {
+            fprintf(stderr, "checking ElementTraversal failed at line %i\n",  __LINE__);
+		    return false;
+	    }
+        DOMElement* childNode = doc->getDocumentElement()->getFirstElementChild();
+        XMLString::transcode("id", tempStr, 3999);
+        XMLString::transcode("rect1", tempStr2, 3999);
+        if(childNode==NULL || childNode->getNodeType()!=DOMNode::ELEMENT_NODE || !XMLString::equals(childNode->getAttribute(tempStr),tempStr2))
+	    {
+            fprintf(stderr, "checking ElementTraversal failed at line %i\n",  __LINE__);
+		    return false;
+	    }
+        XMLSize_t count=0;
+        while(childNode!=NULL)
+        {
+            count++;
+            childNode=childNode->getNextElementSibling();
+        }
+        if(count!=5)
+	    {
+            fprintf(stderr, "checking ElementTraversal failed at line %i\n",  __LINE__);
+		    return false;
+	    }
+        count = doc->getDocumentElement()->getChildElementCount();
+        if(count!=5)
+	    {
+            fprintf(stderr, "checking ElementTraversal failed at line %i\n",  __LINE__);
+		    return false;
+	    }
+        DOMElement* text=doc->getDocumentElement()->getLastElementChild();
+        XMLString::transcode("id", tempStr, 3999);
+        XMLString::transcode("text1", tempStr2, 3999);
+        if(text==NULL || text->getNodeType()!=DOMNode::ELEMENT_NODE || !XMLString::equals(text->getAttribute(tempStr),tempStr2))
+	    {
+            fprintf(stderr, "checking ElementTraversal failed at line %i\n",  __LINE__);
+		    return false;
+	    }
+        DOMElement* textPath=text->getFirstElementChild();
+        XMLString::transcode("id", tempStr, 3999);
+        XMLString::transcode("textPath1", tempStr2, 3999);
+        if(textPath==NULL || textPath->getNodeType()!=DOMNode::ELEMENT_NODE || !XMLString::equals(textPath->getAttribute(tempStr),tempStr2))
+	    {
+            fprintf(stderr, "checking ElementTraversal failed at line %i\n",  __LINE__);
+		    return false;
+	    }
+        count = textPath->getChildElementCount();
+        if(count!=2)
+	    {
+            fprintf(stderr, "checking ElementTraversal failed at line %i\n",  __LINE__);
+		    return false;
+	    }
+        DOMElement* insideEntity=textPath->getFirstElementChild();
+        if(insideEntity==NULL || insideEntity->getNodeType()!=DOMNode::ELEMENT_NODE)
+	    {
+            fprintf(stderr, "checking ElementTraversal failed at line %i\n",  __LINE__);
+		    return false;
+	    }
+        DOMElement* insideEntity2=textPath->getLastElementChild();
+        if(insideEntity2==NULL || insideEntity2->getNodeType()!=DOMNode::ELEMENT_NODE)
+	    {
+            fprintf(stderr, "checking ElementTraversal failed at line %i\n",  __LINE__);
+		    return false;
+	    }
+        if(insideEntity->getNextElementSibling()!=insideEntity2 || insideEntity!=insideEntity2->getPreviousElementSibling())
+	    {
+            fprintf(stderr, "checking ElementTraversal failed at line %i\n",  __LINE__);
+		    return false;
+	    }
+        return true;
+    }
+    catch(DOMLSException&)
+    {
+        fprintf(stderr, "checking testElementTraversal failed at line %i\n",  __LINE__);
+        return false;
+    }
+
     input->release();
     domBuilder->release();
 
@@ -5177,6 +5488,7 @@ bool DOMTest::testRegex() {
     TEST_VALID_SCHEMA_REGEX("abbbbx", "ab{2,4}x", __LINE__);
     TEST_INVALID_SCHEMA_REGEX("abx", "ab{2,4}x", __LINE__);
     TEST_INVALID_SCHEMA_REGEX("abbbbbx", "ab{2,4}x", __LINE__);
+    TEST_VALID_SCHEMA_REGEX("PAG_1", "PAG_[0-9]{1,}", __LINE__);
 
     TEST_VALID_SCHEMA_REGEX("5 Bedford Street Boston , MA 15604-1536", "\\d{1,5}\\s([A-Z][a-z]{1,20}\\s){1}Street\\s([A-Z][a-z]{1,20}\\s){1},\\s[A-Z]{2}\\s15604-1536", __LINE__);
 
@@ -5184,9 +5496,482 @@ bool DOMTest::testRegex() {
     TEST_VALID_SCHEMA_REGEX("0.5 0.2 1.0", "((((\\.[0-9]+|0(\\.[0-9]*)?)((E|e)(\\+|\\-)?[0-9]+)?)|(1(\\.[0]*)?((E|e)\\-[0-9]+)?)|([1-9](\\.[0-9]*)((E|e)\\-[0-9]+))) (((\\.[0-9]+|0(\\.[0-9]*)?)((E|e)(\\+|\\-)?[0-9]+)?)|(1(\\.[0]*)?((E|e)\\-[0-9]+)?)|([1-9](\\.[0-9]*)((E|e)\\-[0-9]+))) (((\\.[0-9]+|0(\\.[0-9]*)?)((E|e)(\\+|\\-)?[0-9]+)?)|(1(\\.[0]*)?((E|e)\\-[0-9]+)?)|([1-9](\\.[0-9]*)((E|e)\\-[0-9]+))))?", __LINE__);
     TEST_VALID_SCHEMA_REGEX("5.0e-2 .2 1", "((((\\.[0-9]+|0(\\.[0-9]*)?)((E|e)(\\+|\\-)?[0-9]+)?)|(1(\\.[0]*)?((E|e)\\-[0-9]+)?)|([1-9](\\.[0-9]*)((E|e)\\-[0-9]+))) (((\\.[0-9]+|0(\\.[0-9]*)?)((E|e)(\\+|\\-)?[0-9]+)?)|(1(\\.[0]*)?((E|e)\\-[0-9]+)?)|([1-9](\\.[0-9]*)((E|e)\\-[0-9]+))) (((\\.[0-9]+|0(\\.[0-9]*)?)((E|e)(\\+|\\-)?[0-9]+)?)|(1(\\.[0]*)?((E|e)\\-[0-9]+)?)|([1-9](\\.[0-9]*)((E|e)\\-[0-9]+))))?", __LINE__);
 
-    TEST_VALID_SCHEMA_REGEX("-0 +3989 -90.76754,+9E77, -0.3e+9", "(((\\+|\\-)?(0|[1-9][0-9]*)?(\\.[0-9]*)?((E|e)(\\+|\\-)?[0-9]+)?)?( )?(,)?( )?)*", __FILE__);
+    TEST_VALID_SCHEMA_REGEX("-0 +3989 -90.76754,+9E77, -0.3e+9", "(((\\+|\\-)?(0|[1-9][0-9]*)?(\\.[0-9]*)?((E|e)(\\+|\\-)?[0-9]+)?)?( )?(,)?( )?)*", __LINE__);
 
     delete hugeString;
 
+    return OK;
+}
+
+
+// support classes to feed data with variable chunks
+
+class Slicer : public BinInputStream
+{
+public:
+	Slicer(const XMLByte* src, XMLSize_t size, const XMLSize_t* slices = 0, XMLSize_t count = 0)
+	: mSrc(src), mSize(size), mSlices(slices), mCount(count), mPos(0), mSlice(0), mBoundary(0)
+	{
+	}
+
+	XMLFilePos curPos() const
+	{
+		return mPos;
+	}
+
+	XMLSize_t readBytes(XMLByte* const toFill, const XMLSize_t maxToRead)
+	{
+		if (mPos == mBoundary)
+		{
+			if (mSlice < mCount)
+			{
+                XMLSize_t next = mBoundary + mSlices[mSlice++];
+                mBoundary = (mSize<next)?mSize:next;
+			}
+			else
+			{
+				mBoundary = mSize;
+			}
+		}
+        XMLSize_t remain = mBoundary - mPos;
+        XMLSize_t toRead = (maxToRead<remain)?maxToRead:remain;
+		memcpy(toFill, mSrc + mPos, toRead);
+		mPos += toRead;
+		return toRead;
+	}
+
+    virtual const XMLCh* getContentType() const
+    {
+        return 0;
+    }
+
+private:
+
+	const XMLByte* const    mSrc;
+	const XMLSize_t         mSize;
+	const XMLSize_t* const  mSlices;
+	const XMLSize_t         mCount;
+
+	XMLSize_t               mPos, mSlice;
+	XMLSize_t               mBoundary;
+};
+
+
+class SlicerSource : public InputSource
+{
+public:
+	SlicerSource(const XMLByte* src, XMLSize_t size, const XMLSize_t* slices = 0, XMLSize_t count = 0)
+	: mSrc(src), mSize(size), mSlices(slices), mCount(count)
+	{
+	}
+
+	XERCES_CPP_NAMESPACE::BinInputStream* makeStream() const
+	{
+		return new Slicer(mSrc, mSize, mSlices, mCount);
+	}
+
+private:
+	const XMLByte* const    mSrc;
+	const XMLSize_t         mSize;
+	const XMLSize_t* const  mSlices;
+	const XMLSize_t         mCount;
+};
+
+bool DOMTest::testScanner(XercesDOMParser* parser) {
+    bool OK = true;
+
+    const char sampleDoc[] =
+	    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+	    "<!-- Document element is document -->\n"
+	    "<document attr=\"value\">\n"
+	    "   <!-- a tag -->\n"
+	    "   <tag>foo</tag>\n"
+	    "\n"
+	    "   <!-- another tag -->\n"
+	    "   <tag/>\n"
+	    "</document>\n";
+    const size_t sampleDocSize = sizeof(sampleDoc) - 1;
+    const XMLByte* sampleDocXML = reinterpret_cast<const XMLByte*>(sampleDoc);
+
+    try
+	{
+		// First, try parsing the document in one hit
+		SlicerSource src(sampleDocXML, sampleDocSize);
+		parser->parse(src);
+	}
+	catch (...)
+	{
+        OK = false;
+        fprintf(stderr, "Variable chunks parsing failed at line %i\n", __LINE__);
+	}
+
+	try
+	{
+		// Now, parse it in blocks that end between the '<',  '!' and '--' of a comment
+		const XMLSize_t slices[] = { 142, 1 };
+		const XMLSize_t count = sizeof(slices) / sizeof(slices[0]);
+		SlicerSource src(sampleDocXML, sampleDocSize, slices, count);
+		parser->parse(src);
+	}
+	catch (...)
+	{
+        OK = false;
+        fprintf(stderr, "Variable chunks parsing failed at line %i\n", __LINE__);
+	}
+
+	try
+	{
+		// Now, parse it in blocks that end between the '<',  '!-' and '-' of a comment
+		const XMLSize_t slices[] = { 142, 2 };
+		const XMLSize_t count = sizeof(slices) / sizeof(slices[0]);
+		SlicerSource src(sampleDocXML, sampleDocSize, slices, count);
+		parser->parse(src);
+	}
+	catch (...)
+	{
+        OK = false;
+        fprintf(stderr, "Variable chunks parsing failed at line %i\n", __LINE__);
+	}
+
+	try
+	{
+		// Now, parse it in blocks that end between the '<',  '!-' and '-' of a comment
+		static const XMLSize_t slices[] =
+        {
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1};
+		static const XMLSize_t count = sizeof(slices) / sizeof(slices[0]);
+		SlicerSource src(sampleDocXML, sampleDocSize, slices, count);
+		parser->parse(src);
+	}
+	catch (...)
+	{
+        OK = false;
+        fprintf(stderr, "Variable chunks parsing failed at line %i\n", __LINE__);
+	}
+
+    return OK;
+}
+
+#define TEST_BOOLEAN(x) \
+    if(!x)  \
+    {       \
+        fprintf(stderr, "Boolean expression test failed at line %i\n", __LINE__); \
+        OK = false; \
+    }
+
+#define TEST_STRING(x,y) \
+    if(!XMLString::equals(x,y))  \
+    {       \
+        fprintf(stderr, "String expression test failed at line %i\n", __LINE__); \
+        OK = false; \
+    }
+
+bool DOMTest::testUtilFunctions()
+{
+    bool OK = true;
+    // test isWSReplaced
+    XMLString::transcode(" xyz ", tempStr, 3999);
+    TEST_BOOLEAN(XMLString::isWSReplaced(tempStr));
+    XMLString::transcode(" x\tyz ", tempStr, 3999);
+    TEST_BOOLEAN(!XMLString::isWSReplaced(tempStr));
+    XMLString::transcode(" xyz\n", tempStr, 3999);
+    TEST_BOOLEAN(!XMLString::isWSReplaced(tempStr));
+    XMLString::transcode("\rxyz", tempStr, 3999);
+    TEST_BOOLEAN(!XMLString::isWSReplaced(tempStr));
+
+    // test replaceWS
+    XMLString::transcode(" x yz ", tempStr2, 3999);
+    XMLString::transcode(" x yz ", tempStr, 3999);
+    XMLString::replaceWS(tempStr);
+    TEST_STRING(tempStr, tempStr2);
+    XMLString::transcode(" x\tyz ", tempStr, 3999);
+    XMLString::replaceWS(tempStr);
+    TEST_STRING(tempStr, tempStr2);
+    XMLString::transcode(" x yz\n", tempStr, 3999);
+    XMLString::replaceWS(tempStr);
+    TEST_STRING(tempStr, tempStr2);
+    XMLString::transcode("\rx yz ", tempStr, 3999);
+    XMLString::replaceWS(tempStr);
+    TEST_STRING(tempStr, tempStr2);
+
+    // test isWSCollapsed
+    XMLString::transcode(" xyz ", tempStr, 3999);
+    TEST_BOOLEAN(!XMLString::isWSCollapsed(tempStr));
+    XMLString::transcode(" x\tyz ", tempStr, 3999);
+    TEST_BOOLEAN(!XMLString::isWSCollapsed(tempStr));
+    XMLString::transcode(" xyz\n", tempStr, 3999);
+    TEST_BOOLEAN(!XMLString::isWSCollapsed(tempStr));
+    XMLString::transcode("\rxyz", tempStr, 3999);
+    TEST_BOOLEAN(!XMLString::isWSCollapsed(tempStr));
+    XMLString::transcode("xyz", tempStr, 3999);
+    TEST_BOOLEAN(XMLString::isWSCollapsed(tempStr));
+    XMLString::transcode("x yz", tempStr, 3999);
+    TEST_BOOLEAN(XMLString::isWSCollapsed(tempStr));
+    XMLString::transcode("x  yz", tempStr, 3999);
+    TEST_BOOLEAN(!XMLString::isWSCollapsed(tempStr));
+
+    // test collapseWS
+    XMLString::transcode("x yz", tempStr2, 3999);
+    XMLString::transcode(" x\tyz ", tempStr, 3999);
+    XMLString::collapseWS(tempStr);
+    TEST_STRING(tempStr, tempStr2);
+    XMLString::transcode("x yz", tempStr, 3999);
+    XMLString::collapseWS(tempStr);
+    TEST_STRING(tempStr, tempStr2);
+    XMLString::transcode("x  yz", tempStr, 3999);
+    XMLString::collapseWS(tempStr);
+    TEST_STRING(tempStr, tempStr2);
+
+    XMLString::transcode("xyz", tempStr2, 3999);
+    XMLString::transcode(" xyz ", tempStr, 3999);
+    XMLString::collapseWS(tempStr);
+    TEST_STRING(tempStr, tempStr2);
+    XMLString::transcode(" xyz\n", tempStr, 3999);
+    XMLString::collapseWS(tempStr);
+    TEST_STRING(tempStr, tempStr2);
+    XMLString::transcode("\rxyz", tempStr, 3999);
+    XMLString::collapseWS(tempStr);
+    TEST_STRING(tempStr, tempStr2);
+    XMLString::transcode("xyz", tempStr, 3999);
+    XMLString::collapseWS(tempStr);
+    TEST_STRING(tempStr, tempStr2);
+
+    // test removeWS
+    XMLString::transcode("xyz", tempStr2, 3999);
+    XMLString::transcode(" x\tyz ", tempStr, 3999);
+    XMLString::removeWS(tempStr);
+    TEST_STRING(tempStr, tempStr2);
+    XMLString::transcode("x yz", tempStr, 3999);
+    XMLString::removeWS(tempStr);
+    TEST_STRING(tempStr, tempStr2);
+    XMLString::transcode("x  yz", tempStr, 3999);
+    XMLString::removeWS(tempStr);
+    TEST_STRING(tempStr, tempStr2);
+    XMLString::transcode(" xyz ", tempStr, 3999);
+    XMLString::removeWS(tempStr);
+    TEST_STRING(tempStr, tempStr2);
+    XMLString::transcode(" xyz\n", tempStr, 3999);
+    XMLString::removeWS(tempStr);
+    TEST_STRING(tempStr, tempStr2);
+    XMLString::transcode("\rxyz", tempStr, 3999);
+    XMLString::removeWS(tempStr);
+    TEST_STRING(tempStr, tempStr2);
+    XMLString::transcode("xyz", tempStr, 3999);
+    XMLString::removeWS(tempStr);
+    TEST_STRING(tempStr, tempStr2);
+
+    if(XMLString::stringLen((XMLCh*)0)!=0)
+    {
+        fprintf(stderr, "strLen test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+    if(XMLString::stringLen(XMLUni::fgZeroLenString)!=0)
+    {
+        fprintf(stderr, "strLen test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+    XMLCh one[2]={ chLatin_A, chNull };
+    if(XMLString::stringLen(one)!=1)
+    {
+        fprintf(stderr, "strLen test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+    XMLCh two[3]={ chLatin_A, chLatin_B, chNull };
+    if(XMLString::stringLen(two)!=2)
+    {
+        fprintf(stderr, "strLen test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+
+    // test copyNString
+    XMLCh buffer[100];
+    XMLString::transcode("xyz", tempStr, 3999);
+    if(!XMLString::copyNString(buffer, tempStr, 100))
+    {
+        fprintf(stderr, "copyNString test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+    if(!XMLString::copyNString(buffer, tempStr, 3))
+    {
+        fprintf(stderr, "copyNString test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+    if(XMLString::copyNString(buffer, tempStr, 2))
+    {
+        fprintf(stderr, "copyNString test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+    if(!XMLString::copyNString(buffer, tempStr, 4))
+    {
+        fprintf(stderr, "copyNString test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+
+    // test indexOf
+    XMLString::transcode("1234567890", tempStr, 3999);
+    if(XMLString::indexOf(tempStr, '1')!=0)
+    {
+        fprintf(stderr, "indexOf test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+    if(XMLString::indexOf(tempStr, '5')!=4)
+    {
+        fprintf(stderr, "indexOf test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+    if(XMLString::indexOf(tempStr, '0')!=9)
+    {
+        fprintf(stderr, "indexOf test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+    if(XMLString::indexOf(tempStr, 'A')!=-1)
+    {
+        fprintf(stderr, "indexOf test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+
+    // test lastIndexOf
+    XMLString::transcode("1234567890", tempStr, 3999);
+    if(XMLString::lastIndexOf(tempStr, '1')!=0)
+    {
+        fprintf(stderr, "lastIndexOf test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+    if(XMLString::lastIndexOf(tempStr, '5')!=4)
+    {
+        fprintf(stderr, "lastIndexOf test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+    if(XMLString::lastIndexOf(tempStr, '0')!=9)
+    {
+        fprintf(stderr, "lastIndexOf test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+    if(XMLString::lastIndexOf(tempStr, 'A')!=-1)
+    {
+        fprintf(stderr, "lastIndexOf test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+
+    // this tests the cached bit storage
+    CMStateSet setT(60);
+    setT.setBit(8);
+    setT.setBit(52);
+    setT.setBit(34);
+
+    if(!setT.getBit(8) || !setT.getBit(52) || !setT.getBit(34))
+    {
+        fprintf(stderr, "bitset test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+
+    CMStateSetEnumerator enumT(&setT);
+    if(!enumT.hasMoreElements() || enumT.nextElement()!=8)
+    {
+        fprintf(stderr, "bitset test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+    if(!enumT.hasMoreElements() || enumT.nextElement()!=34)
+    {
+        fprintf(stderr, "bitset test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+    if(!enumT.hasMoreElements() || enumT.nextElement()!=52)
+    {
+        fprintf(stderr, "bitset test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+    if(enumT.hasMoreElements())
+    {
+        fprintf(stderr, "bitset test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+
+    // this tests the dynamic bit storage
+    CMStateSet setT2(3 * CMSTATE_BITFIELD_CHUNK);
+    setT2.setBit(0); // first block, begin
+    setT2.setBit(CMSTATE_BITFIELD_CHUNK/2 -1); // first block, middle
+    setT2.setBit(CMSTATE_BITFIELD_CHUNK/2); // first block, middle
+    setT2.setBit(CMSTATE_BITFIELD_CHUNK/2 +1); // first block, middle
+    setT2.setBit(CMSTATE_BITFIELD_CHUNK-1); // first block, end
+    setT2.setBit(2*CMSTATE_BITFIELD_CHUNK); // last block, begin
+    setT2.setBit(2*CMSTATE_BITFIELD_CHUNK + CMSTATE_BITFIELD_CHUNK/2 -1); // last block, middle
+    setT2.setBit(2*CMSTATE_BITFIELD_CHUNK + CMSTATE_BITFIELD_CHUNK/2); // last block, middle
+    setT2.setBit(2*CMSTATE_BITFIELD_CHUNK + CMSTATE_BITFIELD_CHUNK/2 +1); // last block, middle
+    setT2.setBit(3*CMSTATE_BITFIELD_CHUNK-1); // last block, end
+
+    // test just a few ones
+    if(!setT2.getBit(0) || !setT2.getBit(CMSTATE_BITFIELD_CHUNK-1) || !setT2.getBit(2*CMSTATE_BITFIELD_CHUNK + CMSTATE_BITFIELD_CHUNK/2 +1))
+    {
+        fprintf(stderr, "bitset test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+
+    if(setT2.getBitCountInRange(0, 3*CMSTATE_BITFIELD_CHUNK)!=10)
+    {
+        fprintf(stderr, "bitset test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+    CMStateSetEnumerator enumT2(&setT2);
+    XMLSize_t count=0;
+    while(enumT2.hasMoreElements())
+    {
+        count++;
+        enumT2.nextElement();
+    }
+    if(count!=10)
+    {
+        fprintf(stderr, "bitset test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+
+    // test the enumerator with a non-default start
+    CMStateSetEnumerator enumT2a(&setT2, CMSTATE_BITFIELD_CHUNK/2);
+    if(!enumT2a.hasMoreElements() || enumT2a.nextElement()!= (CMSTATE_BITFIELD_CHUNK/2))
+    {
+        fprintf(stderr, "bitset test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+    CMStateSetEnumerator enumT2b(&setT2, CMSTATE_BITFIELD_CHUNK/2+2);
+    if(!enumT2b.hasMoreElements() || enumT2b.nextElement()!= (CMSTATE_BITFIELD_CHUNK-1))
+    {
+        fprintf(stderr, "bitset test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+    CMStateSetEnumerator enumT2c(&setT2, 2*CMSTATE_BITFIELD_CHUNK);
+    if(!enumT2c.hasMoreElements() || enumT2c.nextElement()!= (2*CMSTATE_BITFIELD_CHUNK))
+    {
+        fprintf(stderr, "bitset test failed at line %i\n", __LINE__);
+        OK = false;
+    }
+
+    // this tests the hash generator
+    CMStateSet setT3(3 * CMSTATE_BITFIELD_CHUNK), setT4(3 * CMSTATE_BITFIELD_CHUNK);
+    // these two sets will have a single bit set at the beginning of a chunk
+    setT3.setBit(0);
+    setT4.setBit(CMSTATE_BITFIELD_CHUNK);
+    if(setT3.hashCode()==setT4.hashCode())
+    {
+        fprintf(stderr, "bitset test failed at line %i\n", __LINE__);
+        OK = false;
+    }
     return OK;
 }

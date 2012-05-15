@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: URLAccessCFBinInputStream.cpp 670359 2008-06-22 13:43:45Z borisk $
+ * $Id: URLAccessCFBinInputStream.cpp 936316 2010-04-21 14:19:58Z borisk $
  */
 
 #include <cstdlib>
@@ -100,8 +100,13 @@ URLAccessCFBinInputStream::URLAccessCFBinInputStream(const XMLURL& urlSource)
                 break;
 
             case kCFURLRemoteHostUnavailableError:
-                ThrowXML1(NetAccessorException,  XMLExcepts::NetAcc_TargetResolution, urlSource.getHost());
+              {
+                if (urlSource.getHost())
+                  ThrowXML1(NetAccessorException, XMLExcepts::NetAcc_TargetResolution, urlSource.getHost());
+                else
+                  ThrowXML1(NetAccessorException, XMLExcepts::File_CouldNotOpenFile, urlText);
                 break;
+              }
 
             case kCFURLUnknownError:
                 ThrowXML1(NetAccessorException, XMLExcepts::NetAcc_ReadSocket, urlText);

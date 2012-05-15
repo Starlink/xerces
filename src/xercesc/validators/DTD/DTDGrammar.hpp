@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DTDGrammar.hpp 676911 2008-07-15 13:27:32Z amassari $
+ * $Id: DTDGrammar.hpp 883368 2009-11-23 15:28:19Z amassari $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_DTDGRAMMAR_HPP)
@@ -163,7 +163,7 @@ public:
     // -----------------------------------------------------------------------
     //  Content management methods
     // -----------------------------------------------------------------------
-    unsigned int putEntityDecl(DTDEntityDecl* const entityDecl) const;
+    XMLSize_t putEntityDecl(DTDEntityDecl* const entityDecl) const;
 
     /***
      * Support for Serialization/De-serialization
@@ -275,7 +275,7 @@ inline const NameIdPool<DTDEntityDecl>* DTDGrammar::getEntityDeclPool() const
 // -----------------------------------------------------------------------
 //  Setter methods
 // -----------------------------------------------------------------------
-inline unsigned int DTDGrammar::putEntityDecl(DTDEntityDecl* const entityDecl)   const
+inline XMLSize_t DTDGrammar::putEntityDecl(DTDEntityDecl* const entityDecl)   const
 {
     return fEntityDeclPool->put(entityDecl);
 }

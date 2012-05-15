@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: SAX2XMLReaderImpl.cpp 696226 2008-09-17 10:05:00Z borisk $
+ * $Id: SAX2XMLReaderImpl.cpp 882548 2009-11-20 13:44:14Z borisk $
  */
 
 #include <xercesc/util/IOException.hpp>
@@ -724,11 +724,18 @@ startElement(   const   XMLElementDecl&         elemDecl
                 const XMLCh*   nsURI    = 0;
 
                 const XMLAttr* tempAttr = attrList.elementAt(i);
-                if (XMLString::equals(tempAttr->getQName(), XMLUni::fgXMLNSString))
-                    nsURI = tempAttr->getValue();
-                if (XMLString::equals(tempAttr->getPrefix(), XMLUni::fgXMLNSString))
+                const XMLCh* prefix = tempAttr->getPrefix();
+                if(prefix && *prefix)
                 {
-                    nsPrefix = tempAttr->getName();
+                    if(XMLString::equals(prefix, XMLUni::fgXMLNSString))
+                    {
+                        nsPrefix = tempAttr->getName();
+                        nsURI = tempAttr->getValue();
+                    }
+                }
+                else if (XMLString::equals(tempAttr->getName(), XMLUni::fgXMLNSString))
+                {
+                    nsPrefix = XMLUni::fgZeroLenString;
                     nsURI = tempAttr->getValue();
                 }
                 if (!fNamespacePrefix)
@@ -738,8 +745,6 @@ startElement(   const   XMLElementDecl&         elemDecl
                 }
                 if (nsURI != 0)
                 {
-                    if (nsPrefix == 0)
-                        nsPrefix = XMLUni::fgZeroLenString;
                     if(fDocHandler)
                         fDocHandler->startPrefixMapping(nsPrefix, nsURI);
                     unsigned int nPrefixId=fPrefixesStorage->addOrFind(nsPrefix);
@@ -1434,6 +1439,10 @@ void SAX2XMLReaderImpl::setProperty(const XMLCh* const name, void* value)
     {
         fScanner->setSecurityManager((SecurityManager*)value);
     }
+    else if (XMLString::compareIStringASCII(name, XMLUni::fgXercesLowWaterMark) == 0)
+    {
+        fScanner->setLowWaterMark(*(const XMLSize_t*)value);
+    }
     else if (XMLString::equals(name, XMLUni::fgXercesScannerName))
     {
         XMLScanner* tempScanner = XMLScannerResolver::resolveScanner
@@ -1465,6 +1474,8 @@ void* SAX2XMLReaderImpl::getProperty(const XMLCh* const name) const
         return (void*)fScanner->getExternalNoNamespaceSchemaLocation();
     else if (XMLString::compareIStringASCII(name, XMLUni::fgXercesSecurityManager) == 0)
         return (void*)fScanner->getSecurityManager();
+    else if (XMLString::compareIStringASCII(name, XMLUni::fgXercesLowWaterMark) == 0)
+        return (void*)&fScanner->getLowWaterMark();
     else if (XMLString::equals(name, XMLUni::fgXercesScannerName))
         return (void*)fScanner->getName();
     else
@@ -1597,6 +1608,7 @@ void SAX2XMLReaderImpl::resetInProgress()
 void SAX2XMLReaderImpl::resetCachedGrammarPool()
 {
     fGrammarResolver->resetCachedGrammar();
+    fScanner->resetCachedGrammar();
 }
 
 void SAX2XMLReaderImpl::setInputBufferSize(const XMLSize_t bufferSize)

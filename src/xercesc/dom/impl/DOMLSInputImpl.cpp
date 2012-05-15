@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMLSInputImpl.cpp 471747 2006-11-06 14:31:56Z amassari $
+ * $Id: DOMLSInputImpl.cpp 752848 2009-03-12 12:44:40Z amassari $
  */
 
 #include "DOMLSInputImpl.hpp"
@@ -48,6 +48,7 @@ DOMLSInputImpl::~DOMLSInputImpl()
 void DOMLSInputImpl::setStringData(const XMLCh* data)
 {
     fStringData=data;
+    setEncoding(XMLUni::fgXMLChEncodingString);
 }
 
 void DOMLSInputImpl::setByteStream(InputSource* stream)

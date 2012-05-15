@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMRange.hpp 527149 2007-04-10 14:56:39Z amassari $
+ * $Id: DOMRange.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_DOMRANGE_HPP)
@@ -69,7 +69,7 @@ public:
     // -----------------------------------------------------------------------
     //  Class Types
     // -----------------------------------------------------------------------
-    /** @name Public Contants */
+    /** @name Public Constants */
     //@{
     /**
      * Constants CompareHow.

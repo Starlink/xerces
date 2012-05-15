@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: SAX2XMLReaderImpl.hpp 706747 2008-10-21 20:08:34Z borisk $
+ * $Id: SAX2XMLReaderImpl.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_SAX2XMLREADERIMPL_HPP)
@@ -147,11 +147,10 @@ public :
      * The parser owns the returned pointer.  The memory allocated for
      * the returned pointer will be destroyed when the parser is deleted.
      *
-     * To ensure assessiblity of the returned information after the parser
+     * To ensure accessibility of the returned information after the parser
      * is deleted, callers need to copy and store the returned information
      * somewhere else; otherwise you may get unexpected result.  Since the returned
-     * pointer is a generic void pointer, see
-     * http://xerces.apache.org/xerces-c/program-sax2-3.html#SAX2Properties to learn
+     * pointer is a generic void pointer, see the SAX2 Programming Guide to learn
      * exactly what type of property value each property returns for replication.
      *
      * @param name The unique identifier (URI) of the property being set.
@@ -269,7 +268,7 @@ public :
   /**
     * Set the state of any feature in a SAX2 XMLReader.
     * Supported features in SAX2 for xerces-c are:
-    * <br>(See http://xerces.apache.org/xerces-c/program-sax2-3.html#SAX2Features for detail description).
+    * <br>(See the SAX2 Programming Guide for detail description).
     *
     * <br>http://xml.org/sax/features/validation (default: false)
     * <br>http://xml.org/sax/features/namespaces (default: true)
@@ -294,20 +293,20 @@ public :
   /**
     * Set the value of any property in a SAX2 XMLReader.
     * Supported properties in SAX2 for xerces-c are:
-    * <br>(See http://xerces.apache.org/xerces-c/program-sax2-3.html#SAX2Properties for detail description).
+    * <br>(See the SAX2 Programming Guide for detail description).
     *
     * <br>http://apache.org/xml/properties/schema/external-schemaLocation
     * <br>http://apache.org/xml/properties/schema/external-noNamespaceSchemaLocation.
     *
     * It takes a void pointer as the property value.  Application is required to initialize this void
-    * pointer to a correct type.  See http://xerces.apache.org/xerces-c/program-sax2-3.html#SAX2Properties
+    * pointer to a correct type.  See the SAX2 Programming Guide
     * to learn exactly what type of property value each property expects for processing.
     * Passing a void pointer that was initialized with a wrong type will lead to unexpected result.
     * If the same property is set more than once, the last one takes effect.
     *
     * @param name The unique identifier (URI) of the property being set.
     * @param value The requested value for the property.  See
-    *            http://xerces.apache.org/xerces-c/program-sax2-3.html#SAX2Properties to learn
+    *            the SAX2 Programming Guide to learn
     *            exactly what type of property value each property expects for processing.
     *            Passing a void pointer that was initialized with a wrong type will lead
     *            to unexpected result.
@@ -588,7 +587,7 @@ public :
 
     /**
       * This method allows users to set the parser's behaviour when it
-      * encounters a validtion constraint error. If set to true, and the
+      * encounters a validation constraint error. If set to true, and the
       * the parser will treat validation error as fatal and will exit depends on the
       * state of "getExitOnFirstFatalError". If false, then it will
       * report the error and continue processing.
@@ -634,7 +633,7 @@ public :
       * the scan of the prolog failed and the token is not going to work on
       * subsequent scanNext() calls.
       *
-      * @param systemId A pointer to a Unicode string represting the path
+      * @param systemId A pointer to a Unicode string representing the path
       *                 to the XML file to be parsed.
       * @param toFill   A token maintaing state information to maintain
       *                 internal consistency between invocation of 'parseNext'
@@ -667,10 +666,10 @@ public :
       * the scan of the prolog failed and the token is not going to work on
       * subsequent scanNext() calls.
       *
-      * @param systemId A pointer to a regular native string represting
+      * @param systemId A pointer to a regular native string representing
       *                 the path to the XML file to be parsed.
       * @param toFill   A token maintaing state information to maintain
-      *                 internal consIstency between invocation of 'parseNext'
+      *                 internal consistency between invocation of 'parseNext'
       *                 calls.
       *
       * @return 'true', if successful in parsing the prolog. It indicates the
@@ -785,13 +784,12 @@ public :
       * This method invokes the preparsing process on a schema grammar XML
       * file specified by the SAX InputSource parameter.
       *
-      * <p><b>"Experimental - subject to change"</b></p>
       *
       * @param source A const reference to the SAX InputSource object which
       *               points to the schema grammar file to be preparsed.
       * @param grammarType The grammar type (Schema or DTD).
       * @param toCache If <code>true</code>, we cache the preparsed grammar,
-      *                otherwise, no chaching. Default is <code>false</code>.
+      *                otherwise, no caching. Default is <code>false</code>.
       * @return The preparsed schema grammar object (SchemaGrammar or
       *         DTDGrammar). That grammar object is owned by the parser.
       *
@@ -813,14 +811,13 @@ public :
       * This method invokes the preparsing process on a schema grammar XML
       * file specified by the file path parameter.
       *
-      * <p><b>"Experimental - subject to change"</b></p>
       *
       * @param systemId A const XMLCh pointer to the Unicode string which
       *                 contains the path to the XML grammar file to be
       *                 preparsed.
       * @param grammarType The grammar type (Schema or DTD).
       * @param toCache If <code>true</code>, we cache the preparsed grammar,
-      *                otherwise, no chaching. Default is <code>false</code>.
+      *                otherwise, no caching. Default is <code>false</code>.
       * @return The preparsed schema grammar object (SchemaGrammar or
       *         DTDGrammar). That grammar object is owned by the parser.
       *
@@ -840,13 +837,12 @@ public :
       * This method invokes the preparsing process on a schema grammar XML
       * file specified by the file path parameter.
       *
-      * <p><b>"Experimental - subject to change"</b></p>
       *
       * @param systemId A const char pointer to a native string which contains
       *                 the path to the XML grammar file to be preparsed.
       * @param grammarType The grammar type (Schema or DTD).
       * @param toCache If <code>true</code>, we cache the preparsed grammar,
-      *                otherwise, no chaching. Default is <code>false</code>.
+      *                otherwise, no caching. Default is <code>false</code>.
       * @return The preparsed schema grammar object (SchemaGrammar or
       *         DTDGrammar). That grammar object is owned by the parser.
       *
@@ -1024,7 +1020,7 @@ public :
       * was just scanned.
       *
       * <p>If any advanced callback handlers are installed, the
-      * corresponding 'endEnityReference' method is invoked.</p>
+      * corresponding 'endEntityReference' method is invoked.</p>
       *
       * @param entDecl A const reference to the object containing the
       *                entity declaration information.
@@ -1119,7 +1115,7 @@ public :
       * This method is used to indicate the start of an entity reference.
       *
       * <p>If any advanced callback handlers are installed, the
-      * corresponding 'endEnityReference' method is invoked.</p>
+      * corresponding 'endEntityReference' method is invoked.</p>
       *
       * @param entDecl A const reference to the object containing the
       *                entity declaration information.
@@ -1230,7 +1226,7 @@ public :
 
     /**
       * This method allows an installed XMLEntityHandler to further
-      * process any system id's of enternal entities encountered in
+      * process any system id's of external entities encountered in
       * the XML file being parsed, such as redirection etc.
       *
       * <b><font color="#FF0000">This method always returns 'false'

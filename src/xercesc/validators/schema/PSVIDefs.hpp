@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: PSVIDefs.hpp 527149 2007-04-10 14:56:39Z amassari $
+ * $Id: PSVIDefs.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_PSVIDEFS_HPP)
@@ -30,7 +30,7 @@ public:
     enum PSVIScope
     {
         SCP_ABSENT    // declared in group/attribute group
-	    , SCP_GLOBAL  // global decalarion or ref
+	    , SCP_GLOBAL  // global declaration or ref
 	    , SCP_LOCAL   // local declaration
     };
 };

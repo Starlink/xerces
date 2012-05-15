@@ -16,7 +16,7 @@
  */
 
 /**
- * $Id: XMLUTF8Transcoder.cpp 649096 2008-04-17 13:40:51Z amassari $
+ * $Id: XMLUTF8Transcoder.cpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 // ---------------------------------------------------------------------------
@@ -347,7 +347,7 @@ XMLUTF8Transcoder::transcodeFrom(const  XMLByte* const          srcData
                 char byte[2] = {*srcPtr,0};
 
                 ThrowXMLwithMemMgr2(UTFDataFormatException
-                                  , XMLExcepts::UTF8_Exceede_BytesLimit
+                                  , XMLExcepts::UTF8_Exceeds_BytesLimit
                                   , byte
                                   , len
                                   , getMemoryManager());

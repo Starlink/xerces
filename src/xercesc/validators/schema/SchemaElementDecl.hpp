@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: SchemaElementDecl.hpp 676911 2008-07-15 13:27:32Z amassari $
+ * $Id: SchemaElementDecl.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_SCHEMAELEMENTDECL_HPP)
@@ -178,7 +178,7 @@ private :
     //      Stores 'abstract/nullable' values
     //
     //  fDefaultValue
-    //      The defalut/fixed value
+    //      The default/fixed value
     //
     //  fComplexTypeInfo
     //      Stores complex type information

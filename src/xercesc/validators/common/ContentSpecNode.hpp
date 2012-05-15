@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ContentSpecNode.hpp 676426 2008-07-13 20:01:22Z amassari $
+ * $Id: ContentSpecNode.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_CONTENTSPECNODE_HPP)
@@ -161,7 +161,7 @@ private :
     //  fFirst
     //  fSecond
     //      The optional first and second nodes. The fType field indicates
-    //      which of these are valid. The validaty constraints are:
+    //      which of these are valid. The validity constraints are:
     //
     //          Leaf = Neither valid
     //          ZeroOrOne, ZeroOrMore = First

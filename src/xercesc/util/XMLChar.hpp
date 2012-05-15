@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLChar.hpp 558817 2007-07-23 18:12:54Z cargilld $
+ * $Id: XMLChar.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XMLCHAR_HPP)
@@ -135,7 +135,7 @@ private:
     //      code and then hard coded into the cpp file for speed.
     //
     //  fNEL
-    //      Flag to respresents whether NEL and LSEP newline recognition is enabled
+    //      Flag to represents whether NEL and LSEP newline recognition is enabled
     //      or disabled
     // -----------------------------------------------------------------------
     static XMLByte  fgCharCharsTable1_0[0x10000];

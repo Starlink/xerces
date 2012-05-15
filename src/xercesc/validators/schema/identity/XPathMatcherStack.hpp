@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XPathMatcherStack.hpp 676911 2008-07-15 13:27:32Z amassari $
+ * $Id: XPathMatcherStack.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XPATHMATCHERSTACK_HPP)
@@ -69,7 +69,7 @@ private:
     void cleanUp();
 
     // -----------------------------------------------------------------------
-    //  Unimplemented contstructors and operators
+    //  Unimplemented constructors and operators
     // -----------------------------------------------------------------------
     XPathMatcherStack(const XPathMatcherStack& other);
     XPathMatcherStack& operator= (const XPathMatcherStack& other);

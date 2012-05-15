@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ReaderMgr.cpp 676911 2008-07-15 13:27:32Z amassari $
+ * $Id: ReaderMgr.cpp 833045 2009-11-05 13:21:27Z borisk $
  */
 
 // ---------------------------------------------------------------------------
@@ -240,26 +240,39 @@ bool ReaderMgr::skipIfQuote(XMLCh& chGotten)
     return false;
 }
 
-
-bool ReaderMgr::skipPastSpaces(bool inDecl)
+void ReaderMgr::skipPastSpaces(bool& skippedSomething, bool inDecl /* = false */)
 {
-    bool skippedSomething = false;
+    // we rely on the fact that fCurReader->skipSpaces will NOT reset the flag to false, but only
+    // set it to true if a space is found
+    skippedSomething = false;
+    //
+    //  Skip all the spaces in the current reader. If it returned because
+    //  it hit a non-space, break out. Else we have to pop another entity
+    //  and keep going.
+    //
+    while (!fCurReader->skipSpaces(skippedSomething, inDecl))
+    {
+        // Try to pop another entity. If we can't then we are done
+        if (!popReader())
+            break;
+    }
+}
+
+void ReaderMgr::skipPastSpaces()
+{
+    // we are not using it, so we don't care to initialize it
     bool tmpFlag;
     //
     //  Skip all the spaces in the current reader. If it returned because
     //  it hit a non-space, break out. Else we have to pop another entity
     //  and keep going.
     //
-    while (!fCurReader->skipSpaces(tmpFlag, inDecl))
+    while (!fCurReader->skipSpaces(tmpFlag, false))
     {
-        if (tmpFlag)
-            skippedSomething = true;
-
-        // Try to pop another enitity. If we can't then we are done
+        // Try to pop another entity. If we can't then we are done
         if (!popReader())
             break;
     }
-    return (tmpFlag || skippedSomething);
 }
 
 void ReaderMgr::skipQuotedString(const XMLCh quoteCh)
@@ -356,7 +369,8 @@ XMLReader* ReaderMgr::createReader( const   InputSource&        src
                                     , const XMLReader::RefFrom  refFrom
                                     , const XMLReader::Types    type
                                     , const XMLReader::Sources  source
-                                    , const bool                calcSrcOfs)
+                                    , const bool                calcSrcOfs
+                                    ,       XMLSize_t           lowWaterMark)
 {
     //
     //  Ask the input source to create us an input stream. The particular
@@ -396,6 +410,7 @@ XMLReader* ReaderMgr::createReader( const   InputSource&        src
                 , source
                 , false
                 , calcSrcOfs
+                , lowWaterMark
                 , fXMLVersion
                 , fMemoryManager
                 );
@@ -412,6 +427,7 @@ XMLReader* ReaderMgr::createReader( const   InputSource&        src
                 , source
                 , false
                 , calcSrcOfs
+                , lowWaterMark
                 , fXMLVersion
                 , fMemoryManager
                 );
@@ -442,6 +458,7 @@ XMLReader* ReaderMgr::createReader( const   XMLCh* const        sysId
                                     , const XMLReader::Sources  source
                                     ,       InputSource*&       srcToFill
                                     , const bool                calcSrcOfs
+                                    ,       XMLSize_t           lowWaterMark
                                     , const bool                disableDefaultEntityResolution)
 {
     //Normalize sysId
@@ -571,6 +588,7 @@ XMLReader* ReaderMgr::createReader( const   XMLCh* const        sysId
         , type
         , source
         , calcSrcOfs
+        , lowWaterMark
     );
 
     // Either way, we can release the input source now
@@ -595,6 +613,7 @@ XMLReader* ReaderMgr::createReader( const   XMLCh* const        baseURI
                                     , const XMLReader::Sources  source
                                     ,       InputSource*&       srcToFill
                                     , const bool                calcSrcOfs
+                                    ,       XMLSize_t           lowWaterMark
                                     , const bool                disableDefaultEntityResolution)
 {
     //Normalize sysId
@@ -689,6 +708,7 @@ XMLReader* ReaderMgr::createReader( const   XMLCh* const        baseURI
         , type
         , source
         , calcSrcOfs
+        , lowWaterMark
     );
 
     // Either way, we can release the input source now
@@ -711,7 +731,8 @@ ReaderMgr::createIntEntReader(  const   XMLCh* const        sysId
                                 , const XMLCh* const        dataBuf
                                 , const XMLSize_t           dataLen
                                 , const bool                copyBuf
-                                , const bool                calcSrcOfs)
+                                , const bool                calcSrcOfs
+                                ,       XMLSize_t           lowWaterMark)
 {
     //
     //  This one is easy, we just create an input stream for the data and
@@ -743,6 +764,7 @@ ReaderMgr::createIntEntReader(  const   XMLCh* const        sysId
         , XMLReader::Source_Internal
         , false
         , calcSrcOfs
+        , lowWaterMark
         , fXMLVersion
         , fMemoryManager
     );
@@ -1057,7 +1079,7 @@ bool ReaderMgr::popReader()
     //  If there was a previous entity, and either the fThrowEOE flag is set
     //  or reader was marked as such, then throw an end of entity.
     //
-    if (prevEntity && fThrowEOE || prevReaderThrowAtEnd)
+    if (prevEntity && (fThrowEOE || prevReaderThrowAtEnd))
         throw EndOfEntityException(prevEntity, readerNum);
 
     while (true)

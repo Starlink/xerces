@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: Op.hpp 678879 2008-07-22 20:05:05Z amassari $
+ * $Id: Op.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_OP_HPP)
@@ -157,7 +157,7 @@ public:
     void addElement(Op* const op);
 
 private:
-    // Private Data memebers
+    // Private Data members
     RefVectorOf<Op>* fBranches;
 
     // -----------------------------------------------------------------------

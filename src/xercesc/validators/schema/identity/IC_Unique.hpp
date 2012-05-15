@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: IC_Unique.hpp 527149 2007-04-10 14:56:39Z amassari $
+ * $Id: IC_Unique.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_IC_UNIQUE_HPP)
@@ -59,7 +59,7 @@ public:
 
 private:
     // -----------------------------------------------------------------------
-    //  Unimplemented contstructors and operators
+    //  Unimplemented constructors and operators
     // -----------------------------------------------------------------------
     IC_Unique(const IC_Unique& other);
     IC_Unique& operator= (const IC_Unique& other);

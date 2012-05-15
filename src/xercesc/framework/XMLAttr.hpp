@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLAttr.hpp 678709 2008-07-22 10:56:56Z borisk $
+ * $Id: XMLAttr.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XMLATTR_HPP)
@@ -169,7 +169,7 @@ public:
     //@{
 
     /**
-      * This methode returns the attribute name in a QName format.
+      * This method returns the attribute name in a QName format.
       */
     QName* getAttName() const;
 

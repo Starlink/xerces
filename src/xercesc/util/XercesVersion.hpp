@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XercesVersion.hpp 744933 2009-02-16 15:13:42Z borisk $
+ * $Id: XercesVersion.hpp 935350 2010-04-18 15:02:36Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XERCESVERSION_HPP)
@@ -47,7 +47,7 @@
  *
  *    The macro XERCES_GRAMMAR_SERIALIZATION_LEVEL has been added so that during
  *    development if users are using the latest code they can use the grammar
- *    serialization/desialization features.  Whenever a change is made to the
+ *    serialization/deserialization features.  Whenever a change is made to the
  *    serialization code this macro should be incremented.
  *
  * Xerces User Documentation:
@@ -127,7 +127,7 @@
  */
 
 #define XERCES_VERSION_MAJOR 3
-#define XERCES_VERSION_MINOR 0
+#define XERCES_VERSION_MINOR 1
 #define XERCES_VERSION_REVISION 1
 
 /***

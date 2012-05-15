@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: NameIdPool.hpp 678409 2008-07-21 13:08:10Z borisk $
+ * $Id: NameIdPool.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_NAMEIDPOOL_HPP)
@@ -53,7 +53,7 @@ template <class TElem> class NameIdPoolEnumerator;
 //  whole thing is flushed. This makes it very easy to maintain the two
 //  access methods in sync.
 //
-//  For efficiency reasons, the id refererence array is never flushed until
+//  For efficiency reasons, the id reference array is never flushed until
 //  the dtor. This way, it does not have to be regrown every time its reused.
 //
 //  All elements are assumed to be owned by the pool!
@@ -63,12 +63,12 @@ template <class TElem> class NameIdPool : public XMemory
 {
 public :
     // -----------------------------------------------------------------------
-    //  Contructors and Destructor
+    //  Constructors and Destructor
     // -----------------------------------------------------------------------
     NameIdPool
     (
-        const   unsigned int    hashModulus
-        , const unsigned int    initSize = 128
+        const   XMLSize_t       hashModulus
+        , const XMLSize_t       initSize = 128
         , MemoryManager* const  manager = XMLPlatformUtils::fgMemoryManager
     );
 
@@ -87,8 +87,8 @@ public :
     // -----------------------------------------------------------------------
     TElem* getByKey(const XMLCh* const key);
     const TElem* getByKey(const XMLCh* const key) const;
-    TElem* getById(const unsigned int elemId);
-    const TElem* getById(const unsigned int elemId) const;
+    TElem* getById(const XMLSize_t elemId);
+    const TElem* getById(const XMLSize_t elemId) const;
 
     MemoryManager* getMemoryManager() const;
     // -----------------------------------------------------------------------
@@ -97,7 +97,7 @@ public :
     //  Dups are not allowed and cause an IllegalArgumentException. The id
     //  of the new element is returned.
     // -----------------------------------------------------------------------
-    unsigned int put(TElem* const valueToAdopt);
+    XMLSize_t put(TElem* const valueToAdopt);
 
 
 protected :
@@ -136,10 +136,10 @@ private :
     //
     // -----------------------------------------------------------------------
     MemoryManager*                  fMemoryManager;
-    RefHashTableOf<TElem>           fBucketList;
     TElem**                         fIdPtrs;
-    unsigned int                    fIdPtrsCount;
-    unsigned int                    fIdCounter;
+    XMLSize_t                       fIdPtrsCount;
+    XMLSize_t                       fIdCounter;
+    RefHashTableOf<TElem>           fBucketList;
 };
 
 
@@ -180,7 +180,7 @@ public :
     bool hasMoreElements() const;
     TElem& nextElement();
     void Reset();
-    unsigned int  size()  const;
+    XMLSize_t size()  const;
 
 private :
     // -----------------------------------------------------------------------
@@ -193,7 +193,7 @@ private :
     //  fToEnum
     //      The name id pool that is being enumerated.
     // -----------------------------------------------------------------------
-    unsigned int            fCurIndex;
+    XMLSize_t               fCurIndex;
     NameIdPool<TElem>*      fToEnum;
     MemoryManager*          fMemoryManager;
 };

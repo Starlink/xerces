@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ValidationContext.hpp 577322 2007-09-19 14:58:04Z cargilld $
+ * $Id: ValidationContext.hpp 729944 2008-12-29 17:03:32Z amassari $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_VALIDATION_CONTEXT_HPP)
@@ -33,6 +33,7 @@ class XMLRefInfo;
 class DTDEntityDecl;
 class DatatypeValidator;
 class ElemStack;
+class NamespaceScope;
 class XMLScanner;
 
 class XMLPARSER_EXPORT ValidationContext : public XMemory
@@ -97,6 +98,7 @@ public :
     virtual void setElemStack(ElemStack* /* elemStack */) {};
     virtual const XMLCh* getURIForPrefix(XMLCh* /*prefix */) { return 0; };
     virtual void setScanner(XMLScanner* /* scanner */) { };
+    virtual void setNamespaceScope(NamespaceScope* /* nsStack */) { };
 
     //@}
 

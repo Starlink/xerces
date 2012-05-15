@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: Xerces_autoconf_config.borland.hpp 673306 2008-07-02 07:28:14Z amassari $
+ * $Id: Xerces_autoconf_config.borland.hpp 834826 2009-11-11 10:03:53Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XERCES_AUTOCONFIG_CONFIG_HPP)
@@ -56,10 +56,6 @@
 #define XERCES_U32BIT_INT   UINT32
 #define XERCES_S64BIT_INT   INT64
 #define XERCES_U64BIT_INT   UINT64
-
-#define XERCES_SIZEOF_INT   4
-#define XERCES_SIZEOF_LONG  4
-#define XERCES_SIZEOF_INT64 8
 
 #define XERCES_XMLCH_T      wchar_t
 

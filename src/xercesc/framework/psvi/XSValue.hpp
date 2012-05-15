@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XSValue.hpp 635560 2008-03-10 14:10:09Z borisk $
+ * $Id: XSValue.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XSVALUE_HPP)
@@ -171,7 +171,7 @@ public:
       * Get the actual value, in the form of XSValue, for a given string of the
       * data type specified
       *
-      * Client application is responsible for the deleletion of the XSValue returned.
+      * Client application is responsible for the deletion of the XSValue returned.
       *
       * @param  content    raw data
       * @param  datatype   schema datatype

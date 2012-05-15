@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: Xerces_autoconf_config.msvc.hpp 679467 2008-07-24 17:24:46Z borisk $
+ * $Id: Xerces_autoconf_config.msvc.hpp 883299 2009-11-23 10:34:54Z amassari $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XERCES_AUTOCONFIG_CONFIG_HPP)
@@ -70,19 +70,10 @@
 #  define XERCES_U64BIT_INT   UINT32
 #endif
 
-#define XERCES_SIZEOF_INT   4
-#define XERCES_SIZEOF_LONG  4
-
-#if (_MSC_VER >= 1300)
-#  define XERCES_SIZEOF_INT64 8
-#else
-#  define XERCES_SIZEOF_INT64 4
-#endif
-
 #ifdef _NATIVE_WCHAR_T_DEFINED
-#define XERCES_XMLCH_T      wchar_t
+#  define XERCES_XMLCH_T      wchar_t
 #else
-#define XERCES_XMLCH_T      unsigned short
+#  define XERCES_XMLCH_T      unsigned short
 #endif
 
 #define XERCES_SIZE_T       SIZE_T
@@ -95,15 +86,22 @@
 #define XERCES_LSTRSUPPORT          1
 
 #ifdef XERCES_STATIC_LIBRARY
-#define XERCES_PLATFORM_EXPORT
-#define XERCES_PLATFORM_IMPORT
+#  define XERCES_PLATFORM_EXPORT
+#  define XERCES_PLATFORM_IMPORT
 #else
-#define XERCES_PLATFORM_EXPORT __declspec(dllexport)
-#define XERCES_PLATFORM_IMPORT __declspec(dllimport)
-#define DLL_EXPORT
+#  define XERCES_PLATFORM_EXPORT __declspec(dllexport)
+#  define XERCES_PLATFORM_IMPORT __declspec(dllimport)
+#  define DLL_EXPORT
 #endif
 
 #define XERCES_MFC_SUPPORT
+
+#if (_MSC_VER >= 1400)
+#  define XERCES_HAVE_INTRIN_H 1
+#  define XERCES_HAVE_EMMINTRIN_H 1
+#  define XERCES_HAVE_CPUID_INTRINSIC
+#  define XERCES_HAVE_SSE2_INTRINSIC
+#endif
 
 // ---------------------------------------------------------------------------
 //  XMLSize_t is the unsigned integral type.
@@ -144,7 +142,7 @@ typedef XMLUInt64			        XMLFileLoc;
 //  Force on the Xerces debug token if it is on in the build environment
 // ---------------------------------------------------------------------------
 #if defined(_DEBUG)
-#define XERCES_DEBUG
+#  define XERCES_DEBUG
 #endif
 
 #endif

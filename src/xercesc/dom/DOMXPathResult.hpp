@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMXPathResult.hpp 698579 2008-09-24 14:13:08Z borisk $
+ * $Id: DOMXPathResult.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_DOMXPATHRESULT_HPP)
@@ -81,7 +81,7 @@ public:
     // -----------------------------------------------------------------------
     //  Class Types
     // -----------------------------------------------------------------------
-    /** @name Public Contants */
+    /** @name Public Constants */
     //@{
     /**
      * <p>ANY_TYPE
