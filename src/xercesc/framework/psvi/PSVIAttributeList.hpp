@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: PSVIAttributeList.hpp 674012 2008-07-04 11:18:21Z borisk $
+ * $Id: PSVIAttributeList.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_PSVIATTRIBUTE_LIST_HPP)
@@ -92,7 +92,7 @@ public:
 
     /*
      * Get the PSVI contribution of attribute at position i
-     * in this list.  Indeces start from 0.
+     * in this list.  Indices start from 0.
      * @param index index from which the attribute PSVI contribution
      * is to come.
      * @return PSVIAttribute containing the attributes PSVI contributions;
@@ -102,7 +102,7 @@ public:
 
     /*
      * Get local part of attribute name at position index in the list.
-     * Indeces start from 0.
+     * Indices start from 0.
      * @param index index from which the attribute name
      * is to come.
      * @return local part of the attribute's name; null is returned if the index
@@ -112,7 +112,7 @@ public:
 
     /*
      * Get namespace of attribute at position index in the list.
-     * Indeces start from 0.
+     * Indices start from 0.
      * @param index index from which the attribute namespace
      * is to come.
      * @return namespace of the attribute;

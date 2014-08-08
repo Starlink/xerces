@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: TransService.hpp 698579 2008-09-24 14:13:08Z borisk $
+ * $Id: TransService.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_TRANSSERVICE_HPP)
@@ -134,7 +134,7 @@ public :
     virtual void lowerCase(XMLCh* const toLowerCase) = 0;
 
     // -----------------------------------------------------------------------
-    //	Allow users to add their own encodings to the intrinsinc mapping
+    //	Allow users to add their own encodings to the intrinsic mapping
     //	table
     //	Usage:
     //		XMLTransService::addEncoding (

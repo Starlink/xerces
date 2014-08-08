@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XercesDefs.hpp 527149 2007-04-10 14:56:39Z amassari $
+ * $Id: XercesDefs.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XERCESDEFS_HPP)
@@ -87,7 +87,7 @@ typedef XMLUInt32           UCS4Ch;
 #endif
 
 // ---------------------------------------------------------------------------
-//  According to whether the compiler suports L"" type strings, we define
+//  According to whether the compiler supports L"" type strings, we define
 //  the XMLStrL() macro one way or another.
 // ---------------------------------------------------------------------------
 #if defined(XERCES_LSTRSUPPORT)

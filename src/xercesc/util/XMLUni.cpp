@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLUni.cpp 673960 2008-07-04 08:50:12Z borisk $
+ * $Id: XMLUni.cpp 833045 2009-11-05 13:21:27Z borisk $
  */
 
 
@@ -359,6 +359,12 @@ const XMLCh XMLUni::fgUCS4EncodingString3[] =
 const XMLCh XMLUni::fgUCS4EncodingString4[] =
 {
     chLatin_U, chLatin_T, chLatin_F, chDash, chDigit_3, chDigit_2, chNull
+};
+
+const XMLCh XMLUni::fgUCS4EncodingString5[] =
+{
+    chLatin_I, chLatin_S, chLatin_O, chDash, chDigit_1, chDigit_0, chDigit_6, chDigit_4, chDigit_6,
+    chDash, chLatin_U, chLatin_C, chLatin_S, chDash, chDigit_4, chNull
 };
 
 const XMLCh XMLUni::fgUCS4BEncodingString[] =
@@ -1389,6 +1395,20 @@ const XMLCh XMLUni::fgXercesHandleMultipleImports[] =
     ,   chLatin_m, chLatin_u, chLatin_l, chLatin_t, chLatin_i, chLatin_p
     ,   chLatin_l, chLatin_e, chDash, chLatin_i, chLatin_m, chLatin_p, chLatin_o
     ,   chLatin_r, chLatin_t, chLatin_s, chNull
+};
+
+//Property
+//Xerces: http://apache.org/xml/properties/low-water-mark
+const XMLCh XMLUni::fgXercesLowWaterMark[] =
+{
+        chLatin_h, chLatin_t, chLatin_t, chLatin_p, chColon, chForwardSlash
+    ,   chForwardSlash, chLatin_a, chLatin_p, chLatin_a, chLatin_c, chLatin_h
+    ,   chLatin_e, chPeriod, chLatin_o, chLatin_r, chLatin_g, chForwardSlash
+    ,   chLatin_x, chLatin_m, chLatin_l, chForwardSlash, chLatin_p, chLatin_r
+    ,   chLatin_o, chLatin_p, chLatin_e, chLatin_r, chLatin_t, chLatin_i
+    ,   chLatin_e, chLatin_s, chForwardSlash, chLatin_l, chLatin_o, chLatin_w
+    ,   chDash, chLatin_w, chLatin_a, chLatin_t, chLatin_e, chLatin_r, chDash
+    ,   chLatin_m, chLatin_a, chLatin_r, chLatin_k, chNull
 };
 
 //Introduced in DOM Level 3

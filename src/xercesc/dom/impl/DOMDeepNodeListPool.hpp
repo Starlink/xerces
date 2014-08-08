@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMDeepNodeListPool.hpp 679340 2008-07-24 10:28:29Z borisk $
+ * $Id: DOMDeepNodeListPool.hpp 883368 2009-11-23 15:28:19Z amassari $
  */
 
 //
@@ -125,13 +125,13 @@ public:
     TVal* getByKey(const void* const key1, const XMLCh* const key2, const XMLCh* const key3);
     const TVal* getByKey(const void* const key1, const XMLCh* const key2, const XMLCh* const key3) const;
 
-    TVal* getById(const unsigned int elemId);
-    const TVal* getById(const unsigned int elemId) const;
+    TVal* getById(const XMLSize_t elemId);
+    const TVal* getById(const XMLSize_t elemId) const;
 
     // -----------------------------------------------------------------------
     //  Putters
     // -----------------------------------------------------------------------
-    unsigned int put(void* key1, XMLCh* key2, XMLCh* key3, TVal* const valueToAdopt);
+    XMLSize_t put(void* key1, XMLCh* key2, XMLCh* key3, TVal* const valueToAdopt);
 
 private:
 
@@ -184,11 +184,11 @@ private:
     bool                                       fAdoptedElems;
     DOMDeepNodeListPoolTableBucketElem<TVal>** fBucketList;
     XMLSize_t                                  fHashModulus;
-    THasher                                    fHasher;
     TVal**                                     fIdPtrs;
     XMLSize_t                                  fIdPtrsCount;
-    unsigned int                               fIdCounter;
+    XMLSize_t                                  fIdCounter;
     MemoryManager*                             fMemoryManager;
+    THasher                                    fHasher;
 };
 
 XERCES_CPP_NAMESPACE_END

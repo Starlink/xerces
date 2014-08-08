@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: IC_Key.hpp 527149 2007-04-10 14:56:39Z amassari $
+ * $Id: IC_Key.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_IC_KEY_HPP)
@@ -55,7 +55,7 @@ public:
 
 private:
     // -----------------------------------------------------------------------
-    //  Unimplemented contstructors and operators
+    //  Unimplemented constructors and operators
     // -----------------------------------------------------------------------
     IC_Key(const IC_Key& other);
     IC_Key& operator= (const IC_Key& other);

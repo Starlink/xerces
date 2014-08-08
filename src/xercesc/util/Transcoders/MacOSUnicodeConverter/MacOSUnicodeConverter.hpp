@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: MacOSUnicodeConverter.hpp 738907 2009-01-29 16:02:48Z amassari $
+ * $Id: MacOSUnicodeConverter.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_MACOSUNICODECONVERTER_HPP)
@@ -271,7 +271,7 @@ private :
     // -----------------------------------------------------------------------
     XMLTranscoder* const	mTranscoder;
 	MemoryManager* const	mManager;
-	XMLMutex				mMutex;			// Mutex to enable rentrancy of LCP transcoder
+	XMLMutex				mMutex;			// Mutex to enable reentrancy of LCP transcoder
  };
 
 XERCES_CPP_NAMESPACE_END

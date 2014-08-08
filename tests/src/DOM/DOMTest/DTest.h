@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DTest.h 570441 2007-08-28 14:18:18Z amassari $
+ * $Id: DTest.h 806472 2009-08-21 09:19:38Z amassari $
  */
 
 
@@ -108,8 +108,12 @@ bool treeCompare(DOMNode* node, DOMNode* node2);
 bool testBaseURI(XercesDOMParser* parser);
 bool testWholeText(XercesDOMParser* parser);
 bool testLSExceptions();
+bool testElementTraversal();
 
 bool testRegex();
+bool testScanner(XercesDOMParser* parser);
+bool testUtilFunctions();
+
 };
 
 class myUserDataHandler : public DOMUserDataHandler {

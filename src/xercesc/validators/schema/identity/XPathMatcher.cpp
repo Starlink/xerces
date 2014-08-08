@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XPathMatcher.cpp 679382 2008-07-24 12:09:39Z amassari $
+ * $Id: XPathMatcher.cpp 804234 2009-08-14 14:20:16Z amassari $
  */
 
 // ---------------------------------------------------------------------------
@@ -29,6 +29,7 @@
 #include <xercesc/validators/schema/SchemaSymbols.hpp>
 #include <xercesc/util/RuntimeException.hpp>
 #include <xercesc/util/OutOfMemoryException.hpp>
+#include <xercesc/framework/ValidationContext.hpp>
 
 XERCES_CPP_NAMESPACE_BEGIN
 
@@ -149,7 +150,8 @@ void XPathMatcher::startElement(const XMLElementDecl& elemDecl,
                                 const unsigned int urlId,
                                 const XMLCh* const elemPrefix,
 								const RefVectorOf<XMLAttr>& attrList,
-                                const XMLSize_t attrCount) {
+                                const XMLSize_t attrCount,
+                                ValidationContext* validationContext /*=0*/) {
 
     for (XMLSize_t i = 0; i < fLocationPathSize; i++) {
 
@@ -255,16 +257,34 @@ void XPathMatcher::startElement(const XMLElementDecl& elemDecl,
                         if (fCurrentStep[i] == stepSize) {
 
                             fMatched[i] = XP_MATCHED_A;
-                            XMLSize_t j=0;
 
-                            for(; j<i && ((fMatched[j] & XP_MATCHED) != XP_MATCHED); j++) ;
-
-                            if(j == i) {
-
-                                SchemaAttDef* attDef = ((SchemaElementDecl&) elemDecl).getAttDef(curDef->getName(), curDef->getURIId());
-                                DatatypeValidator* dv = (attDef) ? attDef->getDatatypeValidator() : 0;
-                                matched(curDef->getValue(), dv, false);
+                            SchemaAttDef* attDef = ((SchemaElementDecl&) elemDecl).getAttDef(curDef->getName(), curDef->getURIId());
+                            DatatypeValidator* dv = (attDef) ? attDef->getDatatypeValidator() : 0;
+                            const XMLCh* value = curDef->getValue();
+                            // store QName using their Clark name
+                            if(dv && dv->getType()==DatatypeValidator::QName)
+                            {
+                                int index=XMLString::indexOf(value, chColon);
+                                if(index==-1)
+                                    matched(value, dv, false);
+                                else
+                                {
+                                    XMLBuffer buff(1023, fMemoryManager);
+                                    buff.append(chOpenCurly);
+                                    if(validationContext)
+                                    {
+                                        XMLCh* prefix=(XMLCh*)fMemoryManager->allocate((index+1)*sizeof(XMLCh));
+                                        ArrayJanitor<XMLCh> janPrefix(prefix, fMemoryManager);
+                                        XMLString::subString(prefix, value, 0, (XMLSize_t)index, fMemoryManager);
+                                        buff.append(validationContext->getURIForPrefix(prefix));
+                                    }
+                                    buff.append(chCloseCurly);
+                                    buff.append(value+index+1);
+                                    matched(buff.getRawBuffer(), dv, false);
+                                }
                             }
+                            else
+                                matched(value, dv, false);
                         }
                         break;
                     }
@@ -286,7 +306,9 @@ void XPathMatcher::startElement(const XMLElementDecl& elemDecl,
 }
 
 void XPathMatcher::endElement(const XMLElementDecl& elemDecl,
-                              const XMLCh* const elemContent) {
+                              const XMLCh* const elemContent,
+                              ValidationContext* validationContext /*=0*/,
+                              DatatypeValidator* actualValidator /*=0*/) {
 
     for(XMLSize_t i = 0; i < fLocationPathSize; i++) {
 
@@ -300,21 +322,41 @@ void XPathMatcher::endElement(const XMLElementDecl& elemDecl,
         // signal match, if appropriate
         else {
 
-            XMLSize_t j=0;
-            for(; j<i && ((fMatched[j] & XP_MATCHED) != XP_MATCHED); j++) ;
-
-            if ((j < i) || (fMatched[j] == 0)) {
+            if (fMatched[i] == 0)
                 continue;
-            }
-            if ((fMatched[j] & XP_MATCHED_A) == XP_MATCHED_A) {
+            
+            if ((fMatched[i] & XP_MATCHED_A) == XP_MATCHED_A) {
                 fMatched[i] = 0;
                 continue;
             }
 
-            DatatypeValidator* dv = ((SchemaElementDecl*) &elemDecl)->getDatatypeValidator();
+            DatatypeValidator* dv = actualValidator?actualValidator:((SchemaElementDecl*) &elemDecl)->getDatatypeValidator();
             bool isNillable = (((SchemaElementDecl *) &elemDecl)->getMiscFlags() & SchemaSymbols::XSD_NILLABLE) != 0;
 
-            matched(elemContent, dv, isNillable);
+            // store QName using their Clark name
+            if(dv && dv->getType()==DatatypeValidator::QName)
+            {
+                int index=XMLString::indexOf(elemContent, chColon);
+                if(index==-1)
+                    matched(elemContent, dv, isNillable);
+                else
+                {
+                    XMLBuffer buff(1023, fMemoryManager);
+                    buff.append(chOpenCurly);
+                    if(validationContext)
+                    {
+                        XMLCh* prefix=(XMLCh*)fMemoryManager->allocate((index+1)*sizeof(XMLCh));
+                        ArrayJanitor<XMLCh> janPrefix(prefix, fMemoryManager);
+                        XMLString::subString(prefix, elemContent, 0, (XMLSize_t)index, fMemoryManager);
+                        buff.append(validationContext->getURIForPrefix(prefix));
+                    }
+                    buff.append(chCloseCurly);
+                    buff.append(elemContent+index+1);
+                    matched(buff.getRawBuffer(), dv, isNillable);
+                }
+            }
+            else
+                matched(elemContent, dv, isNillable);
             fMatched[i] = 0;
         }
     }

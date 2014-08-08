@@ -22,7 +22,7 @@
 #	This script helps in pretty-printing of build commands.
 #	We invoke it via overridden rules in Makefile.am
 #
-# $Id: pretty-make 470092 2006-11-01 20:40:16Z amassari $
+# $Id: pretty-make 904065 2010-01-28 12:31:53Z borisk $
 #
 
 # Grab the action (what we're doing)
@@ -36,10 +36,12 @@ cmd=$@
 # problems, and may not be reliable across all compilers. Given the
 # dependencies, this is usually the last argument, but sometimes libtool
 # adds additional flags, which throws this off. So we look
-# for the last arg that doesn't start with -.
+# for the last arg that doesn't start with - or + (HP aCC style).
 while [ $# -gt 0 ]; do
 	case ${1} in
 	-*)
+		;;
+	+*)
 		;;
 	*)
 		target=$1

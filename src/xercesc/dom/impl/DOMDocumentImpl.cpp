@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMDocumentImpl.cpp 695427 2008-09-15 11:05:36Z borisk $
+ * $Id: DOMDocumentImpl.cpp 932949 2010-04-11 17:40:33Z borisk $
  */
 #include "DOMDocumentImpl.hpp"
 #include "DOMCasts.hpp"
@@ -200,6 +200,13 @@ void DOMDocumentImpl::setDocumentType(DOMDocumentType *doctype)
 
 DOMDocumentImpl::~DOMDocumentImpl()
 {
+    // While DOMConfiguration is allocated on the Document's heap, itself
+    // it uses the memory manager directly. This means that while we cannot
+    // delete with operator delete, we need to call its d-tor.
+    //
+    if (fDOMConfiguration)
+      fDOMConfiguration->~DOMConfiguration ();
+
     //  Clean up the fNodeListPool
     if (fNodeListPool)
         fNodeListPool->cleanup();
@@ -909,7 +916,7 @@ DOMNodeList *DOMDocumentImpl::getDeepNodeList(const DOMNode *rootNode, const XML
 
     DOMDeepNodeListImpl* retList = fNodeListPool->getByKey(rootNode, tagName, 0);
     if (!retList) {
-        int id = fNodeListPool->put((void*) rootNode, (XMLCh*) tagName, 0, new (this) DOMDeepNodeListImpl(rootNode, tagName));
+        XMLSize_t id = fNodeListPool->put((void*) rootNode, (XMLCh*) tagName, 0, new (this) DOMDeepNodeListImpl(rootNode, tagName));
         retList = fNodeListPool->getById(id);
     }
 
@@ -928,7 +935,7 @@ DOMNodeList *DOMDocumentImpl::getDeepNodeList(const DOMNode *rootNode,     //DOM
     DOMDeepNodeListImpl* retList = fNodeListPool->getByKey(rootNode, localName, namespaceURI);
     if (!retList) {
         // the pool will adopt the DOMDeepNodeListImpl
-        int id = fNodeListPool->put((void*) rootNode, (XMLCh*) localName, (XMLCh*) namespaceURI, new (this) DOMDeepNodeListImpl(rootNode, namespaceURI, localName));
+        XMLSize_t id = fNodeListPool->put((void*) rootNode, (XMLCh*) localName, (XMLCh*) namespaceURI, new (this) DOMDeepNodeListImpl(rootNode, namespaceURI, localName));
         retList = fNodeListPool->getById(id);
     }
 
@@ -1113,8 +1120,9 @@ DOMNode *DOMDocumentImpl::importNode(const DOMNode *source, bool deep, bool clon
             DOMAttrImpl* newattr=NULL;
             if (source->getLocalName() == 0)
                 newattr = (DOMAttrImpl*)createAttribute(source->getNodeName());
-            else
+            else {
                 newattr = (DOMAttrImpl*)createAttributeNS(source->getNamespaceURI(), source->getNodeName());
+            }
             DOMTypeInfoImpl* clonedTypeInfo=NULL;
             // if the source has type informations, copy them
             DOMPSVITypeInfo* sourcePSVI=(DOMPSVITypeInfo*)source->getFeature(XMLUni::fgXercescInterfacePSVITypeInfo, 0);

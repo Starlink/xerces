@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: LexicalHandler.hpp 557282 2007-07-18 14:54:15Z amassari $
+ * $Id: LexicalHandler.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_LEXICALHANDLER_HPP)
@@ -65,7 +65,7 @@ public:
    /**
     * Receive notification of comments.
     *
-    * <p>The Parser will call this method to report each occurence of
+    * <p>The Parser will call this method to report each occurrence of
     * a comment in the XML document.</p>
     *
     * <p>The application must not attempt to read from the array

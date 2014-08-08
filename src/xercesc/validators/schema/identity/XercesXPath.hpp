@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XercesXPath.hpp 676911 2008-07-15 13:27:32Z amassari $
+ * $Id: XercesXPath.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XERCESXPATH_HPP)
@@ -180,7 +180,7 @@ public:
 
 private:
     // -----------------------------------------------------------------------
-    //  Unimplemented contstructors and operators
+    //  Unimplemented constructors and operators
     // -----------------------------------------------------------------------
     XercesLocationPath(const XercesLocationPath& other);
     XercesLocationPath& operator= (const XercesLocationPath& other);
@@ -288,7 +288,7 @@ public:
 
 private:
     // -----------------------------------------------------------------------
-    //  Unimplemented contstructors and operators
+    //  Unimplemented constructors and operators
     // -----------------------------------------------------------------------
     XercesXPath(const XercesXPath& other);
     XercesXPath& operator= (const XercesXPath& other);
@@ -373,7 +373,7 @@ protected:
 
 private:
     // -----------------------------------------------------------------------
-    //  Unimplemented contstructors and operators
+    //  Unimplemented constructors and operators
     // -----------------------------------------------------------------------
     XPathScanner(const XPathScanner& other);
     XPathScanner& operator= (const XPathScanner& other);
@@ -438,7 +438,7 @@ protected:
 
 private:
     // -----------------------------------------------------------------------
-    //  Unimplemented contstructors and operators
+    //  Unimplemented constructors and operators
     // -----------------------------------------------------------------------
     XPathScannerForSchema(const XPathScannerForSchema& other);
     XPathScannerForSchema& operator= (const XPathScannerForSchema& other);

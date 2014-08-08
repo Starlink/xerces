@@ -16,7 +16,7 @@
 #
 
 #
-# $Id: Makefile.am 679340 2008-07-24 10:28:29Z borisk $
+# $Id: Makefile.am 883272 2009-11-23 08:17:49Z borisk $
 #
 
 include ${top_srcdir}/version.incl
@@ -32,12 +32,11 @@ lib_LTLIBRARIES = libxerces-c.la
 # make pretty-printing won't work.
 #
 AM_CPPFLAGS =
-AM_CXXFLAGS = $(ICU_CXXFLAGS)
 
 libxerces_c_la_LDFLAGS = -release ${INTERFACE_VER_D}
 
- # This sets {install}/include as target for the headers
- libxerces_c_ladir = ${includedir}
+# This sets {install}/include as target for the headers
+libxerces_c_ladir = ${includedir}
 
 
 libxerces_c_la_SOURCES = ${util_sources} ${dom_sources} ${domimpl_sources} \
@@ -60,13 +59,12 @@ nodist_autoconfheaders_HEADERS = ${top_builddir}/src/xercesc/util/Xerces_autocon
 EXTRA_DIST = stricmp.h strnicmp.h towlower.h towupper.h
 libxerces_c_la_LIBADD = ${LTLIBOBJS}
 
-
 # NetAccessors, conditionally built based on settings from configure
 #
 if XERCES_USE_NETACCESSOR_CURL
 libxerces_c_la_SOURCES += ${curl_sources}
 nobase_libxerces_c_la_HEADERS += ${curl_headers}
-AM_CPPFLAGS += -I${CURL_PREFIX}/include/curl
+AM_CPPFLAGS += ${CURL_FLAGS}
 endif
 
 if XERCES_USE_NETACCESSOR_SOCKET
@@ -90,7 +88,7 @@ endif
 if XERCES_USE_TRANSCODER_ICU
 libxerces_c_la_SOURCES += ${icu_sources}
 nobase_libxerces_c_la_HEADERS += ${icu_headers}
-AM_CPPFLAGS += -I${ICU_PREFIX}/include
+AM_CPPFLAGS += ${ICU_FLAGS}
 endif
 
 if XERCES_USE_TRANSCODER_GNUICONV
@@ -123,12 +121,26 @@ endif
 
 if XERCES_USE_MSGLOADER_ICU
 libxerces_c_la_SOURCES += ${msgicu_sources}
+nodist_libxerces_c_la_SOURCES = ${msgicu_nodist_sources}
 nobase_libxerces_c_la_HEADERS += ${msgicu_headers}
-AM_CPPFLAGS += -I${ICU_PREFIX}/include
+AM_CPPFLAGS += ${ICU_FLAGS}
 
-SUBDIRS += xercesc/util/MsgLoaders/ICU/resources
-libxerces_c_la_LIBADD += xercesc/util/MsgLoaders/ICU/resources/xercesc_messages.lo \
-xercesc/util/MsgLoaders/ICU/resources/root_res.lo
+EXTRA_DIST += xercesc/util/MsgLoaders/ICU/resources/res-file-list.txt \
+xercesc/util/MsgLoaders/ICU/resources/root.txt
+
+# Resource shortname
+PKGNAME=xercesc_messages_${INTERFACE_VER_U}
+
+CLEANFILES = xercesc_messages.c root_res.c root.res
+BUILT_SOURCES = xercesc_messages.c root_res.c
+xercesc_messages.c: ${top_srcdir}/src/xercesc/util/MsgLoaders/ICU/resources/res-file-list.txt
+	${ICU_SBIN}gencmn --name ${PKGNAME} -S ${PKGNAME}_dat.c -d . ${top_srcdir}/src/xercesc/util/MsgLoaders/ICU/resources/res-file-list.txt
+	@mv ${PKGNAME}_dat.c xercesc_messages.c
+
+root_res.c: ${top_srcdir}/src/xercesc/util/MsgLoaders/ICU/resources/root.txt
+	${ICU_BIN}genrb -d . ${top_srcdir}/src/xercesc/util/MsgLoaders/ICU/resources/root.txt
+	${ICU_SBIN}genccode --name ${PKGNAME} -d . root.res
+
 endif
 
 if XERCES_USE_MSGLOADER_ICONV
@@ -578,6 +590,8 @@ util_headers = \
 	xercesc/util/FlagJanitor.hpp \
 	xercesc/util/FlagJanitor.c \
 	xercesc/util/Hashers.hpp \
+	xercesc/util/Hash2KeysSetOf.hpp \
+	xercesc/util/Hash2KeysSetOf.c \
 	xercesc/util/HexBin.hpp \
 	xercesc/util/IllegalArgumentException.hpp \
 	xercesc/util/InvalidCastException.hpp \
@@ -1057,6 +1071,10 @@ msgicu_headers = \
 msgicu_sources = \
 	xercesc/util/MsgLoaders/ICU/ICUMsgLoader.cpp
 
+msgicu_nodist_sources = \
+	xercesc_messages.c \
+	root_res.c
+
 msgiconv_headers = \
 	xercesc/util/MsgLoaders/MsgCatalog/MsgCatalogLoader.hpp \
 	xercesc/util/MsgLoaders/MsgCatalog/XMLMsgCat_Ids.hpp
@@ -1105,17 +1123,17 @@ winmmgr_sources = \
 if XERCES_PRETTY_MAKE
 
 .c.lo:
-@am__fastdepCXX_TRUE@	@depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.lo$$||'`; \
-@am__fastdepCXX_TRUE@	if $(LTCOMPILE) -MT $@ -MD -MP -MF "$$depbase.Tpo" -c -o $@ $<; \
-@am__fastdepCXX_TRUE@	then mv -f "$$depbase.Tpo" "$$depbase.Plo"; else rm -f "$$depbase.Tpo"; exit 1; fi
+@am__fastdepCC_TRUE@	@depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.lo$$||'`; \
+@am__fastdepCC_TRUE@	if $(LTCOMPILE) -MT $@ -MD -MP -MF "$$depbase.Tpo" -c -o $@ $<; \
+@am__fastdepCC_TRUE@	then $(am__mv) "$$depbase.Tpo" "$$depbase.Plo"; else rm -f "$$depbase.Tpo"; exit 1; fi
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	@source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LTCOMPILE) -c -o $@ $<
+@am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
 
 .cpp.lo:
 @am__fastdepCXX_TRUE@	@depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.lo$$||'`; \
 @am__fastdepCXX_TRUE@	if $(LTCXXCOMPILE) -MT $@ -MD -MP -MF "$$depbase.Tpo" -c -o $@ $<; \
-@am__fastdepCXX_TRUE@	then mv -f "$$depbase.Tpo" "$$depbase.Plo"; else rm -f "$$depbase.Tpo"; exit 1; fi
+@am__fastdepCXX_TRUE@	then $(am__mv) "$$depbase.Tpo" "$$depbase.Plo"; else rm -f "$$depbase.Tpo"; exit 1; fi
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	@source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<

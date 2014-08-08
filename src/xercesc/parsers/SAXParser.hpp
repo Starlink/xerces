@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: SAXParser.hpp 673975 2008-07-04 09:23:56Z borisk $
+ * $Id: SAXParser.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_SAXPARSER_HPP)
@@ -106,7 +106,7 @@ public :
       *                   parser is responsible for freeing the memory.
       * @param manager    Pointer to the memory manager to be used to
       *                   allocate objects.
-      * @param gramPool   The collection of cached grammers.
+      * @param gramPool   The collection of cached grammars.
       */
     SAXParser
     (
@@ -306,7 +306,7 @@ public :
       */
     bool getValidationConstraintFatal() const;
 
-   /** Get the set of Namespace/SchemaLocation that is specified externaly.
+   /** Get the set of Namespace/SchemaLocation that is specified externally.
       *
       * This method returns the list of Namespace/SchemaLocation that was
       * specified using setExternalSchemaLocation.
@@ -314,7 +314,7 @@ public :
       * The parser owns the returned string, and the memory allocated for
       * the returned string will be destroyed when the parser is deleted.
       *
-      * To ensure assessiblity of the returned information after the parser
+      * To ensure accessibility of the returned information after the parser
       * is deleted, callers need to copy and store the returned information
       * somewhere else.
       *
@@ -327,7 +327,7 @@ public :
       */
     XMLCh* getExternalSchemaLocation() const;
 
-   /** Get the noNamespace SchemaLocation that is specified externaly.
+   /** Get the noNamespace SchemaLocation that is specified externally.
       *
       * This method returns the no target namespace XML Schema Location
       * that was specified using setExternalNoNamespaceSchemaLocation.
@@ -335,7 +335,7 @@ public :
       * The parser owns the returned string, and the memory allocated for
       * the returned string will be destroyed when the parser is deleted.
       *
-      * To ensure assessiblity of the returned information after the parser
+      * To ensure accessibility of the returned information after the parser
       * is deleted, callers need to copy and store the returned information
       * somewhere else.
       *
@@ -364,6 +364,21 @@ public :
       * @see #setSecurityManager(SecurityManager* const)
       */
     SecurityManager* getSecurityManager() const;
+
+    /** Get the raw buffer low water mark for this parser.
+      *
+      * If the number of available bytes in the raw buffer is less than
+      * the low water mark the parser will attempt to read more data before
+      * continuing parsing. By default the value for this parameter is 100
+      * bytes. You may want to set this parameter to 0 if you would like
+      * the parser to parse the available data immediately without
+      * potentially blocking while waiting for more date.
+      *
+      * @return current low water mark
+      *
+      * @see #setSecurityManager
+      */
+    XMLSize_t getLowWaterMark() const;
 
     /** Get the 'Loading External DTD' flag
       *
@@ -624,7 +639,7 @@ public :
       *
       * Full schema constraint checking includes those checking that may
       * be time-consuming or memory intensive. Currently, particle unique
-      * attribution constraint checking and particle derivation resriction checking
+      * attribution constraint checking and particle derivation restriction checking
       * are controlled by this option.
       *
       * The parser's default state is: false.
@@ -667,7 +682,7 @@ public :
 
     /**
       * This method allows users to set the parser's behaviour when it
-      * encounters a validtion constraint error. If set to true, and the
+      * encounters a validation constraint error. If set to true, and the
       * the parser will treat validation error as fatal and will exit depends on the
       * state of "getExitOnFirstFatalError". If false, then it will
       * report the error and continue processing.
@@ -689,7 +704,7 @@ public :
     /**
       * This method allows the user to specify a list of schemas to use.
       * If the targetNamespace of a schema specified using this method matches
-      * the targetNamespace of a schema occuring in the instance document in
+      * the targetNamespace of a schema occurring in the instance document in
       * the schemaLocation attribute, or if the targetNamespace matches the
       * namespace attribute of the "import" element, the schema specified by the
       * user using this method will be used (i.e., the schemaLocation attribute
@@ -760,6 +775,21 @@ public :
       * @see #getSecurityManager
       */
     void setSecurityManager(SecurityManager* const securityManager);
+
+    /** Set the raw buffer low water mark for this parser.
+      *
+      * If the number of available bytes in the raw buffer is less than
+      * the low water mark the parser will attempt to read more data before
+      * continuing parsing. By default the value for this parameter is 100
+      * bytes. You may want to set this parameter to 0 if you would like
+      * the parser to parse the available data immediately without
+      * potentially blocking while waiting for more date.
+      *
+      * @param lwm new low water mark
+      *
+      * @see #getSecurityManager
+      */
+    void setLowWaterMark(XMLSize_t lwm);
 
     /** Set the 'Loading External DTD' flag
       *
@@ -1011,7 +1041,7 @@ public :
       * the scan of the prolog failed and the token is not going to work on
       * subsequent scanNext() calls.
       *
-      * @param systemId A pointer to a Unicode string represting the path
+      * @param systemId A pointer to a Unicode string representing the path
       *                 to the XML file to be parsed.
       * @param toFill   A token maintaing state information to maintain
       *                 internal consistency between invocation of 'parseNext'
@@ -1044,10 +1074,10 @@ public :
       * the scan of the prolog failed and the token is not going to work on
       * subsequent scanNext() calls.
       *
-      * @param systemId A pointer to a regular native string represting
+      * @param systemId A pointer to a regular native string representing
       *                 the path to the XML file to be parsed.
       * @param toFill   A token maintaing state information to maintain
-      *                 internal consIstency between invocation of 'parseNext'
+      *                 internal consistency between invocation of 'parseNext'
       *                 calls.
       *
       * @return 'true', if successful in parsing the prolog. It indicates the
@@ -1164,13 +1194,12 @@ public :
       * is enabled, the parser will cache the grammars for re-use. If a grammar
       * key is found in the pool, no caching of any grammar will take place.
       *
-      * <p><b>"Experimental - subject to change"</b></p>
       *
       * @param source A const reference to the SAX InputSource object which
       *               points to the schema grammar file to be preparsed.
       * @param grammarType The grammar type (Schema or DTD).
       * @param toCache If <code>true</code>, we cache the preparsed grammar,
-      *                otherwise, no chaching. Default is <code>false</code>.
+      *                otherwise, no caching. Default is <code>false</code>.
       * @return The preparsed schema grammar object (SchemaGrammar or
       *         DTDGrammar). That grammar object is owned by the parser.
       *
@@ -1194,14 +1223,13 @@ public :
       * is enabled, the parser will cache the grammars for re-use. If a grammar
       * key is found in the pool, no caching of any grammar will take place.
       *
-      * <p><b>"Experimental - subject to change"</b></p>
       *
       * @param systemId A const XMLCh pointer to the Unicode string which
       *                 contains the path to the XML grammar file to be
       *                 preparsed.
       * @param grammarType The grammar type (Schema or DTD).
       * @param toCache If <code>true</code>, we cache the preparsed grammar,
-      *                otherwise, no chaching. Default is <code>false</code>.
+      *                otherwise, no caching. Default is <code>false</code>.
       * @return The preparsed schema grammar object (SchemaGrammar or
       *         DTDGrammar). That grammar object is owned by the parser.
       *
@@ -1223,13 +1251,12 @@ public :
       * is enabled, the parser will cache the grammars for re-use. If a grammar
       * key is found in the pool, no caching of any grammar will take place.
       *
-      * <p><b>"Experimental - subject to change"</b></p>
       *
       * @param systemId A const char pointer to a native string which contains
       *                 the path to the XML grammar file to be preparsed.
       * @param grammarType The grammar type (Schema or DTD).
       * @param toCache If <code>true</code>, we cache the preparsed grammar,
-      *                otherwise, no chaching. Default is <code>false</code>.
+      *                otherwise, no caching. Default is <code>false</code>.
       * @return The preparsed schema grammar object (SchemaGrammar or
       *         DTDGrammar). That grammar object is owned by the parser.
       *
@@ -1484,7 +1511,7 @@ public :
       * was just scanned.
       *
       * <p>If any advanced callback handlers are installed, the
-      * corresponding 'endEnityReference' method is invoked.</p>
+      * corresponding 'endEntityReference' method is invoked.</p>
       *
       * @param entDecl A const reference to the object containing the
       *                entity declaration information.
@@ -1579,7 +1606,7 @@ public :
       * This method is used to indicate the start of an entity reference.
       *
       * <p>If any advanced callback handlers are installed, the
-      * corresponding 'endEnityReference' method is invoked.</p>
+      * corresponding 'endEntityReference' method is invoked.</p>
       *
       * @param entDecl A const reference to the object containing the
       *                entity declaration information.
@@ -1690,7 +1717,7 @@ public :
 
     /**
       * This method allows an installed XMLEntityHandler to further
-      * process any system id's of enternal entities encountered in
+      * process any system id's of external entities encountered in
       * the XML file being parsed, such as redirection etc.
       *
       * <b>This method always returns 'false'

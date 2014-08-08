@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DTDHandler.hpp 527149 2007-04-10 14:56:39Z amassari $
+ * $Id: DTDHandler.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_DTDHANDLER_HPP)
@@ -135,7 +135,7 @@ public:
     /**
     * Reset the DocType object on its reuse
     *
-    * <p>This method helps in reseting the DTD object implementational
+    * <p>This method helps in reseting the DTD object implementation
     * defaults each time the DTD is begun.</p>
     *
     */

@@ -20,11 +20,9 @@
 *  handler with the scanner. In these handler methods, appropriate DOM nodes
 *  are created and added to the DOM tree.
 *
-* $Id: AbstractDOMParser.cpp 678766 2008-07-22 14:00:16Z borisk $
+* $Id: AbstractDOMParser.cpp 935358 2010-04-18 15:40:35Z borisk $
 *
 */
-
-
 
 // ---------------------------------------------------------------------------
 //  Includes
@@ -312,6 +310,13 @@ SecurityManager* AbstractDOMParser::getSecurityManager() const
     return fScanner->getSecurityManager();
 }
 
+// Return it as a reference so that we cn return as void* from getParameter.
+//
+const XMLSize_t& AbstractDOMParser::getLowWaterMark() const
+{
+    return fScanner->getLowWaterMark();
+}
+
 bool AbstractDOMParser::getLoadExternalDTD() const
 {
     return fScanner->getLoadExternalDTD();
@@ -443,6 +448,11 @@ void AbstractDOMParser::setSecurityManager(SecurityManager* const securityManage
         ThrowXMLwithMemMgr(IOException, XMLExcepts::Gen_ParseInProgress, fMemoryManager);
 
     fScanner->setSecurityManager(securityManager);
+}
+
+void AbstractDOMParser::setLowWaterMark(XMLSize_t lwm)
+{
+    fScanner->setLowWaterMark(lwm);
 }
 
 void AbstractDOMParser::setLoadExternalDTD(const bool newState)
@@ -674,7 +684,7 @@ void AbstractDOMParser::handleElementPSVI(const XMLCh* const            localNam
     {
         DOMTypeInfoImpl* typeInfo=new (getDocument()) DOMTypeInfoImpl();
         typeInfo->setNumericProperty(DOMPSVITypeInfo::PSVI_Validity, elementInfo->getValidity());
-        typeInfo->setNumericProperty(DOMPSVITypeInfo::PSVI_Validitation_Attempted, elementInfo->getValidationAttempted());
+        typeInfo->setNumericProperty(DOMPSVITypeInfo::PSVI_Validation_Attempted, elementInfo->getValidationAttempted());
         if(elementInfo->getTypeDefinition())
         {
             typeInfo->setNumericProperty(DOMPSVITypeInfo::PSVI_Type_Definition_Type, elementInfo->getTypeDefinition()->getTypeCategory());
@@ -733,7 +743,7 @@ void AbstractDOMParser::handleAttributesPSVI( const XMLCh* const            loca
             {
                 DOMTypeInfoImpl* typeInfo=new (getDocument()) DOMTypeInfoImpl();
                 typeInfo->setNumericProperty(DOMPSVITypeInfo::PSVI_Validity, attrInfo->getValidity());
-                typeInfo->setNumericProperty(DOMPSVITypeInfo::PSVI_Validitation_Attempted, attrInfo->getValidationAttempted());
+                typeInfo->setNumericProperty(DOMPSVITypeInfo::PSVI_Validation_Attempted, attrInfo->getValidationAttempted());
                 if(attrInfo->getTypeDefinition())
                 {
                     typeInfo->setNumericProperty(DOMPSVITypeInfo::PSVI_Type_Definition_Type, XSTypeDefinition::SIMPLE_TYPE);
@@ -841,6 +851,15 @@ void AbstractDOMParser::endEntityReference(const XMLEntityDecl&)
     fCurrentNode   = fCurrentParent;
     fCurrentParent = fCurrentNode->getParentNode ();
 
+    // When the document is invalid but we continue parsing, we may
+    // end up seeing more 'end' events than the 'start' ones.
+    //
+    if (fCurrentParent == 0 && fDocument != 0)
+    {
+      fCurrentNode = fDocument->getDocumentElement ();
+      fCurrentParent = fCurrentNode;
+    }
+
     if (erImpl)
         erImpl->setReadOnly(true, true);
 }
@@ -854,13 +873,24 @@ void AbstractDOMParser::endElement( const   XMLElementDecl&
     fCurrentNode   = fCurrentParent;
     fCurrentParent = fCurrentNode->getParentNode ();
 
+    // When the document is invalid but we continue parsing, we may
+    // end up seeing more 'end' events than the 'start' ones.
+    //
+    if (fCurrentParent == 0 && fDocument != 0)
+    {
+      fCurrentNode = fDocument->getDocumentElement ();
+      fCurrentParent = fCurrentNode;
+    }
+
     // If we've hit the end of content, clear the flag.
     //
     if (fCurrentParent == fDocument)
         fWithinElement = false;
 
-    if(fDoXInclude && XIncludeUtils::isXIIncludeDOMNode(fCurrentNode)
-        || (XIncludeUtils::isXIFallbackDOMNode(fCurrentNode) && !XMLString::equals(fCurrentParent->getNamespaceURI(), XIncludeUtils::fgXIIIncludeNamespaceURI)))
+    if(fDoXInclude &&
+       (XIncludeUtils::isXIIncludeDOMNode(fCurrentNode) ||
+        ((XIncludeUtils::isXIFallbackDOMNode(fCurrentNode) &&
+          !XMLString::equals(fCurrentParent->getNamespaceURI(), XIncludeUtils::fgXIIIncludeNamespaceURI)))))
     {
     	XIncludeUtils xiu((XMLErrorReporter *) this);
 	    // process the XInclude node, then update the fCurrentNode with the new content
@@ -1010,9 +1040,10 @@ void AbstractDOMParser::startElement(const XMLElementDecl&   elemDecl
             //
             unsigned int attrURIId = oneAttrib->getURIId();
             const XMLCh* localName = oneAttrib->getName();
+            const XMLCh* prefix = oneAttrib->getPrefix();
             namespaceURI = 0;
 
-            if (XMLString::equals(localName, XMLUni::fgXMLNSString))
+            if ((prefix==0 || *prefix==0) && XMLString::equals(localName, XMLUni::fgXMLNSString))
             {
                 // xmlns=...
                 attrURIId = xmlnsNSId;
@@ -1024,7 +1055,7 @@ void AbstractDOMParser::startElement(const XMLElementDecl&   elemDecl
             }
 
             attr = (DOMAttrImpl*) createAttrNS (namespaceURI,
-                                                oneAttrib->getPrefix (),
+                                                prefix,
                                                 localName,
                                                 oneAttrib->getQName());
 

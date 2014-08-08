@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ICUTransService.hpp 676954 2008-07-15 16:29:19Z dbertoni $
+ * $Id: ICUTransService.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_ICUTRANSSERVICE_HPP)
@@ -157,7 +157,7 @@ private :
     //
     //  fSrcOffsets
     //      This is an array of longs, which are allocated to the size of
-    //      the trancoding block (if any) indicated in the ctor. It is used
+    //      the transcoding block (if any) indicated in the ctor. It is used
     //      to get the character offsets from ICU, which are then translated
     //      into an array of char sizes for return.
     // -----------------------------------------------------------------------

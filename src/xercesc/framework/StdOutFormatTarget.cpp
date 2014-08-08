@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: StdOutFormatTarget.cpp 673975 2008-07-04 09:23:56Z borisk $
+ * $Id: StdOutFormatTarget.cpp 881225 2009-11-17 10:19:57Z borisk $
  */
 
 #include <xercesc/framework/StdOutFormatTarget.hpp>
@@ -28,7 +28,9 @@ StdOutFormatTarget::StdOutFormatTarget()
 {}
 
 StdOutFormatTarget::~StdOutFormatTarget()
-{}
+{
+  flush ();
+}
 
 void StdOutFormatTarget::flush()
 {
@@ -39,7 +41,9 @@ void StdOutFormatTarget::writeChars(const XMLByte* const  toWrite
                                   , const XMLSize_t       count
                                   , XMLFormatter* const)
 {
-    fwrite(toWrite, sizeof(XMLByte), count, stdout);
+    XMLSize_t written=fwrite(toWrite, sizeof(XMLByte), count, stdout);
+    if(written!=count)
+        ThrowXML(XMLPlatformUtilsException, XMLExcepts::File_CouldNotWriteToFile);
     fflush(stdout);
 }
 

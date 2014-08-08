@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: TransENameMap.hpp 570552 2007-08-28 19:57:36Z amassari $
+ * $Id: TransENameMap.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_TRANSENAMEMAP_HPP)
@@ -151,7 +151,7 @@ private :
     //  Private data members
     //
     //  fSwapped
-    //      Indicates whether the endianess of the encoding is opposite of
+    //      Indicates whether the endianness of the encoding is opposite of
     //      that of the local host.
     // -----------------------------------------------------------------------
     bool    fSwapped;

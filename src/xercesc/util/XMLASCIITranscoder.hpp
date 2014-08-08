@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLASCIITranscoder.hpp 635560 2008-03-10 14:10:09Z borisk $
+ * $Id: XMLASCIITranscoder.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XMLASCIITRANSCODER_HPP)
@@ -31,7 +31,7 @@ XERCES_CPP_NAMESPACE_BEGIN
 //  This class provides an implementation of the XMLTranscoder interface
 //  for a simple ASCII transcoder. The parser does some encodings
 //  intrinsically without depending upon external transcoding services.
-//  To make everything more orthagonal, we implement these internal
+//  To make everything more orthogonal, we implement these internal
 //  transcoders using the same transcoder abstraction as the pluggable
 //  transcoding services do.
 //

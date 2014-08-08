@@ -20,7 +20,7 @@
 *  handler with the scanner. In these handler methods, appropriate DOM nodes
 *  are created and added to the DOM tree.
 *
-* $Id: XercesDOMParser.cpp 673944 2008-07-04 07:53:16Z borisk $
+* $Id: XercesDOMParser.cpp 882548 2009-11-20 13:44:14Z borisk $
 *
 */
 
@@ -343,6 +343,7 @@ void XercesDOMParser::resetParse()
 void XercesDOMParser::resetCachedGrammarPool()
 {
     getGrammarResolver()->resetCachedGrammar();
+    getScanner()->resetCachedGrammar();
 }
 
 XERCES_CPP_NAMESPACE_END

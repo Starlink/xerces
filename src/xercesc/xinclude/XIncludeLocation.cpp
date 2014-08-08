@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XIncludeLocation.cpp 695885 2008-09-16 14:00:19Z borisk $
+ * $Id: XIncludeLocation.cpp 932949 2010-04-11 17:40:33Z borisk $
  */
 
 
@@ -61,7 +61,6 @@ XIncludeLocation::prependPath(const XMLCh *baseToAdd){
     if (fHref == NULL){
         return NULL;
     }
-    XMLSize_t fileLength = XMLString::stringLen(fHref);
 
     if (baseToAdd == NULL){
         return fHref;
@@ -76,13 +75,19 @@ XIncludeLocation::prependPath(const XMLCh *baseToAdd){
         lastSlash = XMLString::lastIndexOf(baseToAdd, chBackSlash);
     }
 
-    relativeHref = (XMLCh *)XMLPlatformUtils::fgMemoryManager->allocate((fileLength + baseLength + 2) * sizeof(XMLCh));
+    // Skip the scheme (e.g., file://) if fHref has one. Ideally we
+    // should detect also if the URI is absolute.
+    //
+    const XMLCh* hrefPath = findEndOfProtocol (fHref);
+    XMLSize_t hrefPathLength = XMLString::stringLen(hrefPath);
+
+    relativeHref = (XMLCh *)XMLPlatformUtils::fgMemoryManager->allocate((hrefPathLength + baseLength + 2) * sizeof(XMLCh));
     if (relativeHref == NULL){
         return NULL;
     }
     XMLString::copyNString(relativeHref, baseToAdd, lastSlash + 1);
     relativeHref[lastSlash + 1] = chNull;
-    XMLString::catString(relativeHref, fHref);
+    XMLString::catString(relativeHref, hrefPath);
 
     /* free the old reference */
     deallocate((void *)fHref);

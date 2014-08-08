@@ -81,14 +81,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="ws2_32.lib advapi32.lib"
-				OutputFile="$(OutDir)\xerces-c_3_0.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0.fullpdb"
-				StripPrivateSymbols="$(OutDir)\xerces-c_3_0.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1.fullpdb"
+				StripPrivateSymbols="$(OutDir)\xerces-c_3_1.pdb"
 				GenerateMapFile="true"
-				MapFileName="$(IntDir)\xerces-c_3_0.map"
+				MapFileName="$(IntDir)\xerces-c_3_1.map"
 				SubSystem="2"
 				OptimizeReferences="2"
 				SetChecksum="true"
@@ -160,7 +160,7 @@
 				PrecompiledHeaderFile="$(IntDir)\XercesLib.pch"
 				AssemblerListingLocation="$(IntDir)\"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="$(IntDir)\XercesLib_vc80"
+				ProgramDataBaseFileName="$(IntDir)\XercesLib_vc90"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="0"
@@ -179,14 +179,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="ws2_32.lib advapi32.lib"
-				OutputFile="$(OutDir)\xerces-c_3_0.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0.fullpdb"
-				StripPrivateSymbols="$(OutDir)\xerces-c_3_0.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1.fullpdb"
+				StripPrivateSymbols="$(OutDir)\xerces-c_3_1.pdb"
 				GenerateMapFile="true"
-				MapFileName="$(IntDir)\xerces-c_3_0.map"
+				MapFileName="$(IntDir)\xerces-c_3_1.map"
 				SubSystem="2"
 				OptimizeReferences="2"
 				SetChecksum="true"
@@ -278,11 +278,11 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="ws2_32.lib advapi32.lib"
-				OutputFile="$(OutDir)\xerces-c_3_0D.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1D.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0D.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1D.pdb"
 				SubSystem="2"
 				SetChecksum="false"
 				BaseAddress="0x12000000"
@@ -350,7 +350,7 @@
 				PrecompiledHeaderFile="$(IntDir)\XercesLib.pch"
 				AssemblerListingLocation="$(IntDir)\"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="$(IntDir)\XercesLib_vc80"
+				ProgramDataBaseFileName="$(IntDir)\XercesLib_vc90"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="0"
@@ -369,11 +369,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="ws2_32.lib advapi32.lib"
-				OutputFile="$(OutDir)\xerces-c_3_0D.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1D.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0D.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1D.pdb"
 				SubSystem="2"
 				SetChecksum="false"
 				BaseAddress="0x12000000"
@@ -519,7 +519,7 @@
 				PrecompiledHeaderFile="$(IntDir)\XercesLib.pch"
 				AssemblerListingLocation="$(IntDir)\"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="$(IntDir)\XercesLib_vc80"
+				ProgramDataBaseFileName="$(IntDir)\XercesLib_vc90"
 				WarningLevel="3"
 				CompileAs="0"
 			/>
@@ -591,7 +591,7 @@
 				PrecompiledHeaderFile="$(IntDir)\XercesLib.pch"
 				AssemblerListingLocation="$(IntDir)\"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="$(IntDir)\XercesLib_vc90"
+				ProgramDataBaseFileName="$(OutDir)\xerces-c_static_3D.pdb"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
@@ -666,7 +666,7 @@
 				PrecompiledHeaderFile="$(IntDir)\XercesLib.pch"
 				AssemblerListingLocation="$(IntDir)\"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="$(IntDir)\XercesLib_vc80"
+				ProgramDataBaseFileName="$(OutDir)\xerces-c_static_3D.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="0"
@@ -762,11 +762,11 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="ws2_32.lib advapi32.lib icuuc.lib"
-				OutputFile="$(OutDir)\xerces-c_3_0D.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1D.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0D.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1D.pdb"
 				SubSystem="2"
 				SetChecksum="false"
 				BaseAddress="0x12000000"
@@ -834,7 +834,7 @@
 				PrecompiledHeaderFile="$(IntDir)\XercesLib.pch"
 				AssemblerListingLocation="$(IntDir)\"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="$(IntDir)\XercesLib_vc80"
+				ProgramDataBaseFileName="$(IntDir)\XercesLib_vc90"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="0"
@@ -853,11 +853,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="ws2_32.lib advapi32.lib"
-				OutputFile="$(OutDir)\xerces-c_3_0D.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1D.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0D.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1D.pdb"
 				SubSystem="2"
 				SetChecksum="false"
 				BaseAddress="0x12000000"
@@ -951,14 +951,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="ws2_32.lib advapi32.lib icuuc.lib"
-				OutputFile="$(OutDir)\xerces-c_3_0.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0.fullpdb"
-				StripPrivateSymbols="$(OutDir)\xerces-c_3_0.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1.fullpdb"
+				StripPrivateSymbols="$(OutDir)\xerces-c_3_1.pdb"
 				GenerateMapFile="true"
-				MapFileName="$(IntDir)\xerces-c_3_0.map"
+				MapFileName="$(IntDir)\xerces-c_3_1.map"
 				SubSystem="2"
 				OptimizeReferences="2"
 				SetChecksum="true"
@@ -1030,7 +1030,7 @@
 				PrecompiledHeaderFile="$(IntDir)\XercesLib.pch"
 				AssemblerListingLocation="$(IntDir)\"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="$(IntDir)\XercesLib_vc80"
+				ProgramDataBaseFileName="$(IntDir)\XercesLib_vc90"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="0"
@@ -1049,14 +1049,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="ws2_32.lib advapi32.lib"
-				OutputFile="$(OutDir)\xerces-c_3_0.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0.fullpdb"
-				StripPrivateSymbols="$(OutDir)\xerces-c_3_0.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1.fullpdb"
+				StripPrivateSymbols="$(OutDir)\xerces-c_3_1.pdb"
 				GenerateMapFile="true"
-				MapFileName="$(IntDir)\xerces-c_3_0.map"
+				MapFileName="$(IntDir)\xerces-c_3_1.map"
 				SubSystem="2"
 				OptimizeReferences="2"
 				SetChecksum="true"
@@ -1178,6 +1178,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\src\xercesc\util\FlagJanitor.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\xercesc\util\Hash2KeysSetOf.hpp"
 				>
 			</File>
 			<File
@@ -1330,6 +1334,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\src\xercesc\util\SynchronizedStringPool.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\xercesc\util\SynchronizedStringPool.hpp"
 				>
 			</File>
 			<File
@@ -1582,10 +1590,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\src\xercesc\util\XMLDateTime.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\src\xercesc\util\XMLDOMMsg.hpp"
 				>
 			</File>
 			<File
@@ -2581,6 +2585,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\..\src\xercesc\util\regx\UniCharTable.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\..\src\xercesc\util\regx\UnicodeRangeFactory.cpp"
 					>
 				</File>
@@ -2815,6 +2823,14 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\src\xercesc\framework\XMLGrammarDescription.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\xercesc\framework\XMLGrammarPoolImpl.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\xercesc\framework\XMLGrammarPoolImpl.hpp"
 				>
 			</File>
 			<File
@@ -3199,14 +3215,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\xercesc\framework\XMLGrammarPoolImpl.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\src\xercesc\framework\XMLGrammarPoolImpl.hpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\..\..\src\xercesc\internal\XMLInternalErrorHandler.hpp"
 				>
 			</File>
@@ -3418,11 +3426,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\src\xercesc\validators\common\CMRepeatingLeaf.hpp"
+					RelativePath="..\..\..\..\..\src\xercesc\validators\common\CMNode.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\src\xercesc\validators\common\CMNode.hpp"
+					RelativePath="..\..\..\..\..\src\xercesc\validators\common\CMRepeatingLeaf.hpp"
 					>
 				</File>
 				<File

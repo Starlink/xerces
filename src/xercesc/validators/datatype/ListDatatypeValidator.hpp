@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ListDatatypeValidator.hpp 695949 2008-09-16 15:57:44Z borisk $
+ * $Id: ListDatatypeValidator.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_LIST_DATATYPEVALIDATOR_HPP)
@@ -189,7 +189,7 @@ private:
     //  Private data members
     //
     //  fContent
-    //      temporary var referenceing the content to be validated,
+    //      temporary var referencing the content to be validated,
     //      for error reporting purpose.
     //
     // -----------------------------------------------------------------------

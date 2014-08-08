@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLMsgLoader.hpp 570552 2007-08-28 19:57:36Z amassari $
+ * $Id: XMLMsgLoader.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XMLMSGLOADER_HPP)
@@ -103,7 +103,7 @@ public :
       * This function enables set the locale information which
       * all concrete message loaders shall refer to during instantiation.
       *
-      * Note: for detailed discussion, refer to PlatformUtils::initalize()
+      * Note: for detailed discussion, refer to PlatformUtils::initialize()
       */
     static void           setLocale(const char* const localeToAdopt);
 
@@ -120,7 +120,7 @@ public :
       * This function enables set the NLSHome information which
       * all concrete message loaders shall refer to during instantiation.
       *
-      * Note: for detailed discussion, refer to PlatformUtils::initalize()
+      * Note: for detailed discussion, refer to PlatformUtils::initialize()
       */
     static void           setNLSHome(const char* const nlsHomeToAdopt);
 

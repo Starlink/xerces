@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: IdentityConstraint.hpp 676911 2008-07-15 13:27:32Z amassari $
+ * $Id: IdentityConstraint.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_IDENTITYCONSTRAINT_HPP)
@@ -109,7 +109,7 @@ protected:
 
 private:
     // -----------------------------------------------------------------------
-    //  Unimplemented contstructors and operators
+    //  Unimplemented constructors and operators
     // -----------------------------------------------------------------------
     IdentityConstraint(const IdentityConstraint& other);
     IdentityConstraint& operator= (const IdentityConstraint& other);

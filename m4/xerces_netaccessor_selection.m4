@@ -7,7 +7,7 @@ dnl @author James Berry
 dnl @version 2005-05-23
 dnl @license AllPermissive
 dnl
-dnl $Id: xerces_netaccessor_selection.m4 697787 2008-09-22 11:55:10Z borisk $
+dnl $Id: xerces_netaccessor_selection.m4 835245 2009-11-12 05:57:31Z borisk $
 
 AC_DEFUN([XERCES_NETACCESSOR_SELECTION],
 	[
@@ -29,8 +29,6 @@ AC_DEFUN([XERCES_NETACCESSOR_SELECTION],
 	AC_CHECK_LIB([socket], [socket])
 	AC_CHECK_LIB([nsl], [gethostbyname])
 
-        XERCES_CURL_PREFIX
-
 	######################################################
 	# Test for availability of each netaccessor on this host.
 	# For each netaccessor that's available, and hasn't been disabled, add it to our list.
@@ -41,7 +39,7 @@ AC_DEFUN([XERCES_NETACCESSOR_SELECTION],
 	AC_REQUIRE([XERCES_CURL_PREFIX])
 	AC_MSG_CHECKING([whether we can support the libcurl-based NetAccessor])
 	list_add=
-	AS_IF([test x"$xerces_cv_curl_prefix" != x], [
+	AS_IF([test x"$xerces_cv_curl_present" != x"no"], [
 		AC_ARG_ENABLE([netaccessor-curl],
 			AS_HELP_STRING([--enable-netaccessor-curl],
 				[Enable libcurl-based NetAccessor support]),
@@ -69,7 +67,7 @@ AC_DEFUN([XERCES_NETACCESSOR_SELECTION],
 		[AC_MSG_RESULT(no)]
 	)
 
-	# Check for OS-specific transcoders
+	# Check for OS-specific netaccessors
 	case $host_os in
 	darwin*)
 		list_add=
@@ -152,7 +150,7 @@ AC_DEFUN([XERCES_NETACCESSOR_SELECTION],
 		*-curl-*)
 			netaccessor=curl
 			AC_DEFINE([XERCES_USE_NETACCESSOR_CURL], 1, [Define to use the CURL NetAccessor])
-			LIBS="${LIBS} -L${xerces_cv_curl_prefix}/lib -lcurl"
+			LIBS="${LIBS} ${xerces_cv_curl_libs}"
 			break
 			;;
 

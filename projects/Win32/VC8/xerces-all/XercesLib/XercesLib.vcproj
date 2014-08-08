@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="XercesLib"
 	ProjectGUID="{152CE948-F659-4206-A50A-1D2B9658EF96}"
 	RootNamespace="XercesLib"
@@ -79,14 +79,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="ws2_32.lib advapi32.lib"
-				OutputFile="$(OutDir)\xerces-c_3_0.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0.fullpdb"
-				StripPrivateSymbols="$(OutDir)\xerces-c_3_0.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1.fullpdb"
+				StripPrivateSymbols="$(OutDir)\xerces-c_3_1.pdb"
 				GenerateMapFile="true"
-				MapFileName="$(IntDir)\xerces-c_3_0.map"
+				MapFileName="$(IntDir)\xerces-c_3_1.map"
 				SubSystem="2"
 				OptimizeReferences="2"
 				SetChecksum="true"
@@ -178,14 +178,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="ws2_32.lib advapi32.lib"
-				OutputFile="$(OutDir)\xerces-c_3_0.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0.fullpdb"
-				StripPrivateSymbols="$(OutDir)\xerces-c_3_0.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1.fullpdb"
+				StripPrivateSymbols="$(OutDir)\xerces-c_3_1.pdb"
 				GenerateMapFile="true"
-				MapFileName="$(IntDir)\xerces-c_3_0.map"
+				MapFileName="$(IntDir)\xerces-c_3_1.map"
 				SubSystem="2"
 				OptimizeReferences="2"
 				SetChecksum="true"
@@ -277,11 +277,11 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="ws2_32.lib advapi32.lib"
-				OutputFile="$(OutDir)\xerces-c_3_0D.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1D.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0D.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1D.pdb"
 				SubSystem="2"
 				SetChecksum="false"
 				BaseAddress="0x12000000"
@@ -369,11 +369,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="ws2_32.lib advapi32.lib"
-				OutputFile="$(OutDir)\xerces-c_3_0D.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1D.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0D.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1D.pdb"
 				SubSystem="2"
 				SetChecksum="false"
 				BaseAddress="0x12000000"
@@ -590,7 +590,7 @@
 				PrecompiledHeaderFile="$(IntDir)\XercesLib.pch"
 				AssemblerListingLocation="$(IntDir)\"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="$(IntDir)\XercesLib_vc80"
+				ProgramDataBaseFileName="$(OutDir)\xerces-c_static_3D.pdb"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
@@ -665,7 +665,7 @@
 				PrecompiledHeaderFile="$(IntDir)\XercesLib.pch"
 				AssemblerListingLocation="$(IntDir)\"
 				ObjectFile="$(IntDir)\"
-				ProgramDataBaseFileName="$(IntDir)\XercesLib_vc80"
+				ProgramDataBaseFileName="$(OutDir)\xerces-c_static_3D.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				CompileAs="0"
@@ -760,11 +760,11 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="ws2_32.lib advapi32.lib icuuc.lib"
-				OutputFile="$(OutDir)\xerces-c_3_0D.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1D.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0D.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1D.pdb"
 				SubSystem="2"
 				SetChecksum="false"
 				BaseAddress="0x12000000"
@@ -852,11 +852,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="ws2_32.lib advapi32.lib"
-				OutputFile="$(OutDir)\xerces-c_3_0D.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1D.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0D.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1D.pdb"
 				SubSystem="2"
 				SetChecksum="false"
 				BaseAddress="0x12000000"
@@ -950,14 +950,14 @@
 				Name="VCLinkerTool"
 				AdditionalOptions=""
 				AdditionalDependencies="ws2_32.lib advapi32.lib icuuc.lib"
-				OutputFile="$(OutDir)\xerces-c_3_0.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0.fullpdb"
-				StripPrivateSymbols="$(OutDir)\xerces-c_3_0.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1.fullpdb"
+				StripPrivateSymbols="$(OutDir)\xerces-c_3_1.pdb"
 				GenerateMapFile="true"
-				MapFileName="$(IntDir)\xerces-c_3_0.map"
+				MapFileName="$(IntDir)\xerces-c_3_1.map"
 				SubSystem="2"
 				OptimizeReferences="2"
 				SetChecksum="true"
@@ -1049,14 +1049,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="ws2_32.lib advapi32.lib"
-				OutputFile="$(OutDir)\xerces-c_3_0.dll"
+				OutputFile="$(OutDir)\xerces-c_3_1.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)\xerces-c_3_0.fullpdb"
-				StripPrivateSymbols="$(OutDir)\xerces-c_3_0.pdb"
+				ProgramDatabaseFile="$(OutDir)\xerces-c_3_1.fullpdb"
+				StripPrivateSymbols="$(OutDir)\xerces-c_3_1.pdb"
 				GenerateMapFile="true"
-				MapFileName="$(IntDir)\xerces-c_3_0.map"
+				MapFileName="$(IntDir)\xerces-c_3_1.map"
 				SubSystem="2"
 				OptimizeReferences="2"
 				SetChecksum="true"
@@ -1099,10 +1099,6 @@
 			>
 			<File
 				RelativePath="..\..\..\..\..\src\xercesc\util\ArrayIndexOutOfBoundsException.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\src\xercesc\util\AutoSense.hpp"
 				>
 			</File>
 			<File
@@ -1179,6 +1175,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\src\xercesc\util\FlagJanitor.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\xercesc\util\Hash2KeysSetOf.hpp"
 				>
 			</File>
 			<File
@@ -1386,7 +1386,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						CommandLine="echo copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputDir)\$(InputName).msvc.hpp"
+						AdditionalDependencies="$(InputDir)$(InputName).msvc.hpp"
 						Outputs="$(InputPath)"
 					/>
 				</FileConfiguration>
@@ -1395,8 +1395,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="echo copy $(InputDir)\$(InputName).msvc.hpp $(InputPath)&#x0D;&#x0A;copy $(InputDir)\$(InputName).msvc.hpp $(InputPath)&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputDir)\$(InputName).msvc.hpp"
+						CommandLine="echo copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(InputDir)$(InputName).msvc.hpp"
 						Outputs="$(InputPath)"
 					/>
 				</FileConfiguration>
@@ -1406,7 +1406,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						CommandLine="echo copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputDir)\$(InputName).msvc.hpp"
+						AdditionalDependencies="$(InputDir)$(InputName).msvc.hpp"
 						Outputs="$(InputPath)"
 					/>
 				</FileConfiguration>
@@ -1415,8 +1415,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="echo copy $(InputDir)\$(InputName).msvc.hpp $(InputPath)&#x0D;&#x0A;copy $(InputDir)\$(InputName).msvc.hpp $(InputPath)&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputDir)\$(InputName).msvc.hpp"
+						CommandLine="echo copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(InputDir)$(InputName).msvc.hpp"
 						Outputs="$(InputPath)"
 					/>
 				</FileConfiguration>
@@ -1426,7 +1426,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						CommandLine="echo copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputDir)\$(InputName).msvc.hpp"
+						AdditionalDependencies="$(InputDir)$(InputName).msvc.hpp"
 						Outputs="$(InputPath)"
 					/>
 				</FileConfiguration>
@@ -1435,8 +1435,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="echo copy $(InputDir)\$(InputName).msvc.hpp $(InputPath)&#x0D;&#x0A;copy $(InputDir)\$(InputName).msvc.hpp $(InputPath)&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputDir)\$(InputName).msvc.hpp"
+						CommandLine="echo copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(InputDir)$(InputName).msvc.hpp"
 						Outputs="$(InputPath)"
 					/>
 				</FileConfiguration>
@@ -1446,7 +1446,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						CommandLine="echo copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputDir)\$(InputName).msvc.hpp"
+						AdditionalDependencies="$(InputDir)$(InputName).msvc.hpp"
 						Outputs="$(InputPath)"
 					/>
 				</FileConfiguration>
@@ -1455,8 +1455,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="echo copy $(InputDir)\$(InputName).msvc.hpp $(InputPath)&#x0D;&#x0A;copy $(InputDir)\$(InputName).msvc.hpp $(InputPath)&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputDir)\$(InputName).msvc.hpp"
+						CommandLine="echo copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(InputDir)$(InputName).msvc.hpp"
 						Outputs="$(InputPath)"
 					/>
 				</FileConfiguration>
@@ -1466,7 +1466,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						CommandLine="echo copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputDir)\$(InputName).msvc.hpp"
+						AdditionalDependencies="$(InputDir)$(InputName).msvc.hpp"
 						Outputs="$(InputPath)"
 					/>
 				</FileConfiguration>
@@ -1475,8 +1475,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="echo copy $(InputDir)\$(InputName).msvc.hpp $(InputPath)&#x0D;&#x0A;copy $(InputDir)\$(InputName).msvc.hpp $(InputPath)&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputDir)\$(InputName).msvc.hpp"
+						CommandLine="echo copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(InputDir)$(InputName).msvc.hpp"
 						Outputs="$(InputPath)"
 					/>
 				</FileConfiguration>
@@ -1486,7 +1486,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						CommandLine="echo copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputDir)\$(InputName).msvc.hpp"
+						AdditionalDependencies="$(InputDir)$(InputName).msvc.hpp"
 						Outputs="$(InputPath)"
 					/>
 				</FileConfiguration>
@@ -1495,8 +1495,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="echo copy $(InputDir)\$(InputName).msvc.hpp $(InputPath)&#x0D;&#x0A;copy $(InputDir)\$(InputName).msvc.hpp $(InputPath)&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputDir)\$(InputName).msvc.hpp"
+						CommandLine="echo copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;copy &quot;$(InputDir)$(InputName).msvc.hpp&quot; &quot;$(InputPath)&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="$(InputDir)$(InputName).msvc.hpp"
 						Outputs="$(InputPath)"
 					/>
 				</FileConfiguration>
@@ -2711,6 +2711,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\..\..\src\xercesc\framework\XMLGrammarPoolImpl.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\xercesc\framework\XMLGrammarPoolImpl.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\src\xercesc\framework\XMLNotationDecl.cpp"
 				>
 			</File>
@@ -3089,14 +3097,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\src\xercesc\internal\WFXMLScanner.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\src\xercesc\framework\XMLGrammarPoolImpl.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\src\xercesc\framework\XMLGrammarPoolImpl.hpp"
 				>
 			</File>
 			<File

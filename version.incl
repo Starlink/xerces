@@ -15,8 +15,8 @@
 #
 #
 #
-# $Id: version.incl 744933 2009-02-16 15:13:42Z borisk $
+# $Id: version.incl 935350 2010-04-18 15:02:36Z borisk $
 #
-VER=3_0_1
-INTERFACE_VER_D=3.0
-INTERFACE_VER_U=3_0
+VER=3_1_1
+INTERFACE_VER_D=3.1
+INTERFACE_VER_U=3_1

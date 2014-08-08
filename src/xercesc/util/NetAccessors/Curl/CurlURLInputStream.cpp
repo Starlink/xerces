@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,16 +16,28 @@
  */
 
 /*
- * $Id: CurlURLInputStream.cpp 678522 2008-07-21 18:26:41Z amassari $
+ * $Id: CurlURLInputStream.cpp 936316 2010-04-21 14:19:58Z borisk $
  */
+
+#if HAVE_CONFIG_H
+  #include <config.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/time.h>
+#if HAVE_ERRNO_H
+  #include <errno.h>
+#endif
+#if HAVE_UNISTD_H
+  #include <unistd.h>
+#endif
+#if HAVE_SYS_TYPES_H
+  #include <sys/types.h>
+#endif
+#if HAVE_SYS_TIME_H
+  #include <sys/time.h>
+#endif
 
 #include <xercesc/util/XercesDefs.hpp>
 #include <xercesc/util/XMLNetAccessor.hpp>
@@ -59,10 +71,10 @@ CurlURLInputStream::CurlURLInputStream(const XMLURL& urlSource, const XMLNetHTTP
 {
 	// Allocate the curl multi handle
 	fMulti = curl_multi_init();
-	
+
 	// Allocate the curl easy handle
 	fEasy = curl_easy_init();
-	
+
 	// Set URL option
     TranscodeToStr url(fURLSource.getURLText(), "ISO8859-1", fMemoryManager);
 	curl_easy_setopt(fEasy, CURLOPT_URL, (char*)url.str());
@@ -70,7 +82,7 @@ CurlURLInputStream::CurlURLInputStream(const XMLURL& urlSource, const XMLNetHTTP
     // Set up a way to recieve the data
 	curl_easy_setopt(fEasy, CURLOPT_WRITEDATA, this);						// Pass this pointer to write function
 	curl_easy_setopt(fEasy, CURLOPT_WRITEFUNCTION, staticWriteCallback);	// Our static write function
-	
+
 	// Do redirects
 	curl_easy_setopt(fEasy, CURLOPT_FOLLOWLOCATION, (long)1);
 	curl_easy_setopt(fEasy, CURLOPT_MAXREDIRS, (long)6);
@@ -166,10 +178,10 @@ CurlURLInputStream::~CurlURLInputStream()
 {
 	// Remove the easy handle from the multi stack
 	curl_multi_remove_handle(fMulti, fEasy);
-	
+
 	// Cleanup the easy handle
 	curl_easy_cleanup(fEasy);
-	
+
 	// Cleanup the multi handle
 	curl_multi_cleanup(fMulti);
 
@@ -202,7 +214,7 @@ CurlURLInputStream::writeCallback(char *buffer,
 {
 	XMLSize_t cnt = size * nitems;
 	XMLSize_t totalConsumed = 0;
-		
+
 	// Consume as many bytes as possible immediately into the buffer
 	XMLSize_t consume = (cnt > fBytesToRead) ? fBytesToRead : cnt;
 	memcpy(fWritePtr, buffer, consume);
@@ -227,7 +239,7 @@ CurlURLInputStream::writeCallback(char *buffer,
 		totalConsumed	+= consume;
 		//printf("write callback rebuffering %d bytes\n", consume);
 	}
-	
+
 	// Return the total amount we've consumed. If we don't consume all the bytes
 	// then an error will be generated. Since our buffer size is equal to the
 	// maximum size that curl will write, this should never happen unless there
@@ -255,7 +267,7 @@ bool CurlURLInputStream::readMore(int *runningHandles)
 {
     // Ask the curl to do some work
     CURLMcode curlResult = curl_multi_perform(fMulti, runningHandles);
-		
+
     // Process messages from curl
     int msgsInQueue = 0;
     for (CURLMsg* msg = NULL; (msg = curl_multi_info_read(fMulti, &msgsInQueue)) != NULL; )
@@ -264,26 +276,31 @@ bool CurlURLInputStream::readMore(int *runningHandles)
 
         if (msg->msg != CURLMSG_DONE)
             return true;
-				
+
         switch (msg->data.result)
         {
         case CURLE_OK:
             // We completed successfully. runningHandles should have dropped to zero, so we'll bail out below...
             break;
-				
+
         case CURLE_UNSUPPORTED_PROTOCOL:
             ThrowXMLwithMemMgr(MalformedURLException, XMLExcepts::URL_UnsupportedProto, fMemoryManager);
             break;
 
         case CURLE_COULDNT_RESOLVE_HOST:
         case CURLE_COULDNT_RESOLVE_PROXY:
-            ThrowXMLwithMemMgr1(NetAccessorException,  XMLExcepts::NetAcc_TargetResolution, fURLSource.getHost(), fMemoryManager);
+          {
+            if (fURLSource.getHost())
+              ThrowXMLwithMemMgr1(NetAccessorException, XMLExcepts::NetAcc_TargetResolution, fURLSource.getHost(), fMemoryManager);
+            else
+              ThrowXMLwithMemMgr1(NetAccessorException, XMLExcepts::File_CouldNotOpenFile, fURLSource.getURLText(), fMemoryManager);
             break;
-                
+          }
+
         case CURLE_COULDNT_CONNECT:
             ThrowXMLwithMemMgr1(NetAccessorException, XMLExcepts::NetAcc_ConnSocket, fURLSource.getURLText(), fMemoryManager);
             break;
-            	
+
         case CURLE_RECV_ERROR:
             ThrowXMLwithMemMgr1(NetAccessorException, XMLExcepts::NetAcc_ReadSocket, fURLSource.getURLText(), fMemoryManager);
             break;
@@ -297,7 +314,7 @@ bool CurlURLInputStream::readMore(int *runningHandles)
     // If nothing is running any longer, bail out
     if(*runningHandles == 0)
         return false;
-		
+
     // If there is no further data to read, and we haven't
     // read any yet on this invocation, call select to wait for data
     if (curlResult != CURLM_CALL_MULTI_PERFORM && fBytesRead == 0)
@@ -310,10 +327,10 @@ bool CurlURLInputStream::readMore(int *runningHandles)
         FD_ZERO(&readSet);
         FD_ZERO(&writeSet);
         FD_ZERO(&exceptSet);
-			
+
         // Ask curl for the file descriptors to wait on
         curl_multi_fdset(fMulti, &readSet, &writeSet, &exceptSet, &fdcnt);
-			
+
         // Wait on the file descriptors
         timeval tv;
         tv.tv_sec  = 2;
@@ -331,7 +348,7 @@ CurlURLInputStream::readBytes(XMLByte* const          toFill
 	fBytesRead = 0;
 	fBytesToRead = maxToRead;
 	fWritePtr = toFill;
-	
+
 	for (bool tryAgain = true; fBytesToRead > 0 && (tryAgain || fBytesRead == 0); )
 	{
 		// First, any buffered data we have available
@@ -344,21 +361,21 @@ CurlURLInputStream::readBytes(XMLByte* const          toFill
 			fBytesRead		+= bufCnt;
 			fTotalBytesRead	+= bufCnt;
 			fBytesToRead	-= bufCnt;
-			
+
 			fBufferTailPtr	+= bufCnt;
 			if (fBufferTailPtr == fBufferHeadPtr)
 				fBufferHeadPtr = fBufferTailPtr = fBuffer;
-				
+
 			//printf("consuming %d buffered bytes\n", bufCnt);
 
 			tryAgain = true;
 			continue;
 		}
-	
+
 		// Ask the curl to do some work
 		int runningHandles = 0;
         tryAgain = readMore(&runningHandles);
-		
+
 		// If nothing is running any longer, bail out
 		if (runningHandles == 0)
 			break;
@@ -373,4 +390,3 @@ const XMLCh *CurlURLInputStream::getContentType() const
 }
 
 XERCES_CPP_NAMESPACE_END
-

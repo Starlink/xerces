@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XProtoType.cpp 557254 2007-07-18 13:28:54Z amassari $
+ * $Id: XProtoType.cpp 834826 2009-11-11 10:03:53Z borisk $
  */
 
 // ---------------------------------------------------------------------------
@@ -66,8 +66,8 @@ void XProtoType::load(XSerializeEngine& serEng
     {
         XMLCh value1[17];
         XMLCh value2[17];
-        XMLString::binToText((unsigned long)inNameLen,    value1, 16, 10, manager);
-        XMLString::binToText((unsigned long)classNameLen, value2, 16, 10, manager);
+        XMLString::sizeToText(inNameLen,    value1, 16, 10, manager);
+        XMLString::sizeToText(classNameLen, value2, 16, 10, manager);
 
         ThrowXMLwithMemMgr2(XSerializationException
                 , XMLExcepts::XSer_ProtoType_NameLen_Dif

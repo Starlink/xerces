@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLReader.hpp 698118 2008-09-23 10:16:06Z borisk $
+ * $Id: XMLReader.hpp 833045 2009-11-05 13:21:27Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XMLREADER_HPP)
@@ -123,6 +123,7 @@ public:
         , const Sources               source
         , const bool                  throwAtEnd = false
         , const bool                  calculateSrcOfs = true
+        ,       XMLSize_t             lowWaterMark = 100
         , const XMLVersion            xmlVersion = XMLV1_0
         ,       MemoryManager* const  manager = XMLPlatformUtils::fgMemoryManager
     );
@@ -138,6 +139,7 @@ public:
         , const Sources               source
         , const bool                  throwAtEnd = false
         , const bool                  calculateSrcOfs = true
+        ,       XMLSize_t             lowWaterMark = 100
         , const XMLVersion            xmlVersion = XMLV1_0
         ,       MemoryManager* const  manager = XMLPlatformUtils::fgMemoryManager
     );
@@ -153,6 +155,7 @@ public:
         , const Sources               source
         , const bool                  throwAtEnd = false
         , const bool                  calculateSrcOfs = true
+        ,       XMLSize_t             lowWaterMark = 100
         , const XMLVersion            xmlVersion = XMLV1_0
         ,       MemoryManager* const  manager = XMLPlatformUtils::fgMemoryManager
     );
@@ -172,6 +175,7 @@ public:
     // -----------------------------------------------------------------------
     bool getName(XMLBuffer& toFill, const bool token);
     bool getQName(XMLBuffer& toFill, int* colonPosition);
+    bool getNCName(XMLBuffer& toFill);
     bool getNextChar(XMLCh& chGotten);
     bool getNextCharIfNot(const XMLCh chNotToGet, XMLCh& chGotten);
     void movePlainContentChars(XMLBuffer &dest);
@@ -345,6 +349,10 @@ private:
     //      helps deal with the last buffer's worth, which will usually not
     //      be a full one.
     //
+    //  fLowWaterMark
+    //      The low water mark for the raw byte buffer.
+    //
+    //
     //  fReaderNum
     //      Each reader from a particular reader manager (which means from a
     //      particular document) is given a unique number. The reader manager
@@ -441,6 +449,7 @@ private:
     XMLSize_t                   fRawBufIndex;
     XMLByte                     fRawByteBuf[kRawBufSize];
     XMLSize_t                   fRawBytesAvail;
+    XMLSize_t                   fLowWaterMark;
     XMLSize_t                   fReaderNum;
     RefFrom                     fRefFrom;
     bool                        fSentTrailingSpace;

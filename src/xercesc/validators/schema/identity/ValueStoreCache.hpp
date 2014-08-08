@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ValueStoreCache.hpp 679340 2008-07-24 10:28:29Z borisk $
+ * $Id: ValueStoreCache.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_VALUESTORECACHE_HPP)
@@ -28,7 +28,7 @@
   * Sketch of algorithm:
   *  - When a constraint is first encountered, its values are stored in the
   *    (local) fIC2ValueStoreMap;
-  *  - Once it is validated (i.e., wen it goes out of scope), its values are
+  *  - Once it is validated (i.e., when it goes out of scope), its values are
   *    merged into the fGlobalICMap;
   *  - As we encounter keyref's, we look at the global table to validate them.
   *  - Validation always occurs against the fGlobalIDConstraintMap (which
@@ -53,7 +53,7 @@
 XERCES_CPP_NAMESPACE_BEGIN
 
 // ---------------------------------------------------------------------------
-//  Forward Declcaration
+//  Forward Declaration
 // ---------------------------------------------------------------------------
 class ValueStore;
 class SchemaElementDecl;
@@ -92,7 +92,7 @@ public:
     //  Access methods
     // -----------------------------------------------------------------------
     ValueStore* getValueStoreFor(const IC_Field* const field, const int initialDepth);
-    ValueStore* getValueStoreFor(const IdentityConstraint* const ic, const int intialDepth);
+    ValueStore* getValueStoreFor(const IdentityConstraint* const ic, const int initialDepth);
     ValueStore* getGlobalValueStoreFor(const IdentityConstraint* const ic);
 
 	// -----------------------------------------------------------------------
@@ -106,7 +106,7 @@ public:
 
 private:
     // -----------------------------------------------------------------------
-    //  Unimplemented contstructors and operators
+    //  Unimplemented constructors and operators
     // -----------------------------------------------------------------------
     ValueStoreCache(const ValueStoreCache& other);
     ValueStoreCache& operator= (const ValueStoreCache& other);

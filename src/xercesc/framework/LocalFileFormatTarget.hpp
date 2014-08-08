@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: LocalFileFormatTarget.hpp 553937 2007-07-06 16:02:19Z amassari $
+ * $Id: LocalFileFormatTarget.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_LOCALFILEFORMATTARGET_HPP)
@@ -65,8 +65,7 @@ private:
     // -----------------------------------------------------------------------
     //  Private helpers
     // -----------------------------------------------------------------------
-    void flushBuffer();
-    bool insureCapacity(const XMLSize_t extraNeeded);
+    void ensureCapacity(const XMLSize_t extraNeeded);
 
     // -----------------------------------------------------------------------
     //  Private data members
@@ -98,4 +97,3 @@ private:
 XERCES_CPP_NAMESPACE_END
 
 #endif
-

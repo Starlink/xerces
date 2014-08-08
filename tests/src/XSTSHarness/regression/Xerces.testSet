@@ -86,7 +86,23 @@
 			<current status="accepted" date="2008-02-13"/>
 		</instanceTest>
 	</testGroup>
-	<testGroup name="XERCESC-711">
+  <testGroup name="XERCESC-697">
+    <annotation>
+      <documentation>Incorrect Schema Validation Failure When Redefining Complex Type with Simple Content</documentation>
+    </annotation>
+    <documentationReference xlink:href="https://issues.apache.org/jira/browse/XERCESC-697"/>
+    <schemaTest name="XERCESC-697">
+      <schemaDocument xlink:href="./XERCESC-697/redefined.xsd"/>
+      <expected validity="valid"/>
+      <current status="accepted" date="2009-08-10"/>
+    </schemaTest>
+    <instanceTest name="XERCESC-697">
+      <instanceDocument xlink:href="./XERCESC-697/redefined.xml"/>
+      <expected validity="valid"/>
+      <current status="accepted" date="2009-08-10"/>
+    </instanceTest>
+  </testGroup>
+  <testGroup name="XERCESC-711">
 		<annotation>
 			<documentation>Validator doesn't enforce xsd:key</documentation>
 		</annotation>
@@ -121,6 +137,22 @@
 			<instanceDocument xlink:href="./XERCESC-796/sample.xml"/>
 			<expected validity="valid"/>
 			<current status="accepted" date="2008-02-13"/>
+		</instanceTest>
+	</testGroup>
+	<testGroup name="XERCESC-809">
+		<annotation>
+			<documentation>Does implement co-occurence constraints</documentation>
+		</annotation>
+		<documentationReference xlink:href="https://issues.apache.org/jira/browse/XERCESC-809"/>
+		<schemaTest name="XERCESC-809-1">
+			<schemaDocument xlink:href="./XERCESC-809/test.xsd"/>
+			<expected validity="valid"/>
+			<current status="accepted" date="2009-08-14"/>
+		</schemaTest>
+		<instanceTest name="XERCESC-809-2">
+			<instanceDocument xlink:href="./XERCESC-809/test.xml"/>
+			<expected validity="invalid"/>
+			<current status="accepted" date="2009-08-14"/>
 		</instanceTest>
 	</testGroup>
 	<testGroup name="XERCESC-830">
@@ -257,6 +289,22 @@
 			<current status="accepted" date="2008-02-13"/>
 		</instanceTest>
 	</testGroup>
+	<testGroup name="XERCESC-1263">
+		<annotation>
+			<documentation>Pre-loaded grammar and xsi:type in the root element</documentation>
+		</annotation>
+		<documentationReference xlink:href="https://issues.apache.org/jira/browse/XERCESC-1263"/>
+		<schemaTest name="XERCESC-1263-1">
+			<schemaDocument xlink:href="./XERCESC-1263/test.xsd"/>
+			<expected validity="valid"/>
+			<current status="accepted" date="2009-11-18"/>
+		</schemaTest>
+		<instanceTest name="XERCESC-1263-2">
+			<instanceDocument xlink:href="./XERCESC-1263/test.xml"/>
+			<expected validity="valid"/>
+			<current status="accepted" date="2009-11-18"/>
+		</instanceTest>
+	</testGroup>
 	<testGroup name="XERCESC-1281">
 		<annotation>
 			<documentation>Regular expressions in schema should allow unescaped '-'</documentation>
@@ -342,6 +390,22 @@
 			<current status="accepted" date="2008-02-13"/>
 		</instanceTest>
 	</testGroup>
+	<testGroup name="XERCESC-1583">
+		<annotation>
+			<documentation>keyref are not processing with imported schema</documentation>
+		</annotation>
+		<documentationReference xlink:href="https://issues.apache.org/jira/browse/XERCESC-1583"/>
+		<schemaTest name="XERCESC-1583">
+			<schemaDocument xlink:href="./XERCESC-1583/keyref-main.xsd"/>
+			<expected validity="valid"/>
+			<current status="accepted" date="2009-07-29"/>
+		</schemaTest>
+		<instanceTest name="XERCESC-1583-1">
+			<instanceDocument xlink:href="./XERCESC-1583/keyref.xml"/>
+			<expected validity="invalid"/>
+			<current status="accepted" date="2009-07-29"/>
+		</instanceTest>
+	</testGroup>
 	<testGroup name="XERCESC-1591">
 		<annotation>
 			<documentation>Mishandling of recursive definition on complex content restriction</documentation>
@@ -399,6 +463,66 @@
 			<instanceDocument xlink:href="./XERCESC-1633/instance.xml"/>
 			<expected validity="valid"/>
 			<current status="accepted" date="2008-02-13"/>
+		</instanceTest>
+	</testGroup>
+        <testGroup name="XERCESC-1659-1">
+		<annotation>
+			<documentation>Multi-import and schemaLocation ordering</documentation>
+		</annotation>
+		<documentationReference xlink:href="https://issues.apache.org/jira/browse/XERCESC-1659"/>
+		<instanceTest name="XERCESC-1659-1-1">
+			<instanceDocument xlink:href="./XERCESC-1659/test-1/test-users.xml"/>
+			<expected validity="valid"/>
+			<current status="accepted" date="2009-11-19"/>
+		</instanceTest>
+	</testGroup>
+        <testGroup name="XERCESC-1659-2">
+		<annotation>
+			<documentation>Multi-import and schemaLocation ordering</documentation>
+		</annotation>
+		<documentationReference xlink:href="https://issues.apache.org/jira/browse/XERCESC-1659"/>
+		<instanceTest name="XERCESC-1659-2-1">
+			<instanceDocument xlink:href="./XERCESC-1659/test-2/test-users.xml"/>
+			<expected validity="valid"/>
+			<current status="accepted" date="2009-11-19"/>
+		</instanceTest>
+	</testGroup>
+        <testGroup name="XERCESC-1659-3">
+		<annotation>
+			<documentation>Multi-import and schemaLocation ordering</documentation>
+		</annotation>
+		<documentationReference xlink:href="https://issues.apache.org/jira/browse/XERCESC-1659"/>
+		<instanceTest name="XERCESC-1659-3-1">
+			<instanceDocument xlink:href="./XERCESC-1659/test-3/test-users.xml"/>
+			<expected validity="valid"/>
+			<current status="accepted" date="2009-11-19"/>
+		</instanceTest>
+	</testGroup>
+        <testGroup name="XERCESC-1659-4">
+		<annotation>
+			<documentation>Multi-import and schemaLocation ordering</documentation>
+		</annotation>
+		<documentationReference xlink:href="https://issues.apache.org/jira/browse/XERCESC-1659"/>
+		<instanceTest name="XERCESC-1659-4-1">
+			<instanceDocument xlink:href="./XERCESC-1659/test-4/test-users.xml"/>
+			<expected validity="valid"/>
+			<current status="accepted" date="2009-11-19"/>
+		</instanceTest>
+	</testGroup>
+	<testGroup name="XERCESC-1707">
+		<annotation>
+			<documentation>Processing of not-declared-element with "xsi:type" under anyType element does not clear SchemaValidator::fXsiType</documentation>
+		</annotation>
+		<documentationReference xlink:href="https://issues.apache.org/jira/browse/XERCESC-1707"/>
+		<schemaTest name="XERCESC-1707">
+			<schemaDocument xlink:href="./XERCESC-1707/test.xsd"/>
+			<expected validity="valid"/>
+			<current status="accepted" date="2009-08-14"/>
+		</schemaTest>
+		<instanceTest name="XERCESC-1707-1">
+			<instanceDocument xlink:href="./XERCESC-1707/test.xml"/>
+			<expected validity="valid"/>
+			<current status="accepted" date="2009-08-14"/>
 		</instanceTest>
 	</testGroup>
 	<testGroup name="XERCESC-1714">
@@ -471,6 +595,22 @@
 			<expected validity="invalid"/>
 			<current status="accepted" date="2008-03-14"/>
 		</schemaTest>
+	</testGroup>
+	<testGroup name="XERCESC-1748">
+		<annotation>
+			<documentation>Registry-based URI authority validation</documentation>
+		</annotation>
+		<documentationReference xlink:href="https://issues.apache.org/jira/browse/XERCESC-1748"/>
+		<schemaTest name="XERCESC-1748-1">
+			<schemaDocument xlink:href="./XERCESC-1748/anyURITest.xsd"/>
+			<expected validity="valid"/>
+			<current status="accepted" date="2009-11-18"/>
+		</schemaTest>
+                <instanceTest name="XERCESC-1748-2">
+			<instanceDocument xlink:href="./XERCESC-1748/anyURITest.xml"/>
+			<expected validity="valid"/>
+			<current status="accepted" date="2009-11-18"/>
+		</instanceTest>
 	</testGroup>
 	<testGroup name="XERCESC-1758">
 		<annotation>
@@ -567,5 +707,107 @@
       <expected validity="valid"/>
       <current status="accepted" date="2008-07-17"/>
     </instanceTest>
+  </testGroup>
+  <testGroup name="XERCESC-1825-1">
+    <annotation>
+      <documentation>Default value of QName type with non-empty prefix causes segfault</documentation>
+    </annotation>
+    <documentationReference xlink:href="https://issues.apache.org/jira/browse/XERCESC-1825"/>
+    <schemaTest name="XERCESC-1825-1-1">
+      <schemaDocument xlink:href="./XERCESC-1825/test.xsd"/>
+      <expected validity="valid"/>
+      <current status="accepted" date="2008-12-29"/>
+    </schemaTest>
+    <instanceTest name="XERCESC-1825-1-2">
+      <instanceDocument xlink:href="./XERCESC-1825/test.xml"/>
+      <expected validity="valid"/>
+      <current status="accepted" date="2008-12-29"/>
+    </instanceTest>
+  </testGroup>
+  <testGroup name="XERCESC-1825-2">
+    <annotation>
+      <documentation>Default value of QName type with non-empty prefix causes segfault</documentation>
+    </annotation>
+    <documentationReference xlink:href="https://issues.apache.org/jira/browse/XERCESC-1825"/>
+    <schemaTest name="XERCESC-1825-2-1">
+      <schemaDocument xlink:href="./XERCESC-1825/test2.xsd"/>
+      <expected validity="invalid"/>
+      <current status="accepted" date="2008-12-29"/>
+    </schemaTest>
+  </testGroup>
+  <testGroup name="XERCESC-1831">
+    <annotation>
+      <documentation>Xerces-c can not parse instance with special chars (", &lt; and &gt;) in target namespace</documentation>
+    </annotation>
+    <documentationReference xlink:href="https://issues.apache.org/jira/browse/XERCESC-1831"/>
+    <schemaTest name="XERCESC-1831">
+      <schemaDocument xlink:href="./XERCESC-1831/ack.xsd"/>
+      <expected validity="valid"/>
+      <current status="accepted" date="2009-08-10"/>
+    </schemaTest>
+    <instanceTest name="XERCESC-1831-1">
+      <instanceDocument xlink:href="./XERCESC-1831/ack.xml"/>
+      <expected validity="valid"/>
+      <current status="accepted" date="2009-08-10"/>
+    </instanceTest>
+  </testGroup>
+  <testGroup name="XERCESC-1832">
+    <annotation>
+      <documentation>Namespace definitions attached to xs:extension/xs:restriction are not processed</documentation>
+    </annotation>
+    <documentationReference xlink:href="https://issues.apache.org/jira/browse/XERCESC-1832"/>
+    <schemaTest name="XERCESC-1832">
+      <schemaDocument xlink:href="./XERCESC-1832/schema11.xsd"/>
+      <expected validity="valid"/>
+      <current status="accepted" date="2008-10-01"/>
+    </schemaTest>
+  </testGroup>
+  <testGroup name="XERCESC-1878">
+    <annotation>
+      <documentation>Validation of xs:keys and xs:keyrefs with xpath takes too long</documentation>
+    </annotation>
+    <documentationReference xlink:href="https://issues.apache.org/jira/browse/XERCESC-1878"/>
+    <schemaTest name="XERCESC-1878">
+      <schemaDocument xlink:href="./XERCESC-1878/schema.xsd"/>
+      <expected validity="valid"/>
+      <current status="accepted" date="2009-07-28"/>
+    </schemaTest>
+    <instanceTest name="XERCESC-1878-1-1">
+      <instanceDocument xlink:href="./XERCESC-1878/valid.xml"/>
+      <expected validity="valid"/>
+      <current status="accepted" date="2009-07-28"/>
+    </instanceTest>
+    <instanceTest name="XERCESC-1878-1-2">
+      <instanceDocument xlink:href="./XERCESC-1878/invalid.xml"/>
+      <expected validity="invalid"/>
+      <current status="accepted" date="2009-07-28"/>
+    </instanceTest>
+  </testGroup>
+  <testGroup name="XERCESC-1893-1">
+    <annotation>
+      <documentation>Error reported when defining a complex type as an extension of an imported simple type</documentation>
+    </annotation>
+    <documentationReference xlink:href="https://issues.apache.org/jira/browse/XERCESC-1893"/>
+    <schemaTest name="XERCESC-1893">
+      <schemaDocument xlink:href="./XERCESC-1893/main.xsd"/>
+      <expected validity="valid"/>
+      <current status="accepted" date="2009-10-28"/>
+    </schemaTest>
+  </testGroup>
+  <testGroup name="XERCESC-1893-2">
+    <annotation>
+      <documentation>Error reported when defining a complex type as an extension of an imported simple type</documentation>
+    </annotation>
+    <documentationReference xlink:href="https://issues.apache.org/jira/browse/XERCESC-1893"/>
+    <schemaTest name="XERCESC-1893-1">
+      <schemaDocument xlink:href="./XERCESC-1893/included.xsd"/>
+      <expected validity="valid"/>
+      <current status="accepted" date="2009-10-28"/>
+    </schemaTest>
+    <schemaTest name="XERCESC-1893-2">
+      <schemaDocument xlink:href="./XERCESC-1893/main.xsd"/>
+      <expected validity="valid"/>
+      <current status="accepted" date="2009-10-28"/>
+    </schemaTest>
   </testGroup>
 </testSet>

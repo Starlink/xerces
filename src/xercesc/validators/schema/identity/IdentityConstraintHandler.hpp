@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: IdentityConstraintHandler.hpp 676911 2008-07-15 13:27:32Z amassari $
+ * $Id: IdentityConstraintHandler.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_IDENTITYCONSTRAINT_HANDLER_HPP)
@@ -72,7 +72,8 @@ public:
                              (
                                     SchemaElementDecl* const elem
                             , const XMLCh*             const content
-                              );
+                            , ValidationContext*       validationContext = 0
+                            , DatatypeValidator*       actualValidator = 0);
 
             void         activateIdentityConstraint
                                (
@@ -82,13 +83,13 @@ public:
                              , const XMLCh*                 const elemPrefix
                              , const RefVectorOf<XMLAttr>&        attrList
                              , const XMLSize_t                    attrCount
-                               );
+                             , ValidationContext*                 validationContext = 0 );
 
             void         reset();
 
 private:
     // -----------------------------------------------------------------------
-    //  Unimplemented contstructors and operators
+    //  Unimplemented constructors and operators
     // -----------------------------------------------------------------------
     IdentityConstraintHandler(const IdentityConstraintHandler& other);
     IdentityConstraintHandler& operator= (const IdentityConstraintHandler& other);

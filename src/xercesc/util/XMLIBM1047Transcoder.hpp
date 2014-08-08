@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLIBM1047Transcoder.hpp 570552 2007-08-28 19:57:36Z amassari $
+ * $Id: XMLIBM1047Transcoder.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XMLIBM1047TRANSCODER_HPP)
@@ -31,7 +31,7 @@ XERCES_CPP_NAMESPACE_BEGIN
 //  This class provides an implementation of the XMLTranscoder interface
 //  for a simple 1047-US transcoder. The parser does some encodings
 //  intrinsically without depending upon external transcoding services.
-//  To make everything more orthagonal, we implement these internal
+//  To make everything more orthogonal, we implement these internal
 //  transcoders using the same transcoder abstraction as the pluggable
 //  transcoding services do.
 //

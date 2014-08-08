@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: MemBufFormatTarget.hpp 553937 2007-07-06 16:02:19Z amassari $
+ * $Id: MemBufFormatTarget.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_MEMBUFFORMATTARGET_HPP)
@@ -31,7 +31,7 @@ XERCES_CPP_NAMESPACE_BEGIN
  * may plug into DOMLSSerializer to retrieve the serialized XML stream (from DOM Tree)
  * in a memory buffer.
  *
- * The MemBufFormatTarget is initalized to have a memory buffer of 1023 upon
+ * The MemBufFormatTarget is initialized to have a memory buffer of 1023 upon
  * construction, which grows as needed. The buffer will be deleted when
  * MemBufFormatTarget is destructed; or will be reset when the reset() function
  * is called.
@@ -105,7 +105,7 @@ private:
     // -----------------------------------------------------------------------
     //  Private helpers
     // -----------------------------------------------------------------------
-    void insureCapacity(const XMLSize_t extraNeeded);
+    void ensureCapacity(const XMLSize_t extraNeeded);
 
     // -----------------------------------------------------------------------
     //  Private data members

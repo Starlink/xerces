@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ContentHandler.hpp 557282 2007-07-18 14:54:15Z amassari $
+ * $Id: ContentHandler.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_CONTENTHANDLER_HPP)
@@ -128,7 +128,7 @@ public:
     * startElement() event for every endElement() event (even when the
     * element is empty).</p>
     *
-    * @param uri The URI of the asscioated namespace for this element
+    * @param uri The URI of the associated namespace for this element
 	* @param localname The local part of the element name
 	* @param qname The QName of this element
     * @exception SAXException Any SAX exception, possibly

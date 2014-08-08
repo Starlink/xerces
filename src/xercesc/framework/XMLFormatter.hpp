@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLFormatter.hpp 698579 2008-09-24 14:13:08Z borisk $
+ * $Id: XMLFormatter.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XMLFORMATTER_HPP)
@@ -44,7 +44,7 @@ public:
     // -----------------------------------------------------------------------
     //  Class types
     // -----------------------------------------------------------------------
-    /** @name Public Contants */
+    /** @name Public Constants */
     //@{
     /**
      * EscapeFlags - Different styles of escape flags to control various formatting.
@@ -271,7 +271,7 @@ public:
     inline const XMLTranscoder*   getTranscoder() const;
 
     /**
-     * @return return the transcoder used internally for transcoding the formatter conent
+     * @return return the transcoder used internally for transcoding the formatter content
      */
     inline XMLTranscoder*   getTranscoder();
 

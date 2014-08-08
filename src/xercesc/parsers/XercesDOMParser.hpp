@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XercesDOMParser.hpp 673944 2008-07-04 07:53:16Z borisk $
+ * $Id: XercesDOMParser.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XERCESDOMPARSER_HPP)
@@ -38,7 +38,7 @@ class XMLResourceIdentifier;
   * This class implements the Document Object Model (DOM) interface.
   * It should be used by applications which choose to parse and
   * process the XML document using the DOM api's. This implementation
-  * also allows the applications to install an error and an entitty
+  * also allows the applications to install an error and an entity
   * handler (useful extensions to the DOM specification).
   *
   * <p>It can be used to instantiate a validating or non-validating
@@ -48,7 +48,7 @@ class PARSERS_EXPORT XercesDOMParser : public AbstractDOMParser
 {
 public :
     // -----------------------------------------------------------------------
-    //  Constructors and Detructor
+    //  Constructors and Destructor
     // -----------------------------------------------------------------------
 
     /** @name Constructors and Destructor */
@@ -298,7 +298,7 @@ public :
       * instead of building the grammar from scratch, to validate XML
       * documents.
       *
-      * If the 'Grammar caching' flag is set to true, this mehod ignore the
+      * If the 'Grammar caching' flag is set to true, this method ignore the
       * value passed in.
       *
       * The parser's default state is: false.
@@ -441,7 +441,7 @@ public :
     /** Expand a system id
       *
       * This method allows an installed XMLEntityHandler to further
-      * process any system id's of enternal entities encountered in
+      * process any system id's of external entities encountered in
       * the XML file being parsed, such as redirection etc.
       *
       * <b>This method always returns 'false'
@@ -521,13 +521,12 @@ public :
       * is enabled, the parser will cache the grammars for re-use. If a grammar
       * key is found in the pool, no caching of any grammar will take place.
       *
-      * <p><b>"Experimental - subject to change"</b></p>
       *
       * @param source A const reference to the SAX InputSource object which
       *               points to the schema grammar file to be preparsed.
       * @param grammarType The grammar type (Schema or DTD).
       * @param toCache If <code>true</code>, we cache the preparsed grammar,
-      *                otherwise, no chaching. Default is <code>false</code>.
+      *                otherwise, no caching. Default is <code>false</code>.
       * @return The preparsed schema grammar object (SchemaGrammar or
       *         DTDGrammar). That grammar object is owned by the parser.
       *
@@ -551,14 +550,13 @@ public :
       * is enabled, the parser will cache the grammars for re-use. If a grammar
       * key is found in the pool, no caching of any grammar will take place.
       *
-      * <p><b>"Experimental - subject to change"</b></p>
       *
       * @param systemId A const XMLCh pointer to the Unicode string which
       *                 contains the path to the XML grammar file to be
       *                 preparsed.
       * @param grammarType The grammar type (Schema or DTD).
       * @param toCache If <code>true</code>, we cache the preparsed grammar,
-      *                otherwise, no chaching. Default is <code>false</code>.
+      *                otherwise, no caching. Default is <code>false</code>.
       * @return The preparsed schema grammar object (SchemaGrammar or
       *         DTDGrammar). That grammar object is owned by the parser.
       *
@@ -580,13 +578,12 @@ public :
       * is enabled, the parser will cache the grammars for re-use. If a grammar
       * key is found in the pool, no caching of any grammar will take place.
       *
-      * <p><b>"Experimental - subject to change"</b></p>
       *
       * @param systemId A const char pointer to a native string which contains
       *                 the path to the XML grammar file to be preparsed.
       * @param grammarType The grammar type (Schema or DTD).
       * @param toCache If <code>true</code>, we cache the preparsed grammar,
-      *                otherwise, no chaching. Default is <code>false</code>.
+      *                otherwise, no caching. Default is <code>false</code>.
       * @return The preparsed schema grammar object (SchemaGrammar or
       *         DTDGrammar). That grammar object is owned by the parser.
       *

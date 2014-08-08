@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ValueArrayOf.c 676911 2008-07-15 13:27:32Z amassari $
+ * $Id: ValueArrayOf.c 932887 2010-04-11 13:04:59Z borisk $
  */
 
 
@@ -31,7 +31,7 @@
 XERCES_CPP_NAMESPACE_BEGIN
 
 // ---------------------------------------------------------------------------
-//  ValueArrayOf: Contructors and Destructor
+//  ValueArrayOf: Constructors and Destructor
 // ---------------------------------------------------------------------------
 template <class TElem>
 ValueArrayOf<TElem>::ValueArrayOf(const XMLSize_t size,
@@ -203,7 +203,7 @@ resize(const XMLSize_t newSize)
     for (; index < newSize; index++)
         newArray[index] = TElem(0);
 
-    // Delete the old array and udpate our members
+    // Delete the old array and update our members
     fMemoryManager->deallocate(fArray); //delete [] fArray;
     fArray = newArray;
     fSize = newSize;

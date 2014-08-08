@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: MixedContentModel.hpp 677705 2008-07-17 20:15:32Z amassari $
+ * $Id: MixedContentModel.hpp 901107 2010-01-20 08:45:02Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_MIXEDCONTENTMODEL_HPP)
@@ -172,22 +172,22 @@ MixedContentModel::getNextState(unsigned int,
 }
 
 inline bool
-MixedContentModel::handleRepetitions( const QName* const curElem,
-                                    unsigned int curState,
-                                    unsigned int currentLoop,
-                                    unsigned int& nextState,
-                                    unsigned int& nextLoop,
-                                    XMLSize_t elementIndex,
-                                    SubstitutionGroupComparator * comparator) const
+MixedContentModel::handleRepetitions( const QName* const /*curElem*/,
+                                      unsigned int /*curState*/,
+                                      unsigned int /*currentLoop*/,
+                                      unsigned int& /*nextState*/,
+                                      unsigned int& /*nextLoop*/,
+                                      XMLSize_t /*elementIndex*/,
+                                      SubstitutionGroupComparator * /*comparator*/) const
 {
     return true;
 }
 
 inline void MixedContentModel::checkUniqueParticleAttribution
     (
-        SchemaGrammar*    const 
-      , GrammarResolver*  const 
-      , XMLStringPool*    const 
+        SchemaGrammar*    const
+      , GrammarResolver*  const
+      , XMLStringPool*    const
       , XMLValidator*     const
       , unsigned int*     const pContentSpecOrgURI
       , const XMLCh*            /*pComplexTypeName*/ /*= 0*/

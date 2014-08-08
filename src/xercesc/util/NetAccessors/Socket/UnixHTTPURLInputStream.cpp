@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: UnixHTTPURLInputStream.cpp 734988 2009-01-16 12:34:58Z johns $
+ * $Id: UnixHTTPURLInputStream.cpp 936316 2010-04-21 14:19:58Z borisk $
  */
 
 #if HAVE_CONFIG_H
@@ -104,6 +104,13 @@ UnixHTTPURLInputStream::UnixHTTPURLInputStream(const XMLURL& urlSource, const XM
     MemoryManager *memoryManager = urlSource.getMemoryManager();
 
     const XMLCh*        hostName = urlSource.getHost();
+
+    if (hostName == 0)
+      ThrowXMLwithMemMgr1(NetAccessorException,
+                          XMLExcepts::File_CouldNotOpenFile,
+                          urlSource.getURLText(),
+                          memoryManager);
+
     char*               hostNameAsCharStar = XMLString::transcode(hostName, memoryManager);
     ArrayJanitor<char>  janHostNameAsCharStar(hostNameAsCharStar, memoryManager);
 
@@ -126,11 +133,11 @@ UnixHTTPURLInputStream::UnixHTTPURLInputStream(const XMLURL& urlSource, const XM
         hints.ai_family = PF_UNSPEC;
         hints.ai_socktype = SOCK_STREAM;
         int n = getaddrinfo(hostNameAsCharStar,portBuffer.getRawBuffer(),&hints, &res);
-        if(n<0)
+        if(n != 0)
         {
             hints.ai_flags = AI_NUMERICHOST;
             n = getaddrinfo(hostNameAsCharStar,portBuffer.getRawBuffer(),&hints, &res);
-            if(n<0)
+            if(n != 0)
                 ThrowXMLwithMemMgr1(NetAccessorException, XMLExcepts::NetAcc_TargetResolution, hostName, memoryManager);
         }
         janSock.reset();
@@ -139,6 +146,7 @@ UnixHTTPURLInputStream::UnixHTTPURLInputStream(const XMLURL& urlSource, const XM
             fSocket = socket(ai->ai_family, ai->ai_socktype, ai->ai_protocol);
             if (fSocket < 0)
                 continue;
+            janSock.reset(&fSocket);
             if (connect(fSocket, ai->ai_addr, ai->ai_addrlen) < 0)
             {
                 freeaddrinfo(res);
@@ -153,7 +161,6 @@ UnixHTTPURLInputStream::UnixHTTPURLInputStream(const XMLURL& urlSource, const XM
             ThrowXMLwithMemMgr1(NetAccessorException,
                      XMLExcepts::NetAcc_CreateSocket, url.getURLText(), memoryManager);
         }
-        janSock.reset(&fSocket);
 #else
         struct hostent *hostEntPtr = 0;
         struct sockaddr_in sa;
@@ -217,9 +224,16 @@ UnixHTTPURLInputStream::UnixHTTPURLInputStream(const XMLURL& urlSource, const XM
             }
 
             url = newURL;
+            hostName = newURL.getHost();
+
+            if (hostName == 0)
+              ThrowXMLwithMemMgr1(NetAccessorException,
+                                  XMLExcepts::File_CouldNotOpenFile,
+                                  newURL.getURLText(),
+                                  memoryManager);
 
             janHostNameAsCharStar.release();
-            hostNameAsCharStar = XMLString::transcode(newURL.getHost(), memoryManager);
+            hostNameAsCharStar = XMLString::transcode(hostName, memoryManager);
             janHostNameAsCharStar.reset(hostNameAsCharStar, memoryManager);
         }
         else {

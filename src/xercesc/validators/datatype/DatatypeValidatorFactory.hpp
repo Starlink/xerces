@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DatatypeValidatorFactory.hpp 678409 2008-07-21 13:08:10Z borisk $
+ * $Id: DatatypeValidatorFactory.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_DATATYPEVALIDATORFACTORY_HPP)
@@ -33,11 +33,11 @@
  * 9 validators) get initialized in the registry.
  * The initialization process consist of instantiating the Datatype and
  * facets and registering the Datatype into registry table.
- * This implementation uses a Hahtable as a registry. The datatype validators created
+ * This implementation uses a Hashtable as a registry. The datatype validators created
  * by the factory will be deleted by the registry.
  *
  * As the Parser parses an instance document it knows if validation needs
- * to be checked. If no validation is necesary we should not instantiate a
+ * to be checked. If no validation is necessary we should not instantiate a
  * DatatypeValidatorFactory.
  * If validation is needed, we need to instantiate a DatatypeValidatorFactory.
  */

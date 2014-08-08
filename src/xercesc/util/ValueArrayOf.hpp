@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ValueArrayOf.hpp 676911 2008-07-15 13:27:32Z amassari $
+ * $Id: ValueArrayOf.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_VALUEARRAY_HPP)
@@ -34,7 +34,7 @@ template <class TElem> class ValueArrayOf : public XMemory
 {
 public :
     // -----------------------------------------------------------------------
-    //  Contructors and Destructor
+    //  Constructors and Destructor
     // -----------------------------------------------------------------------
     ValueArrayOf
     (

@@ -119,11 +119,6 @@
             <Message Id="InvalidChildInComplexContent" Text="invalid element following restriction or extension definition in complexContent"/>
             <Message Id="AnnotationError" Text="duplicate annotation in type '{0}'"/>
             <Message Id="DisallowedBaseDerivation" Text="type '{0}' cannot be used in its own union, list, or restriction definition"/>
-            <Message Id="SubstitutionRepeated" Text="value 'substitution' is already in the final list"/>
-            <Message Id="UnionRepeated" Text="value 'union' is already in the final list"/>
-            <Message Id="ExtensionRepeated" Text="value 'extension' is already in the final list"/>
-            <Message Id="ListRepeated" Text="value 'list' is already in the final list"/>
-            <Message Id="RestrictionRepeated" Text="value 'restriction' is already in the final list"/>
             <Message Id="InvalidBlockValue" Text="block value '{0}' is invalid"/>
             <Message Id="InvalidFinalValue" Text="final value '{0}' is invalid"/>
             <Message Id="InvalidSubstitutionGroupElement" Text="element '{0}' cannot be part of the substitution group headed by '{1}'"/>
@@ -213,6 +208,8 @@
             <Message Id="InvalidAttTNS" Text="target namespace of attribute '{0}' cannot be http://www.w3.org/2001/XMLSchema-instance"/>
             <Message Id="NSDeclInvalid" Text="invalid namespace declaration"/>
             <Message Id="DOMLevel1Node" Text="namespace fix-up cannot be performed on DOM Level 1 node"/>
+            <Message Id="DuplicateAnyAttribute" Text="more than one anyAttribute declaration found in complex type declaration"/>
+            <Message Id="AnyAttributeBeforeAttribute" Text="anyAttribute must not be followed by other declarations"/>
         </Error>
         <FatalError>
             <Message Id="EntityExpansionLimitExceeded" Text= "parser has encountered more than '{0}' entity expansions in the document; this is the limit imposed by the application"/>
@@ -408,7 +405,8 @@
             <Message Id="NoUseAbstractType" Text="type of element '{0}' is abstract; use 'xsi:type' to specify non-abstract type instead"/>
             <Message Id="BadXsiType" Text="type '{0}' specified in 'xsi:type' cannot be resolved"/>
             <Message Id="NonDerivedXsiType" Text="type '{0}' specified in 'xsi:type' does not derive from type of element '{1}'"/>
-            <Message Id="NoSubforBlock" Text="element '{0}' does not permit substitution"/>
+            <Message Id="ElemNoSubforBlock" Text="element '{0}' does not permit substitution"/>
+            <Message Id="TypeNoSubforBlock" Text="complex type '{0}' does not permit substitution"/>
             <Message Id="AttributeNotQualified" Text="attribute '{0}' must be qualified"/>
             <Message Id="AttributeNotUnQualified" Text="attribute '{0}' must be unqualified"/>
             <Message Id="IC_FieldMultipleMatch" Text="identity constraint field matches more than one value within the scope of its selector; field must match unique value"/>
@@ -521,7 +519,7 @@
             <Message Id="UTF8_Invalid_3BytesSeq"   Text="invalid bytes '{0}' and '{1}' of a 3-byte sequence"/>
             <Message Id="UTF8_Irregular_3BytesSeq" Text="irregular bytes '{0}' and '{1}' of a 3-byte sequence"/>
             <Message Id="UTF8_Invalid_4BytesSeq"   Text="invalid bytes '{0}' and '{1}' of a 4-byte sequence"/>
-            <Message Id="UTF8_Exceede_BytesLimit"  Text="exceeded byte limit at byte '{0}' in a {1}-byte sequence"/>
+            <Message Id="UTF8_Exceeds_BytesLimit"  Text="exceeded byte limit at byte '{0}' in a {1}-byte sequence"/>
             <Message Id="Vector_BadIndex" Text="index is beyond vector bounds"/>
             <Message Id="Val_InvalidElemId" Text="invalid element id"/>
             <Message Id="Val_CantHaveIntSS" Text="internal subset is not allowed when reusing the grammar"/>
@@ -715,11 +713,12 @@
             <Message Id="XPath_InvalidChar" Text="invalid character '{0}' in XPath expression"/>
             <Message Id="XPath_TokenNotSupported" Text="unsupported XPath token"/>
             <Message Id="XPath_FindSolution" Text="fractional values not supported in XPath expression"/>
-            <Message Id="DateTime_Assert_Buffer_Fail" Text="buffer not initialized"/>
+	    <Message Id="DateTime_dt_invalid"         Text="invalid dateTime value '{0}'"/>
             <Message Id="DateTime_dt_missingT"        Text="missing 'T' separator in dateTime value '{0}'"/>
             <Message Id="DateTime_gDay_invalid"       Text="invalid gDay value '{0}'"/>
             <Message Id="DateTime_gMth_invalid"       Text="invalid gMonth value '{0}'"/>
             <Message Id="DateTime_gMthDay_invalid"    Text="invalid gMonthDay value '{0}'"/>
+	    <Message Id="DateTime_dur_invalid"        Text="invalid duration value '{0}'"/>
             <Message Id="DateTime_dur_Start_dashP"    Text="duration value '{0}' must start with '-' or 'P'"/>
             <Message Id="DateTime_dur_noP"            Text="duration value '{0}' must contain 'P'"/>
             <Message Id="DateTime_dur_DashNotFirst"   Text="duration value '{0}' can contain '-' only as the first character"/>
@@ -732,11 +731,12 @@
             <Message Id="DateTime_time_incomplete"    Text="incomplete time value '{0}'"/>
             <Message Id="DateTime_time_invalid"       Text="invalid time value '{0}'"/>
             <Message Id="DateTime_ms_noDigit"         Text="expected fractional seconds after '.' in time value '{0}'"/>
-            <Message Id="DateTime_ym_incomplete"      Text="incomplete yearMonth value '{0}'"/>
-            <Message Id="DateTime_ym_invalid"         Text="year separator is missing or misplaced in yearMonth value '{0}'"/>
+            <Message Id="DateTime_ym_incomplete"      Text="incomplete gYearMonth value '{0}'"/>
+            <Message Id="DateTime_ym_invalid"         Text="invalid gYearMonth value '{0}'"/>
+	    <Message Id="DateTime_year_invalid"       Text="invalid gYear value '{0}'"/>
             <Message Id="DateTime_year_tooShort"      Text="year value '{0}' must follow 'CCYY' format"/>
-            <Message Id="DateTime_year_leadingZero"   Text="invalid leading zero in year value '{0}'"/>
-            <Message Id="DateTime_ym_noMonth"         Text="month component missing in yearMonth value '{0}'"/>
+            <Message Id="DateTime_year_leadingZero"   Text="invalid leading zero in gYear value '{0}'"/>
+            <Message Id="DateTime_ym_noMonth"         Text="month component missing in gYearMonth value '{0}'"/>
             <Message Id="DateTime_tz_noUTCsign"       Text="time zone expected in '{0}'"/>
             <Message Id="DateTime_tz_stuffAfterZ"     Text="unexpected text after 'Z' in time zone value '{0}'"/>
             <Message Id="DateTime_tz_invalid"         Text="invalid time zone value '{0}'"/>
@@ -840,6 +840,7 @@
 <!--Messages used by DOMLSParser -->
             <Message Id="LSParser_ParseInProgress" Text="parsing in progress"/>
             <Message Id="LSParser_ParsingAborted" Text="parsing aborted by the user"/>
+            <Message Id="LSParser_ParsingFailed" Text="parsing failed"/>
         </FatalError>
     </MsgDomain>
 </MsgFile>

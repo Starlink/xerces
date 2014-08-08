@@ -16,49 +16,28 @@
  */
 
 /*
- * $Id: IconvGNUTransService.cpp 676954 2008-07-15 16:29:19Z dbertoni $
+ * $Id: IconvGNUTransService.cpp 901107 2010-01-20 08:45:02Z borisk $
  */
 
 // ---------------------------------------------------------------------------
 //  Includes
 // ---------------------------------------------------------------------------
+#if HAVE_CONFIG_H
+  #include <config.h>
+#endif
+
 #include <ctype.h>
 
 #include <locale.h>
 #include <errno.h>
+
 #if HAVE_ENDIAN_H
   #include <endian.h>
 #elif HAVE_MACHINE_ENDIAN_H
   #include <machine/endian.h>
+#elif HAVE_ARPA_NAMESER_COMPAT_H
+  #include <arpa/nameser_compat.h>
 #endif
-
-#include <xercesc/util/XMLString.hpp>
-#include <xercesc/util/XMLUniDefs.hpp>
-#include <xercesc/util/XMLUni.hpp>
-#include <xercesc/util/PlatformUtils.hpp>
-#include <xercesc/util/TranscodingException.hpp>
-#include <xercesc/util/Janitor.hpp>
-#include "IconvGNUTransService.hpp"
-
-XERCES_CPP_NAMESPACE_BEGIN
-
-// ---------------------------------------------------------------------------
-// Description of encoding schemas, supported by iconv()
-// ---------------------------------------------------------------------------
-typedef struct __IconvGNUEncoding {
-    const char*    fSchema;    // schema name
-    size_t    fUChSize;    // size of the character
-    unsigned int fUBO;        // byte order, relative to the host
-} IconvGNUEncoding;
-
-static const IconvGNUEncoding    gIconvGNUEncodings[] = {
-    { "UTF-16LE",        2,    LITTLE_ENDIAN },
-    { "UTF-16BE",        2,    BIG_ENDIAN },
-    { "UCS-2LE",         2,    LITTLE_ENDIAN },
-    { "UCS-2BE",         2,    BIG_ENDIAN },
-    { "UCS-2-INTERNAL",  2,    BYTE_ORDER },
-    { NULL,              0,    0 }
-};
 
 #define MAX_UCHSIZE 4
 
@@ -124,11 +103,38 @@ static const IconvGNUEncoding    gIconvGNUEncodings[] = {
 # endif /* BYTE_ORDER == LITTLE_ENDIAN */
 
 #include <wchar.h>
-
-
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+
+#include <xercesc/util/XMLString.hpp>
+#include <xercesc/util/XMLUniDefs.hpp>
+#include <xercesc/util/XMLUni.hpp>
+#include <xercesc/util/PlatformUtils.hpp>
+#include <xercesc/util/TranscodingException.hpp>
+#include <xercesc/util/Janitor.hpp>
+#include "IconvGNUTransService.hpp"
+
+
+XERCES_CPP_NAMESPACE_BEGIN
+
+// ---------------------------------------------------------------------------
+// Description of encoding schemas, supported by iconv()
+// ---------------------------------------------------------------------------
+typedef struct __IconvGNUEncoding {
+    const char*    fSchema;    // schema name
+    size_t    fUChSize;    // size of the character
+    unsigned int fUBO;        // byte order, relative to the host
+} IconvGNUEncoding;
+
+static const IconvGNUEncoding    gIconvGNUEncodings[] = {
+    { "UTF-16LE",        2,    LITTLE_ENDIAN },
+    { "UTF-16BE",        2,    BIG_ENDIAN },
+    { "UCS-2LE",         2,    LITTLE_ENDIAN },
+    { "UCS-2BE",         2,    BIG_ENDIAN },
+    { "UCS-2-INTERNAL",  2,    BYTE_ORDER },
+    { NULL,              0,    0 }
+};
 
 // ---------------------------------------------------------------------------
 //  Local, const data
@@ -236,7 +242,11 @@ XMLCh IconvGNUWrapper::toUpper (const XMLCh ch)
     xmlChToMbc (ch, wcbuf);
 
     char    tmpArr[4];
-    char*    ptr = wcbuf;
+#if ICONV_USES_CONST_POINTER
+    const char* ptr = wcbuf;
+#else
+    char* ptr = wcbuf;
+#endif
     size_t    len = fUChSize;
     char    *pTmpArr = tmpArr;
     size_t    bLen = 2;
@@ -265,7 +275,11 @@ XMLCh IconvGNUWrapper::toLower (const XMLCh ch)
     xmlChToMbc (ch, wcbuf);
 
     char    tmpArr[4];
-    char*    ptr = wcbuf;
+#if ICONV_USES_CONST_POINTER
+    const char* ptr = wcbuf;
+#else
+    char* ptr = wcbuf;
+#endif
     size_t    len = fUChSize;
     char    *pTmpArr = tmpArr;
     size_t    bLen = 2;
@@ -366,7 +380,11 @@ size_t    IconvGNUWrapper::iconvFrom ( const char    *fromPtr,
                  char        **toPtr,
                  size_t        toLen )
 {
+#if ICONV_USES_CONST_POINTER
+    const char ** tmpPtr = &fromPtr;
+#else
     char ** tmpPtr = (char**)&fromPtr;
+#endif
     return ::iconv (fCDFrom, tmpPtr, fromLen, toPtr, &toLen);
 }
 
@@ -375,7 +393,11 @@ size_t    IconvGNUWrapper::iconvTo ( const char    *fromPtr,
                    char        **toPtr,
                    size_t        toLen )
 {
+#if ICONV_USES_CONST_POINTER
+    const char ** tmpPtr = &fromPtr;
+#else
     char ** tmpPtr = (char**)&fromPtr;
+#endif
     return ::iconv (fCDTo, tmpPtr, fromLen, toPtr, &toLen);
 }
 
@@ -392,7 +414,7 @@ IconvGNUTransService::IconvGNUTransService(MemoryManager* manager)
     // Using an empty string instead of NULL, will modify the libc
     // behavior.
     //
-    char* fLocalCP = setlocale (LC_CTYPE, NULL);
+    const char* fLocalCP = setlocale (LC_CTYPE, NULL);
     if (fLocalCP == NULL || *fLocalCP == 0 ||
         strcmp (fLocalCP, "C") == 0 ||
         strcmp (fLocalCP, "POSIX") == 0) {
@@ -409,7 +431,7 @@ IconvGNUTransService::IconvGNUTransService(MemoryManager* manager)
         strcmp (fLocalCP, "POSIX") == 0)
         fLocalCP = "iso-8859-1";    // fallback locale
     else {
-        char    *ptr = strchr (fLocalCP, '.');
+        const char *ptr = strchr (fLocalCP, '.');
         if (ptr == NULL)
             fLocalCP = "iso-8859-1";    // fallback locale
         else
@@ -1049,7 +1071,7 @@ XMLSize_t    IconvGNUTranscoder::transcodeTo
     ,       XMLByte* const   toFill
     , const XMLSize_t        maxBytes
     ,       XMLSize_t&       charsEaten
-    , const UnRepOpts        options )
+    , const UnRepOpts        /*options*/ )
 {
     // Transcode FROM XMLCh
     char    tmpWBuff[gTempBuffArraySize];
@@ -1099,7 +1121,7 @@ bool IconvGNUTranscoder::canTranscodeTo
     unsigned int    srcCount = 1;
     if (toCheck & 0xFFFF0000) {
         XMLCh    ch1 = (toCheck >> 10) + 0xD800;
-        XMLCh    ch2 = toCheck & 0x3FF + 0xDC00;
+        XMLCh    ch2 = (toCheck & 0x3FF) + 0xDC00;
         xmlToMbs(&ch1, srcBuf, 1);
         xmlToMbs(&ch2, srcBuf + uChSize(), 1);
         srcCount++;
@@ -1116,5 +1138,3 @@ bool IconvGNUTranscoder::canTranscodeTo
 }
 
 XERCES_CPP_NAMESPACE_END
-
-

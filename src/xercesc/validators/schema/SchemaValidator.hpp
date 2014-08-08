@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: SchemaValidator.hpp 744929 2009-02-16 14:53:58Z borisk $
+ * $Id: SchemaValidator.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_SCHEMAVALIDATOR_HPP)
@@ -109,7 +109,7 @@ public:
     // -----------------------------------------------------------------------
     //  Schema Validator methods
     // -----------------------------------------------------------------------
-    void normalizeWhiteSpace(DatatypeValidator* dV, const XMLCh* const value, XMLBuffer& toFill);
+    void normalizeWhiteSpace(DatatypeValidator* dV, const XMLCh* const value, XMLBuffer& toFill, bool bStandalone = false);
 
     // -----------------------------------------------------------------------
     //  Setter methods
@@ -121,6 +121,7 @@ public:
        , const unsigned int        uriId);
 
     void setNillable(bool isNil);
+    void resetNillable();
     void setErrorReporter(XMLErrorReporter* const errorReporter);
     void setExitOnFirstFatal(const bool newValue);
     void setDatatypeBuffer(const XMLCh* const value);
@@ -134,6 +135,7 @@ public:
     DatatypeValidator *getMostRecentAttrValidator() const;
     bool getErrorOccurred() const;
     bool getIsElemSpecified() const;
+    bool getIsXsiTypeSet() const;
     const XMLCh* getNormalizedValue() const;
 
 private:
@@ -144,7 +146,7 @@ private:
     SchemaValidator& operator=(const SchemaValidator&);
 
     // -----------------------------------------------------------------------
-    //  Element Consitency Checking methods
+    //  Element Consistency Checking methods
     // -----------------------------------------------------------------------
     void checkRefElementConsistency(SchemaGrammar* const currentGrammar,
                                     const ComplexTypeInfo* const curTypeInfo,
@@ -255,6 +257,8 @@ private:
     //      Store the Schema Type Attribute Value if schema type is specified
     //
     //  fNil
+    //      Indicates if a nil value is acceptable
+    //  fNilFound
     //      Indicates if Nillable has been set
     // -----------------------------------------------------------------------
     //  The following used internally in the validator
@@ -292,16 +296,12 @@ private:
     GrammarResolver*                fGrammarResolver;
     QName*                          fXsiType;
     bool                            fNil;
+    bool                            fNilFound;
     DatatypeValidator*              fCurrentDatatypeValidator;
     XMLBuffer*                      fNotationBuf;
     XMLBuffer                       fDatatypeBuffer;
-    // Only for 3.0.1.
-    //
-    union
-    {
-      bool old;
-      unsigned char flags; // fTrailing - big 0; fSeenNonWhiteSpace - bit 1
-    } fTrailingSeenNonWhiteSpace;
+    bool                            fTrailing;
+    bool                            fSeenNonWhiteSpace;
     bool                            fSeenId;
     XSDErrorReporter                fSchemaErrorReporter;
     ValueStackOf<ComplexTypeInfo*>* fTypeStack;
@@ -328,6 +328,12 @@ inline void SchemaValidator::setXsiType(const XMLCh* const        prefix
 
 inline void SchemaValidator::setNillable(bool isNil) {
     fNil = isNil;
+    fNilFound = true;
+}
+
+inline void SchemaValidator::resetNillable() {
+    fNil = false;
+    fNilFound = false;
 }
 
 inline void SchemaValidator::setExitOnFirstFatal(const bool newValue) {
@@ -425,6 +431,11 @@ inline bool SchemaValidator::getIsElemSpecified() const
 inline const XMLCh* SchemaValidator::getNormalizedValue() const
 {
     return fDatatypeBuffer.getRawBuffer();
+}
+
+inline bool SchemaValidator::getIsXsiTypeSet() const
+{
+    return (fXsiType!=0);
 }
 
 XERCES_CPP_NAMESPACE_END

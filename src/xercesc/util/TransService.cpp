@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: TransService.cpp 688055 2008-08-22 11:10:05Z johns $
+ * $Id: TransService.cpp 933523 2010-04-13 08:53:39Z amassari $
  */
 // ---------------------------------------------------------------------------
 //  Includes
@@ -39,6 +39,7 @@
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/util/TransENameMap.hpp>
 #include <xercesc/util/XMLInitializer.hpp>
+#include <xercesc/util/TranscodingException.hpp>
 
 XERCES_CPP_NAMESPACE_BEGIN
 
@@ -82,11 +83,11 @@ XMLTransService::~XMLTransService()
 }
 
 // ---------------------------------------------------------------------------
-//	Allow user specific encodings to be added to the mappings table.
-//	Should be called after platform init
+//    Allow user specific encodings to be added to the mappings table.
+//    Should be called after platform init
 // ---------------------------------------------------------------------------
 void XMLTransService::addEncoding(const XMLCh* const encoding,
-								  ENameMap* const ownMapping)
+                                  ENameMap* const ownMapping)
 {
     gMappings->put((void *) encoding, ownMapping);
 }
@@ -142,7 +143,7 @@ XMLTransService::makeNewTranscoderFor(  const   XMLCh* const            encoding
 
     // If we found it, then call the factory method for it
     if (ourMapping)
-	{
+    {
        XMLTranscoder* temp = ourMapping->makeNew(blockSize, manager);
        resValue = temp ? XMLTransService::Ok : XMLTransService::InternalFailure;
        return temp;
@@ -181,7 +182,7 @@ XMLTransService::makeNewTranscoderFor(  XMLRecognizer::Encodings        encoding
     ENameMap* ourMapping = gMappingsRecognizer->elementAt(encodingEnum);
 
     // If we found it, then call the factory method for it
-    if (ourMapping)	{
+    if (ourMapping)    {
        XMLTranscoder* temp = ourMapping->makeNew(blockSize, manager);
        resValue = temp ? XMLTransService::Ok : XMLTransService::InternalFailure;
        return temp;
@@ -260,7 +261,7 @@ void XMLTransService::initTransService()
     gMappingsRecognizer->setElementAt(new EEndianNameMapFor<XMLUTF16Transcoder>(XMLUni::fgUTF16LEncodingString, swapped), XMLRecognizer::UTF_16L);
     gMappings->put
     (
-		(void*)XMLUni::fgUTF16LEncodingString,
+        (void*)XMLUni::fgUTF16LEncodingString,
         new EEndianNameMapFor<XMLUTF16Transcoder>
         (
             XMLUni::fgUTF16LEncodingString
@@ -270,7 +271,7 @@ void XMLTransService::initTransService()
 
     gMappings->put
     (
-		(void*)XMLUni::fgUTF16LEncodingString2,
+        (void*)XMLUni::fgUTF16LEncodingString2,
         new EEndianNameMapFor<XMLUTF16Transcoder>
         (
             XMLUni::fgUTF16LEncodingString2
@@ -281,7 +282,7 @@ void XMLTransService::initTransService()
     gMappingsRecognizer->setElementAt(new EEndianNameMapFor<XMLUCS4Transcoder>(XMLUni::fgUCS4LEncodingString, swapped), XMLRecognizer::UCS_4L);
     gMappings->put
     (
-		(void*)XMLUni::fgUCS4LEncodingString,
+        (void*)XMLUni::fgUCS4LEncodingString,
         new EEndianNameMapFor<XMLUCS4Transcoder>
         (
             XMLUni::fgUCS4LEncodingString
@@ -291,7 +292,7 @@ void XMLTransService::initTransService()
 
     gMappings->put
     (
-		(void*)XMLUni::fgUCS4LEncodingString2,
+        (void*)XMLUni::fgUCS4LEncodingString2,
         new EEndianNameMapFor<XMLUCS4Transcoder>
         (
             XMLUni::fgUCS4LEncodingString2
@@ -307,7 +308,7 @@ void XMLTransService::initTransService()
     gMappingsRecognizer->setElementAt(new EEndianNameMapFor<XMLUTF16Transcoder>(XMLUni::fgUTF16BEncodingString, swapped), XMLRecognizer::UTF_16B);
     gMappings->put
     (
-		(void*)XMLUni::fgUTF16BEncodingString,
+        (void*)XMLUni::fgUTF16BEncodingString,
         new EEndianNameMapFor<XMLUTF16Transcoder>
         (
             XMLUni::fgUTF16BEncodingString
@@ -317,7 +318,7 @@ void XMLTransService::initTransService()
 
     gMappings->put
     (
-		(void*)XMLUni::fgUTF16BEncodingString2,
+        (void*)XMLUni::fgUTF16BEncodingString2,
         new EEndianNameMapFor<XMLUTF16Transcoder>
         (
             XMLUni::fgUTF16BEncodingString2
@@ -328,7 +329,7 @@ void XMLTransService::initTransService()
     gMappingsRecognizer->setElementAt(new EEndianNameMapFor<XMLUCS4Transcoder>(XMLUni::fgUCS4BEncodingString, swapped), XMLRecognizer::UCS_4B);
     gMappings->put
     (
-		(void*)XMLUni::fgUCS4BEncodingString,
+        (void*)XMLUni::fgUCS4BEncodingString,
         new EEndianNameMapFor<XMLUCS4Transcoder>
         (
             XMLUni::fgUCS4BEncodingString
@@ -338,7 +339,7 @@ void XMLTransService::initTransService()
 
     gMappings->put
     (
-		(void*)XMLUni::fgUCS4BEncodingString2,
+        (void*)XMLUni::fgUCS4BEncodingString2,
         new EEndianNameMapFor<XMLUCS4Transcoder>
         (
             XMLUni::fgUCS4BEncodingString2
@@ -353,7 +354,7 @@ void XMLTransService::initTransService()
 
     gMappings->put
     (
-		(void*)XMLUni::fgUTF16EncodingString,
+        (void*)XMLUni::fgUTF16EncodingString,
         new EEndianNameMapFor<XMLUTF16Transcoder>
         (
             XMLUni::fgUTF16EncodingString
@@ -362,7 +363,7 @@ void XMLTransService::initTransService()
     );
     gMappings->put
     (
-		(void*)XMLUni::fgUTF16EncodingString2,
+        (void*)XMLUni::fgUTF16EncodingString2,
         new EEndianNameMapFor<XMLUTF16Transcoder>
         (
             XMLUni::fgUTF16EncodingString2
@@ -371,7 +372,7 @@ void XMLTransService::initTransService()
     );
     gMappings->put
     (
-		(void*)XMLUni::fgUTF16EncodingString3,
+        (void*)XMLUni::fgUTF16EncodingString3,
         new EEndianNameMapFor<XMLUTF16Transcoder>
         (
             XMLUni::fgUTF16EncodingString3
@@ -380,7 +381,7 @@ void XMLTransService::initTransService()
     );
     gMappings->put
     (
-		(void*)XMLUni::fgUTF16EncodingString4,
+        (void*)XMLUni::fgUTF16EncodingString4,
         new EEndianNameMapFor<XMLUTF16Transcoder>
         (
             XMLUni::fgUTF16EncodingString4
@@ -389,7 +390,7 @@ void XMLTransService::initTransService()
     );
     gMappings->put
     (
-		(void*)XMLUni::fgUTF16EncodingString5,
+        (void*)XMLUni::fgUTF16EncodingString5,
         new EEndianNameMapFor<XMLUTF16Transcoder>
         (
             XMLUni::fgUTF16EncodingString5
@@ -398,7 +399,7 @@ void XMLTransService::initTransService()
     );
     gMappings->put
     (
-		(void*)XMLUni::fgUTF16EncodingString6,
+        (void*)XMLUni::fgUTF16EncodingString6,
         new EEndianNameMapFor<XMLUTF16Transcoder>
         (
             XMLUni::fgUTF16EncodingString6
@@ -407,7 +408,7 @@ void XMLTransService::initTransService()
     );
     gMappings->put
     (
-		(void*)XMLUni::fgUTF16EncodingString7,
+        (void*)XMLUni::fgUTF16EncodingString7,
         new EEndianNameMapFor<XMLUTF16Transcoder>
         (
             XMLUni::fgUTF16EncodingString7
@@ -416,7 +417,7 @@ void XMLTransService::initTransService()
     );
     gMappings->put
     (
-		(void*)XMLUni::fgUCS4EncodingString,
+        (void*)XMLUni::fgUCS4EncodingString,
         new EEndianNameMapFor<XMLUCS4Transcoder>
         (
             XMLUni::fgUCS4EncodingString
@@ -425,7 +426,7 @@ void XMLTransService::initTransService()
     );
     gMappings->put
     (
-		(void*)XMLUni::fgUCS4EncodingString2,
+        (void*)XMLUni::fgUCS4EncodingString2,
         new EEndianNameMapFor<XMLUCS4Transcoder>
         (
             XMLUni::fgUCS4EncodingString2
@@ -434,7 +435,7 @@ void XMLTransService::initTransService()
     );
     gMappings->put
     (
-		(void*)XMLUni::fgUCS4EncodingString3,
+        (void*)XMLUni::fgUCS4EncodingString3,
         new EEndianNameMapFor<XMLUCS4Transcoder>
         (
             XMLUni::fgUCS4EncodingString3
@@ -443,10 +444,19 @@ void XMLTransService::initTransService()
     );
     gMappings->put
     (
-		(void*)XMLUni::fgUCS4EncodingString4,
+        (void*)XMLUni::fgUCS4EncodingString4,
         new EEndianNameMapFor<XMLUCS4Transcoder>
         (
             XMLUni::fgUCS4EncodingString4
+            , false
+        )
+    );
+    gMappings->put
+    (
+        (void*)XMLUni::fgUCS4EncodingString5,
+        new EEndianNameMapFor<XMLUCS4Transcoder>
+        (
+            XMLUni::fgUCS4EncodingString5
             , false
         )
     );
@@ -604,13 +614,16 @@ void TranscodeToStr::transcode(const XMLCh *in, XMLSize_t len, XMLTranscoder* tr
     XMLSize_t allocSize = len * sizeof(XMLCh);
     fString = (XMLByte*)fMemoryManager->allocate(allocSize);
 
-    XMLSize_t charsRead;
+    XMLSize_t charsRead = 0;
     XMLSize_t charsDone = 0;
 
     while(true) {
         fBytesWritten += trans->transcodeTo(in + charsDone, len - charsDone,
                                             fString + fBytesWritten, allocSize - fBytesWritten,
                                             charsRead, XMLTranscoder::UnRep_Throw);
+        if(charsRead == 0)
+            ThrowXMLwithMemMgr(TranscodingException, XMLExcepts::Trans_BadSrcSeq, fMemoryManager);
+
         charsDone += charsRead;
 
         if(charsDone == len) break;
@@ -623,7 +636,7 @@ void TranscodeToStr::transcode(const XMLCh *in, XMLSize_t len, XMLTranscoder* tr
     }
 
     // null terminate
-    if(fBytesWritten > (allocSize - 4)) {
+    if((fBytesWritten + 4) > allocSize) {
         allocSize = fBytesWritten + 4;
         XMLByte *newBuf = (XMLByte*)fMemoryManager->allocate(allocSize);
         memcpy(newBuf, fString, fBytesWritten);
@@ -683,13 +696,16 @@ void TranscodeFromStr::transcode(const XMLByte *in, XMLSize_t length, XMLTransco
     ArrayJanitor<unsigned char> charSizes((unsigned char*)fMemoryManager->allocate(csSize * sizeof(unsigned char)),
                                           fMemoryManager);
 
-    XMLSize_t bytesRead;
+    XMLSize_t bytesRead = 0;
     XMLSize_t bytesDone = 0;
 
     while(true) {
         fCharsWritten += trans->transcodeFrom(in + bytesDone, length - bytesDone,
                                               fString + fCharsWritten, allocSize - fCharsWritten,
                                               bytesRead, charSizes.get());
+        if(bytesRead == 0)
+            ThrowXMLwithMemMgr(TranscodingException, XMLExcepts::Trans_BadSrcSeq, fMemoryManager);
+
         bytesDone += bytesRead;
         if(bytesDone == length) break;
 

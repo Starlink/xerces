@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLString.hpp 698579 2008-09-24 14:13:08Z borisk $
+ * $Id: XMLString.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XMLSTRING_HPP)
@@ -432,9 +432,9 @@ public:
       */
     static bool copyNString
     (
-                XMLCh* const    target
-        , const XMLCh* const    src
-        , const XMLSize_t       maxChars
+                XMLCh* const   target
+        , const XMLCh* const   src
+        , const XMLSize_t      maxChars
     );
     //@}
 
@@ -484,7 +484,7 @@ public:
     /** @name Search functions */
     //@{
     /**
-      * Provides the index of the first occurance of a character within a string
+      * Provides the index of the first occurrence of a character within a string
       *
       * @param toSearch The string to search
       * @param ch The character to search within the string
@@ -494,7 +494,7 @@ public:
     static int indexOf(const char* const toSearch, const char ch);
 
     /**
-      * Provides the index of the first occurance of a character within a string
+      * Provides the index of the first occurrence of a character within a string
       *
       * @param toSearch The string to search
       * @param ch The character to search within the string
@@ -504,7 +504,7 @@ public:
     static int indexOf(const XMLCh* const toSearch, const XMLCh ch);
 
 	    /**
-      * Provides the index of the first occurance of a character within a string
+      * Provides the index of the first occurrence of a character within a string
       * starting from a given index
       *
       * @param toSearch The string to search
@@ -523,7 +523,7 @@ public:
     );
 
     /**
-      * Provides the index of the first occurance of a character within a string
+      * Provides the index of the first occurrence of a character within a string
       * starting from a given index
       *
       * @param toSearch The string to search
@@ -542,7 +542,7 @@ public:
     );
 
     /**
-      * Provides the index of the last occurance of a character within a string
+      * Provides the index of the last occurrence of a character within a string
       *
       * @param toSearch The string to search
       * @param ch The character to search within the string
@@ -552,7 +552,7 @@ public:
     static int lastIndexOf(const char* const toSearch, const char ch);
 
     /**
-      * Provides the index of the last occurance of a character within a string
+      * Provides the index of the last occurrence of a character within a string
       *
       * @param toSearch The string to search
       * @param ch The character to search within the string
@@ -562,7 +562,7 @@ public:
     static int lastIndexOf(const XMLCh* const toSearch, const XMLCh ch);
 
     /**
-      * Provides the index of the last occurance of a character within a string
+      * Provides the index of the last occurrence of a character within a string
       *
       * @param ch The character to search within the string
       * @param toSearch The string to search
@@ -578,7 +578,7 @@ public:
     );
 
     /**
-      * Provides the index of the last occurance of a character within a string
+      * Provides the index of the last occurrence of a character within a string
       * starting backward from a given index
       *
       * @param toSearch The string to search
@@ -597,7 +597,7 @@ public:
     );
 
     /**
-      * Provides the index of the last occurance of a character within a string
+      * Provides the index of the last occurrence of a character within a string
       * starting backward from a given index
       *
       * @param toSearch The string to search
@@ -790,7 +790,7 @@ public:
     );
 
 
-    /** Tells if a string has any occurance of any character of another
+    /** Tells if a string has any occurrence of any character of another
       * string within itself
       * @param toSearch The string to be searched
       * @param searchList The string from which characters to be searched for are drawn
@@ -804,7 +804,7 @@ public:
         , const XMLCh* const    searchList
     );
 
-    /** Tells if a string has any occurance of any character of another
+    /** Tells if a string has any occurrence of any character of another
       * string within itself
       * @param toSearch The string to be searched
       * @param searchList The string from which characters to be searched for are drawn
@@ -1020,48 +1020,6 @@ public:
         , MemoryManager* const  manager = XMLPlatformUtils::fgMemoryManager
     );
 
-#if XERCES_SIZEOF_INT != 8 && XERCES_SIZEOF_LONG != 8 && XERCES_SIZEOF_INT64 != 4
-    /** Converts binary data to a text string based a given radix
-      *
-      * @param toFormat The number to convert
-      * @param toFill The buffer that will hold the output on return. The
-      *        size of this buffer should at least be 'maxChars + 1'.
-      * @param maxChars The maximum number of output characters that can be
-      *         accepted. If the result will not fit, it is an error.
-      * @param radix The radix of the input data, based on which the conversion
-      * @param manager The MemoryManager to use to allocate objects
-      * will be done
-      */
-    static void binToText
-    (
-        const   XMLUInt64           toFormat
-        ,       char* const         toFill
-        , const XMLSize_t           maxChars
-        , const unsigned int        radix
-        , MemoryManager* const      manager = XMLPlatformUtils::fgMemoryManager
-    );
-
-    /** Converts binary data to a text string based a given radix
-      *
-      * @param toFormat The number to convert
-      * @param toFill The buffer that will hold the output on return. The
-      *        size of this buffer should at least be 'maxChars + 1'.
-      * @param maxChars The maximum number of output characters that can be
-      *         accepted. If the result will not fit, it is an error.
-      * @param radix The radix of the input data, based on which the conversion
-      * @param manager The MemoryManager to use to allocate objects
-      * will be done
-      */
-    static void binToText
-    (
-        const   XMLUInt64           toFormat
-        ,       XMLCh* const        toFill
-        , const XMLSize_t           maxChars
-        , const unsigned int        radix
-        , MemoryManager* const      manager = XMLPlatformUtils::fgMemoryManager
-    );
-#endif // XERCES_SIZEOF_INT != 8 && XERCES_SIZEOF_LONG != 8 && XERCES_SIZEOF_INT64 != 4
-
     /** Converts binary data to a text string based a given radix
       *
       * @param toFormat The number to convert
@@ -1141,53 +1099,11 @@ public:
         , const unsigned int    radix
         , MemoryManager* const  manager = XMLPlatformUtils::fgMemoryManager
     );
-
-#if XERCES_SIZEOF_INT != 8 && XERCES_SIZEOF_LONG != 8 && XERCES_SIZEOF_INT64 != 4
-    /** Converts binary data to a text string based a given radix
-      *
-      * @param toFormat The number to convert
-      * @param toFill The buffer that will hold the output on return. The
-      *        size of this buffer should at least be 'maxChars + 1'.
-      * @param maxChars The maximum number of output characters that can be
-      *         accepted. If the result will not fit, it is an error.
-      * @param radix The radix of the input data, based on which the conversion
-      * @param manager The MemoryManager to use to allocate objects
-      * will be done
-      */
-    static void binToText
-    (
-        const   XMLInt64        toFormat
-        ,       char* const     toFill
-        , const XMLSize_t       maxChars
-        , const unsigned int    radix
-        , MemoryManager* const  manager = XMLPlatformUtils::fgMemoryManager
-    );
-
-    /** Converts binary data to a text string based a given radix
-      *
-      * @param toFormat The number to convert
-      * @param toFill The buffer that will hold the output on return. The
-      *        size of this buffer should at least be 'maxChars + 1'.
-      * @param maxChars The maximum number of output characters that can be
-      *         accepted. If the result will not fit, it is an error.
-      * @param radix The radix of the input data, based on which the conversion
-      * @param manager The MemoryManager to use to allocate objects
-      * will be done
-      */
-    static void binToText
-    (
-        const   XMLInt64        toFormat
-        ,       XMLCh* const    toFill
-        , const XMLSize_t       maxChars
-        , const unsigned int    radix
-        , MemoryManager* const  manager = XMLPlatformUtils::fgMemoryManager
-    );
-#endif // XERCES_SIZEOF_INT != 8 && XERCES_SIZEOF_LONG != 8 && XERCES_SIZEOF_INT64 != 4
 
     /**
       * Converts a string of decimal chars to a binary value
       *
-      * Note that leading and trailng whitespace is legal and will be ignored
+      * Note that leading and trailing whitespace is legal and will be ignored
       * but the remainder must be all decimal digits.
       *
       * @param toConvert The string of digits to convert
@@ -1205,7 +1121,7 @@ public:
     /**
       * Converts a string of decimal chars to a binary value
       *
-      * Note that leading and trailng whitespace is legal and will be ignored,
+      * Note that leading and trailing whitespace is legal and will be ignored,
       *
       * Only one and either of (+,-) after the leading whitespace, before
       * any other characters are allowed.
@@ -1417,7 +1333,7 @@ public:
       *        On return , this buffer also holds the converted string
       * @param manager The MemoryManager to use to allocate objects
       */
-    static void replaceWS(XMLCh* const toConvert
+    static void replaceWS(XMLCh* toConvert
         , MemoryManager* const  manager = XMLPlatformUtils::fgMemoryManager);
 
 	/** Collapse whitespace
@@ -1425,7 +1341,7 @@ public:
       *        On return , this buffer also holds the converted string
       * @param manager The MemoryManager to use to allocate objects
       */
-    static void collapseWS(XMLCh* const toConvert
+    static void collapseWS(XMLCh* toConvert
         , MemoryManager* const  manager = XMLPlatformUtils::fgMemoryManager);
 
     /** Remove whitespace
@@ -1433,14 +1349,14 @@ public:
       *        On return , this buffer also holds the converted string
       * @param manager The MemoryManager to use to allocate objects
       */
-    static void removeWS(XMLCh* const toConvert
+    static void removeWS(XMLCh* toConvert
     , MemoryManager*       const manager = XMLPlatformUtils::fgMemoryManager);
 
 
     /** Remove character
       * @param srcString The string
       * @param toRemove  The character needs to be removed from the string
-      * @param dstBuffer The buffer containning the result
+      * @param dstBuffer The buffer containing the result
       */
     static void removeChar(const XMLCh*     const srcString
                          , const XMLCh&           toRemove
@@ -1532,19 +1448,14 @@ inline void XMLString::moveChars(       XMLCh* const targetStr
 
 inline XMLSize_t XMLString::stringLen(const XMLCh* const src)
 {
-    if (src == 0 || *src == 0)
-    {
+    if (src == 0)
         return 0;
-    }
-    else
-    {
-        const XMLCh* pszTmp = src + 1;
 
-        while (*pszTmp)
-            ++pszTmp;
+    const XMLCh* pszTmp = src;
 
-        return (pszTmp - src);
-    }
+    while (*pszTmp++) ;
+
+    return (pszTmp - src - 1);
 }
 
 inline XMLCh* XMLString::replicate(const XMLCh* const toRep,

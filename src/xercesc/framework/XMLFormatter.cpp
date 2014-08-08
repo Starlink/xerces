@@ -16,7 +16,7 @@
  */
 
 /**
- * $Id: XMLFormatter.cpp 695949 2008-09-16 15:57:44Z borisk $
+ * $Id: XMLFormatter.cpp 901107 2010-01-20 08:45:02Z borisk $
  */
 
 
@@ -506,7 +506,8 @@ XMLFormatter::handleUnEscapedChars(const XMLCh *                  srcPtr,
    XMLSize_t count = oCount;
 
    while (count) {
-      const XMLSize_t srcChars = (count > kTmpBufSize) ? kTmpBufSize : count;
+     const XMLSize_t srcChars = (count > XMLSize_t (kTmpBufSize))
+       ? XMLSize_t (kTmpBufSize) : count;
 
       const XMLSize_t outBytes
          = fXCoder->transcodeTo(srcPtr, srcChars,

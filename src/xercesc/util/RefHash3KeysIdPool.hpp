@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: RefHash3KeysIdPool.hpp 679340 2008-07-24 10:28:29Z borisk $
+ * $Id: RefHash3KeysIdPool.hpp 883368 2009-11-23 15:28:19Z amassari $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_REFHASH3KEYSIDPOOL_HPP)
@@ -196,10 +196,10 @@ private:
     bool                                fAdoptedElems;
     RefHash3KeysTableBucketElem<TVal>** fBucketList;
     XMLSize_t                           fHashModulus;
-    THasher                             fHasher;
     TVal**                              fIdPtrs;
     XMLSize_t                           fIdPtrsCount;
     XMLSize_t                           fIdCounter;
+    THasher                             fHasher;
 };
 
 

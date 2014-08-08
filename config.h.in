@@ -6,6 +6,9 @@
 /* Define to 1 if you have the <arpa/inet.h> header file. */
 #undef HAVE_ARPA_INET_H
 
+/* Define to 1 if you have the <arpa/nameser_compat.h> header file. */
+#undef HAVE_ARPA_NAMESER_COMPAT_H
+
 /* define if bool is a built-in type */
 #undef HAVE_BOOL
 
@@ -23,6 +26,9 @@
 
 /* Define to 1 if you have the <CoreServices/CoreServices.h> header file. */
 #undef HAVE_CORESERVICES_CORESERVICES_H
+
+/* Define to 1 if you have cpuid.h */
+#undef HAVE_CPUID_H
 
 /* Define to 1 if you have the <ctype.h> header file. */
 #undef HAVE_CTYPE_H
@@ -264,12 +270,13 @@
 /* Define to 1 if the system has the type `_Bool'. */
 #undef HAVE__BOOL
 
+/* Define to 1 if you have to use const char* with iconv, to 0 if you must use
+   char*. */
+#undef ICONV_USES_CONST_POINTER
+
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
    */
 #undef LT_OBJDIR
-
-/* Define to 1 if your C compiler doesn't accept -c and -o together. */
-#undef NO_MINUS_C_MINUS_O
 
 /* Name of package */
 #undef PACKAGE
@@ -286,6 +293,9 @@
 /* Define to the one symbol short name of this package. */
 #undef PACKAGE_TARNAME
 
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
@@ -293,22 +303,22 @@
    your system. */
 #undef PTHREAD_CREATE_JOINABLE
 
-/* The size of a `int', as computed by sizeof. */
+/* The size of `int', as computed by sizeof. */
 #undef SIZEOF_INT
 
-/* The size of a `long', as computed by sizeof. */
+/* The size of `long', as computed by sizeof. */
 #undef SIZEOF_LONG
 
-/* The size of a `long long', as computed by sizeof. */
+/* The size of `long long', as computed by sizeof. */
 #undef SIZEOF_LONG_LONG
 
-/* The size of a `short', as computed by sizeof. */
+/* The size of `short', as computed by sizeof. */
 #undef SIZEOF_SHORT
 
-/* The size of a `wchar_t', as computed by sizeof. */
+/* The size of `wchar_t', as computed by sizeof. */
 #undef SIZEOF_WCHAR_T
 
-/* The size of a `__int64', as computed by sizeof. */
+/* The size of `__int64', as computed by sizeof. */
 #undef SIZEOF___INT64
 
 /* Define to 1 if you have the ANSI C header files. */
@@ -326,8 +336,25 @@
 /* Define if namespaces is supported by the compiler */
 #undef XERCES_HAS_CPP_NAMESPACE
 
+/* Define to have SSE2 instruction support detected at runtime using __cpuid
+   */
+#undef XERCES_HAVE_CPUID_INTRINSIC
+
+/* Define to 1 if you have emmintrin.h */
+#undef XERCES_HAVE_EMMINTRIN_H
+
+/* Define to have SSE2 instruction support detected at runtime using
+   __get_cpuid */
+#undef XERCES_HAVE_GETCPUID
+
+/* Define to 1 if you have intrin.h */
+#undef XERCES_HAVE_INTRIN_H
+
 /* Define to 1 if we have inttypes.h */
 #undef XERCES_HAVE_INTTYPES_H
+
+/* Define to have SSE2 instruction used at runtime */
+#undef XERCES_HAVE_SSE2_INTRINSIC
 
 /* Define to 1 if we have sys/types.h */
 #undef XERCES_HAVE_SYS_TYPES_H
@@ -340,6 +367,10 @@
 
 /* Define if the isstream library can be included as <iostream> */
 #undef XERCES_NEW_IOSTREAMS
+
+/* Define to have XMemory.hpp avoid declaring a matching operator delete for
+   the placement operator new */
+#undef XERCES_NO_MATCHING_DELETE_OPERATOR
 
 /* Define if there is no native bool support in this environment */
 #undef XERCES_NO_NATIVE_BOOL
@@ -361,15 +392,6 @@
 
 /* An appropriate signed 64 bit integer type */
 #undef XERCES_S64BIT_INT
-
-/* Size of the int type as returned by sizeof */
-#undef XERCES_SIZEOF_INT
-
-/* Size of the presumably int64 type which on lesser platforms can be int32 */
-#undef XERCES_SIZEOF_INT64
-
-/* Size of the long type as returned by sizeof */
-#undef XERCES_SIZEOF_LONG
 
 /* Define as the appropriate size_t type */
 #undef XERCES_SIZE_T
@@ -452,10 +474,10 @@
 #undef inline
 #endif
 
-/* Define to `long' if <sys/types.h> does not define. */
+/* Define to `long int' if <sys/types.h> does not define. */
 #undef off_t
 
-/* Define to `unsigned' if <sys/types.h> does not define. */
+/* Define to `unsigned int' if <sys/types.h> does not define. */
 #undef size_t
 
 /* Define to empty if the keyword `volatile' does not work. Warning: valid

@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLElementDecl.hpp 676911 2008-07-15 13:27:32Z amassari $
+ * $Id: XMLElementDecl.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XMLELEMENTDECL_HPP)
@@ -313,7 +313,7 @@ class XMLPARSER_EXPORT XMLElementDecl : public XSerializable, public XMemory
     /** Get the memory manager
       *
       * This method returns the configurable memory manager used by the
-      * element declaration for dynamic allocation/deacllocation.
+      * element declaration for dynamic allocation/deallocation.
       *
       * @return the memory manager
       */
@@ -371,8 +371,8 @@ class XMLPARSER_EXPORT XMLElementDecl : public XSerializable, public XMemory
       * decl object. As the validator parses its DTD, Schema, etc... it will
       * encounter various references to an element declaration, which will
       * cause the element declaration to either be declared or to be faulted
-      * into the pool in preperation for some future declaration. As it does
-      * so,it will update this field to indicate the current satus of the
+      * into the pool in preparation for some future declaration. As it does
+      * so,it will update this field to indicate the current status of the
       * decl object.
       */
     void setCreateReason(const CreateReasons newReason);
@@ -398,7 +398,7 @@ class XMLPARSER_EXPORT XMLElementDecl : public XSerializable, public XMemory
     //  Miscellaneous methods
     // -----------------------------------------------------------------------
 
-    /** @name Miscellenous methods */
+    /** @name Miscellaneous methods */
     //@{
 
     //@}

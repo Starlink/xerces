@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: FieldValueMap.hpp 676911 2008-07-15 13:27:32Z amassari $
+ * $Id: FieldValueMap.hpp 708224 2008-10-27 16:02:26Z amassari $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_FIELDVALUEMAP_HPP)
@@ -73,6 +73,7 @@ public:
     // -----------------------------------------------------------------------
     XMLSize_t size() const;
     bool indexOf(const IC_Field* const key, XMLSize_t& location) const;
+    void clear();
 
 private:
     // -----------------------------------------------------------------------

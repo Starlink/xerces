@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ValidationContextImpl.hpp 577322 2007-09-19 14:58:04Z cargilld $
+ * $Id: ValidationContextImpl.hpp 729944 2008-12-29 17:03:32Z amassari $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_VALIDATION_CONTEXTIMPL_HPP)
@@ -26,6 +26,7 @@
 
 XERCES_CPP_NAMESPACE_BEGIN
 class ElemStack;
+class NamespaceScope;
 
 class XMLPARSER_EXPORT ValidationContextImpl : public ValidationContext
 {
@@ -93,6 +94,7 @@ public :
     virtual void setElemStack(ElemStack* elemStack);
     virtual const XMLCh* getURIForPrefix(XMLCh* prefix);
     virtual void setScanner(XMLScanner* scanner);   
+    virtual void setNamespaceScope(NamespaceScope* nsStack);
 
 
     //@}
@@ -126,16 +128,18 @@ private:
     //      will not be accurate unless the type of the most recently-validated
     //      element/attribute is in fact a union datatype.
     //  fElemStack
-    //      Need access to elemstack to look up URI's that are inscope.
+    //      Need access to elemstack to look up URI's that are inscope (while validating an XML).
+    //  fNamespaceScope
+    //      Need access to namespace scope to look up URI's that are inscope (while loading a schema).
     // -----------------------------------------------------------------------
 
     RefHashTableOf<XMLRefInfo>*         fIdRefList;
     const NameIdPool<DTDEntityDecl>*    fEntityDeclPool;
     bool                                fToCheckIdRefList;
     DatatypeValidator *                 fValidatingMemberType;    
-    ElemStack*      fElemStack;
-    XMLScanner*     fScanner;
-
+    ElemStack*                          fElemStack;
+    XMLScanner*                         fScanner;
+    NamespaceScope*                     fNamespaceScope;
 
 };
 
@@ -157,6 +161,10 @@ inline void ValidationContextImpl::setElemStack(ElemStack* elemStack) {
 
 inline void ValidationContextImpl::setScanner(XMLScanner* scanner) {
     fScanner = scanner;
+}
+
+inline void ValidationContextImpl::setNamespaceScope(NamespaceScope* nsStack) {
+    fNamespaceScope = nsStack;
 }
 
 XERCES_CPP_NAMESPACE_END

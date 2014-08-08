@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: RegxParser.hpp 678879 2008-07-22 20:05:05Z amassari $
+ * $Id: RegxParser.hpp 711369 2008-11-04 20:03:14Z amassari $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_REGXPARSER_HPP)
@@ -122,7 +122,7 @@ protected:
     virtual Token*      processQuestion(Token* const tok);
     virtual Token*      processParen();
 
-    RangeToken*         parseCharacterClass();
+    RangeToken*         parseCharacterClass(const bool useNRange);
     RangeToken*         processBacksolidus_pP(const XMLInt32 ch);
 
     // -----------------------------------------------------------------------

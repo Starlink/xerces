@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XPathMatcher.hpp 679382 2008-07-24 12:09:39Z amassari $
+ * $Id: XPathMatcher.hpp 803869 2009-08-13 12:56:21Z amassari $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XPATHMATCHER_HPP)
@@ -44,6 +44,7 @@ class XercesLocationPath;
 class XMLAttr;
 class XercesNodeTest;
 class QName;
+class ValidationContext;
 
 class VALIDATORS_EXPORT XPathMatcher : public XMemory
 {
@@ -81,9 +82,12 @@ public:
                               const unsigned int urlId,
                               const XMLCh* const elemPrefix,
                               const RefVectorOf<XMLAttr>& attrList,
-                              const XMLSize_t attrCount);
+                              const XMLSize_t attrCount,
+                              ValidationContext* validationContext = 0);
     virtual void endElement(const XMLElementDecl& elemDecl,
-                            const XMLCh* const elemContent);
+                            const XMLCh* const elemContent,
+                            ValidationContext* validationContext = 0,
+                            DatatypeValidator* actualValidator = 0);
 
     enum
     {

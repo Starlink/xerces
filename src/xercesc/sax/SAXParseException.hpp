@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: SAXParseException.hpp 672273 2008-06-27 13:57:00Z borisk $
+ * $Id: SAXParseException.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_SAXPARSEEXCEPTION_HPP)
@@ -77,9 +77,9 @@ public:
     * fully before creating the exception.</p>
     *
     * @param message The error or warning message.
-    * @param publicId The public identifer of the entity that generated
+    * @param publicId The public identifier of the entity that generated
     *                 the error or warning.
-    * @param systemId The system identifer of the entity that generated
+    * @param systemId The system identifier of the entity that generated
     *                 the error or warning.
     * @param lineNumber The line number of the end of the text that
     *                   caused the error or warning.

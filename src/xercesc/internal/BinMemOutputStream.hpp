@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: BinMemOutputStream.hpp 553915 2007-07-06 14:57:08Z amassari $
+ * $Id: BinMemOutputStream.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_BINMEMOUTPUTSTREAM_HPP)
@@ -71,7 +71,7 @@ private :
     // -----------------------------------------------------------------------
     //  Private helpers
     // -----------------------------------------------------------------------
-    void insureCapacity(const XMLSize_t extraNeeded);
+    void ensureCapacity(const XMLSize_t extraNeeded);
 
     // -----------------------------------------------------------------------
     //  Private data members

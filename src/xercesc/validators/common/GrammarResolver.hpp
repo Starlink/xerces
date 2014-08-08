@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: GrammarResolver.hpp 527149 2007-04-10 14:56:39Z amassari $
+ * $Id: GrammarResolver.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_GRAMMARRESOLVER_HPP)
@@ -216,7 +216,7 @@ private:
     //
     //  fGrammarPool           The Grammar Set either plugged or created. 
     //
-    //  fDataTypeReg           DatatypeValidatorFactory registery
+    //  fDataTypeReg           DatatypeValidatorFactory registry
     //
     //  fMemoryManager         Pluggable memory manager for dynamic memory
     //                         allocation/deallocation

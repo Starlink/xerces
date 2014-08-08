@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMLSParser.hpp 671894 2008-06-26 13:29:21Z borisk $
+ * $Id: DOMLSParser.hpp 832686 2009-11-04 08:55:59Z borisk $
  *
  */
 
@@ -24,6 +24,7 @@
 #define XERCESC_INCLUDE_GUARD_DOMLSPARSER_HPP
 
 #include <xercesc/dom/DOMConfiguration.hpp>
+#include <xercesc/dom/DOMLSParserFilter.hpp>
 #include <xercesc/util/XercesDefs.hpp>
 #include <xercesc/validators/common/Grammar.hpp>
 
@@ -32,7 +33,6 @@ XERCES_CPP_NAMESPACE_BEGIN
 
 class DOMErrorHandler;
 class DOMLSInput;
-class DOMLSParserFilter;
 class DOMNode;
 class DOMDocument;
 
@@ -448,7 +448,8 @@ public:
       *         this method returns.
       * @exception DOMException INVALID_STATE_ERR: Raised if the <code>DOMLSParser::busy</code>
       *                                            attribute is true.
-      * @exception DOMLSException PARSE_ERR: Raised if the <code>DOMLSParser</code> was unable
+      * @exception DOMLSException PARSE_ERR: Starting from Xerces-C++ 4.0.0 this exception is
+      *                                      raised if the <code>DOMLSParser</code> was unable
       *                                      to load the XML document. DOM applications should
       *                                      attach a <code>DOMErrorHandler</code> using the
       *                                      parameter "error-handler" if they wish to get details
@@ -477,7 +478,8 @@ public:
       *         is returned since the document object is not yet parsed when this method returns.
       * @exception DOMException INVALID_STATE_ERR: Raised if the <code>DOMLSParser::busy</code>
       *                                            attribute is true.
-      * @exception DOMLSException PARSE_ERR: Raised if the <code>DOMLSParser</code> was unable
+      * @exception DOMLSException PARSE_ERR: Starting from Xerces-C++ 4.0.0 this exception is
+      *                                      raised if the <code>DOMLSParser</code> was unable
       *                                      to load the XML document. DOM applications should
       *                                      attach a <code>DOMErrorHandler</code> using the
       *                                      parameter "error-handler" if they wish to get details
@@ -505,7 +507,8 @@ public:
       *         is returned since the document object is not yet parsed when this method returns.
       * @exception DOMException INVALID_STATE_ERR: Raised if the <code>DOMLSParser::busy</code>
       *                                            attribute is true.
-      * @exception DOMLSException PARSE_ERR: Raised if the <code>DOMLSParser</code> was unable
+      * @exception DOMLSException PARSE_ERR: Starting from Xerces-C++ 4.0.0 this exception is
+      *                                      raised if the <code>DOMLSParser</code> was unable
       *                                      to load the XML document. DOM applications should
       *                                      attach a <code>DOMErrorHandler</code> using the
       *                                      parameter "error-handler" if they wish to get details
@@ -584,12 +587,7 @@ public:
       *                                      if they wish to get details on the error.
       * @since DOM Level 3
       */
-    virtual void parseWithContext
-    (
-        const   DOMLSInput*     source
-        ,       DOMNode*        contextNode
-        , const ActionType      action
-    ) = 0;
+    virtual DOMNode* parseWithContext(const DOMLSInput* source, DOMNode* contextNode, const ActionType action) = 0;
 
     /**
       * Abort the loading of the document that is currently being loaded by the <code>DOMLSParser</code>.

@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ErrorHandler.hpp 527149 2007-04-10 14:56:39Z amassari $
+ * $Id: ErrorHandler.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_ERRORHANDLER_HPP)
@@ -67,7 +67,7 @@ public:
     {
     }
 
-    /** Desctructor */
+    /** Destructor */
     virtual ~ErrorHandler()
     {
     }
@@ -144,7 +144,7 @@ public:
     * Reset the Error handler object on its reuse
     *
     * <p>This method helps in reseting the Error handler object
-    * implementational defaults each time the Error handler is begun.</p>
+    * implementation defaults each time the Error handler is begun.</p>
     *
     */
     virtual void resetErrors() = 0;

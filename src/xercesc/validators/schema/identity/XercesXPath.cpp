@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XercesXPath.cpp 676911 2008-07-15 13:27:32Z amassari $
+ * $Id: XercesXPath.cpp 903997 2010-01-28 08:28:06Z borisk $
  */
 
 // ---------------------------------------------------------------------------
@@ -420,8 +420,26 @@ void XercesXPath::parseExpression(XMLStringPool* const stringPool,
                     ThrowXMLwithMemMgr(XPathException, XMLExcepts::XPath_NoMultipleUnion, fMemoryManager);
                 }
 
-                fLocationPaths->addElement(new (fMemoryManager) XercesLocationPath(stepsVector));
+                if(stepsVector->elementAt(0)->getAxisType()!=XercesStep::AxisType_SELF)
+                {
+                    // prepend ./
+                    XercesNodeTest* nodeTest = new (fMemoryManager) XercesNodeTest(XercesNodeTest::NodeType_NODE, fMemoryManager);
+                    XercesStep* step = new (fMemoryManager) XercesStep(XercesStep::AxisType_SELF, nodeTest);
+                    stepsVector->insertElementAt(step, 0);
+                }
+                XercesLocationPath* newPath = new (fMemoryManager) XercesLocationPath(stepsVector);
                 janSteps.orphan();
+                bool bFound=false;
+                for(XMLSize_t i=0;i<fLocationPaths->size();i++)
+                    if((*(fLocationPaths->elementAt(i)))==(*newPath))
+                    {
+                        bFound=true;
+                        break;
+                    }
+                if(bFound)
+                    delete newPath;
+                else
+                    fLocationPaths->addElement(newPath);
                 stepsVector = new (fMemoryManager) RefVectorOf<XercesStep>(16, true, fMemoryManager);
                 janSteps.reset(stepsVector);
                 firstTokenOfLocationPath = true;
@@ -624,6 +642,10 @@ void XercesXPath::parseExpression(XMLStringPool* const stringPool,
                     ThrowXMLwithMemMgr(XPathException, XMLExcepts::XPath_ExpectedStep3, fMemoryManager);
                 }
 
+                aToken = tokens.elementAt(i+1);
+                if(aToken == XercesXPath::EXPRTOKEN_OPERATOR_SLASH || aToken == XercesXPath::EXPRTOKEN_OPERATOR_DOUBLE_SLASH || aToken == XercesXPath::EXPRTOKEN_OPERATOR_UNION)
+                    ThrowXMLwithMemMgr(XPathException, XMLExcepts::XPath_ExpectedStep3, fMemoryManager);
+
                 firstTokenOfLocationPath=false;
                 break;
             }
@@ -643,8 +665,26 @@ void XercesXPath::parseExpression(XMLStringPool* const stringPool,
         }
     }
 
-    fLocationPaths->addElement(new (fMemoryManager) XercesLocationPath(stepsVector));
+    if(stepsVector->elementAt(0)->getAxisType()!=XercesStep::AxisType_SELF)
+    {
+        // prepend ./
+        XercesNodeTest* nodeTest = new (fMemoryManager) XercesNodeTest(XercesNodeTest::NodeType_NODE, fMemoryManager);
+        XercesStep* step = new (fMemoryManager) XercesStep(XercesStep::AxisType_SELF, nodeTest);
+        stepsVector->insertElementAt(step, 0);
+    }
+    XercesLocationPath* newPath = new (fMemoryManager) XercesLocationPath(stepsVector);
     janSteps.orphan();
+    bool bFound=false;
+    for(XMLSize_t j=0;j<fLocationPaths->size();j++)
+        if((*(fLocationPaths->elementAt(j)))==(*newPath))
+        {
+            bFound=true;
+            break;
+        }
+    if(bFound)
+        delete newPath;
+    else
+        fLocationPaths->addElement(newPath);
 }
 
 /***
@@ -842,7 +882,7 @@ bool XPathScanner::scanExpression(const XMLCh* const data,
                     ch = data[currentOffset];
                 } while (XMLChar1_0::isWhitespace(ch));
 
-                if (currentOffset == endOffset || ch == chPipe) {
+                if (currentOffset == endOffset || ch == chPipe || ch == chForwardSlash) {
 				    addToken(tokens, XercesXPath::EXPRTOKEN_PERIOD);
                     starIsMultiplyOperator = true;
                     break;
@@ -1418,4 +1458,3 @@ XERCES_CPP_NAMESPACE_END
 /**
   * End of file XercesPath.cpp
   */
-

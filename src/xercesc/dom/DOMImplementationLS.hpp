@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMImplementationLS.hpp 671894 2008-06-26 13:29:21Z borisk $
+ * $Id: DOMImplementationLS.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_DOMIMPLEMENTATIONLS_HPP)
@@ -128,7 +128,7 @@ public:
      * Other Schema languages are outside the scope of the W3C and therefore should
      * recommend an absolute URI in order to use this method.
      * @param manager    Pointer to the memory manager to be used to allocate objects.
-     * @param gramPool   The collection of cached grammers.
+     * @param gramPool   The collection of cached grammars.
      * @return The newly created <code>DOMLSParser</code> object. This
      * <code>DOMLSParser</code> is either synchronous or asynchronous depending
      * on the value of the <code>mode</code> argument.

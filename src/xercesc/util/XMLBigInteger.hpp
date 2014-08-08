@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLBigInteger.hpp 557254 2007-07-18 13:28:54Z amassari $
+ * $Id: XMLBigInteger.hpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XML_BIGINTEGER_HPP)
@@ -83,9 +83,9 @@ public:
     unsigned int       getTotalDigit() const;
    
     /**
-     *  Return a copy of the fMagnitue.
+     *  Return a copy of the fMagnitude.
      *  This is similar to toString, except the internal buffer is returned directly
-     *  Caller is not required to delet the returned memory.
+     *  Caller is not required to delete the returned memory.
      */
     inline XMLCh*      getRawData() const;
 

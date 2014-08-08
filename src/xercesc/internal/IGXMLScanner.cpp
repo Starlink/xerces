@@ -16,9 +16,8 @@
  */
 
 /*
- * $Id: IGXMLScanner.cpp 696218 2008-09-17 09:31:41Z borisk $
+ * $Id: IGXMLScanner.cpp 882548 2009-11-20 13:44:14Z borisk $
  */
-
 
 // ---------------------------------------------------------------------------
 //  Includes
@@ -80,11 +79,12 @@ IGXMLScanner::IGXMLScanner( XMLValidator* const  valToAdopt
     , fElemCount(0)
     , fAttDefRegistry(0)
     , fUndeclaredAttrRegistry(0)
-    , fUndeclaredAttrRegistryNS(0)
     , fPSVIAttrList(0)
     , fModel(0)
     , fPSVIElement(0)
     , fErrorStack(0)
+    , fSchemaInfoList(0)
+    , fCachedSchemaInfoList (0)
 {
     CleanupType cleanup(this, &IGXMLScanner::cleanUp);
 
@@ -132,11 +132,12 @@ IGXMLScanner::IGXMLScanner( XMLDocumentHandler* const docHandler
     , fElemCount(0)
     , fAttDefRegistry(0)
     , fUndeclaredAttrRegistry(0)
-    , fUndeclaredAttrRegistryNS(0)
     , fPSVIAttrList(0)
     , fModel(0)
     , fPSVIElement(0)
     , fErrorStack(0)
+    , fSchemaInfoList(0)
+    , fCachedSchemaInfoList (0)
 {
     CleanupType cleanup(this, &IGXMLScanner::cleanUp);
 
@@ -542,15 +543,11 @@ void IGXMLScanner::commonInit()
     (
         131, false, fMemoryManager
     );
-    fUndeclaredAttrRegistry = new (fMemoryManager) RefHashTableOf<unsigned int>
-    (
-        7, false, fMemoryManager
-    );
-    fUndeclaredAttrRegistryNS = new (fMemoryManager) RefHash2KeysTableOf<unsigned int>
-    (
-        7, false, fMemoryManager
-    );
+    fUndeclaredAttrRegistry = new (fMemoryManager) Hash2KeysSetOf<StringHasher>(7, fMemoryManager);
     fPSVIAttrList = new (fMemoryManager) PSVIAttributeList(fMemoryManager);
+
+    fSchemaInfoList = new (fMemoryManager) RefHash2KeysTableOf<SchemaInfo>(29, fMemoryManager);
+    fCachedSchemaInfoList = new (fMemoryManager) RefHash2KeysTableOf<SchemaInfo>(29, fMemoryManager);
 
     // use fDTDValidator as the default validator
     if (!fValidator)
@@ -571,10 +568,11 @@ void IGXMLScanner::cleanUp()
     delete fSchemaElemNonDeclPool;
     delete fAttDefRegistry;
     delete fUndeclaredAttrRegistry;
-    delete fUndeclaredAttrRegistryNS;
     delete fPSVIAttrList;
     delete fPSVIElement;
     delete fErrorStack;
+    delete fSchemaInfoList;
+    delete fCachedSchemaInfoList;
 }
 
 // ---------------------------------------------------------------------------
@@ -615,18 +613,15 @@ IGXMLScanner::rawAttrScan(const   XMLCh* const                elemName
         {
             if ((nextCh != chForwardSlash) && (nextCh != chCloseAngle))
             {
-                if (fReaderMgr.getCurrentReader()->isWhitespace(nextCh))
-                {
-                    // Ok, skip by them and get another char
-                    fReaderMgr.getNextChar();
-                    fReaderMgr.skipPastSpaces();
-                    nextCh = fReaderMgr.peekNextChar();
-                }
-                 else
+                bool bFoundSpace;
+                fReaderMgr.skipPastSpaces(bFoundSpace);
+                if (!bFoundSpace)
                 {
                     // Emit the error but keep on going
                     emitError(XMLErrs::ExpectedWhitespace);
                 }
+                // Ok, peek another char
+                nextCh = fReaderMgr.peekNextChar();
             }
         }
 
@@ -636,7 +631,7 @@ IGXMLScanner::rawAttrScan(const   XMLCh* const                elemName
         //  the special case checks.
         if (!fReaderMgr.getCurrentReader()->isSpecialStartTagChar(nextCh))
         {
-            //  Assume its going to be an attribute, so get a name from
+            //  Assume it's going to be an attribute, so get a name from
             //  the input.
             int colonPosition;
             if (!fReaderMgr.getQName(fAttNameBuf, &colonPosition))
@@ -758,10 +753,8 @@ IGXMLScanner::rawAttrScan(const   XMLCh* const                elemName
             if (attCount >= fRawAttrColonListSize) {
                 resizeRawAttrColonList();
             }
-            fRawAttrColonList[attCount] = colonPosition;
-
-            // And bump the count of attributes we've gotten
-            attCount++;
+            // Set the position of the colon and bump the count of attributes we've gotten
+            fRawAttrColonList[attCount++] = colonPosition;
 
             // And go to the top again for another attribute
             continue;
@@ -1143,6 +1136,8 @@ void IGXMLScanner::scanEndTag(bool& gotData)
                              (
                               (SchemaElementDecl *) topElem->fThisElement
                             , fContent.getRawBuffer()
+                            , fValidationContext
+                            , fPSVIElemContext.fCurrentDV
                              );
             }
 
@@ -1245,7 +1240,9 @@ void IGXMLScanner::scanDocTypeDecl()
         fDocTypeHandler->resetDocType();
 
     // There must be some space after DOCTYPE
-    if (!fReaderMgr.skipPastSpaces())
+    bool skippedSomething;
+    fReaderMgr.skipPastSpaces(skippedSomething);
+    if (!skippedSomething)
     {
         emitError(XMLErrs::ExpectedWhitespace);
 
@@ -1493,6 +1490,7 @@ void IGXMLScanner::scanDocTypeDecl()
                             , XMLReader::Type_General
                             , XMLReader::Source_External
                             , fCalculateSrcOfs
+                            , fLowWaterMark
                         );
             }
             else {
@@ -1506,6 +1504,7 @@ void IGXMLScanner::scanDocTypeDecl()
                             , XMLReader::Source_External
                             , srcUsed
                             , fCalculateSrcOfs
+                            , fLowWaterMark
                             , fDisableDefaultEntityResolution
                         );
                 janSrc.reset(srcUsed);
@@ -1689,17 +1688,15 @@ bool IGXMLScanner::scanStartTag(bool& gotData)
         {
             if ((nextCh != chForwardSlash) && (nextCh != chCloseAngle))
             {
-                if (fReaderMgr.getCurrentReader()->isWhitespace(nextCh))
-                {
-                    // Ok, skip by them and peek another char
-                    fReaderMgr.skipPastSpaces();
-                    nextCh = fReaderMgr.peekNextChar();
-                }
-                 else
+                bool bFoundSpace;
+                fReaderMgr.skipPastSpaces(bFoundSpace);
+                if (!bFoundSpace)
                 {
                     // Emit the error but keep on going
                     emitError(XMLErrs::ExpectedWhitespace);
                 }
+                // Ok, peek another char
+                nextCh = fReaderMgr.peekNextChar();
             }
         }
 
@@ -1814,9 +1811,7 @@ bool IGXMLScanner::scanStartTag(bool& gotData)
                         , elemDecl->getFullName()
                     );
                 }
-                if(!fUndeclaredAttrRegistry->containsKey(namePtr))
-                    fUndeclaredAttrRegistry->put((void *)namePtr, 0);
-                else
+                if(!fUndeclaredAttrRegistry->putIfNotPresent(namePtr, 0))
                 {
                     emitError
                     (
@@ -1969,7 +1964,7 @@ bool IGXMLScanner::scanStartTag(bool& gotData)
     {
         // N.B.:  this assumes DTD validation.
         XMLAttDefList& attDefList = elemDecl->getAttDefList();
-        for(unsigned int i=0; i<attDefList.getAttDefCount(); i++)
+        for(XMLSize_t i=0; i<attDefList.getAttDefCount(); i++)
         {
             // Get the current att def, for convenience and its def type
             const XMLAttDef& curDef = attDefList.getAttDef(i);
@@ -2197,7 +2192,7 @@ bool IGXMLScanner::scanStartTagNS(bool& gotData)
     //  Now, since we might have to update the namespace map for this element,
     //  but we don't have the element decl yet, we just tell the element stack
     //  to expand up to get ready.
-    unsigned int elemDepth = fElemStack.addLevel();
+    XMLSize_t elemDepth = fElemStack.addLevel();
     fElemStack.setValidationFlag(fValidate);
     fElemStack.setPrefixColonPos(prefixColonPos);
 
@@ -2207,9 +2202,9 @@ bool IGXMLScanner::scanStartTagNS(bool& gotData)
         && (fExternalSchemaLocation || fExternalNoNamespaceSchemaLocation)) {
 
         if (fExternalSchemaLocation)
-            parseSchemaLocation(fExternalSchemaLocation);
+            parseSchemaLocation(fExternalSchemaLocation, true);
         if (fExternalNoNamespaceSchemaLocation)
-            resolveSchemaGrammar(fExternalNoNamespaceSchemaLocation, XMLUni::fgZeroLenString);
+            resolveSchemaGrammar(fExternalNoNamespaceSchemaLocation, XMLUni::fgZeroLenString, true);
     }
 
     //  Make an initial pass through the list and find any xmlns attributes or
@@ -2233,7 +2228,7 @@ bool IGXMLScanner::scanStartTagNS(bool& gotData)
             if (elemDecl) {
                 if (elemDecl->hasAttDefs()) {
                     XMLAttDefList& attDefList = elemDecl->getAttDefList();
-                    for(unsigned int i=0; i<attDefList.getAttDefCount(); i++)
+                    for(XMLSize_t i=0; i<attDefList.getAttDefCount(); i++)
                     {
                         // Get the current att def, for convenience and its def type
                         const XMLAttDef& curDef = attDefList.getAttDef(i);
@@ -2291,7 +2286,6 @@ bool IGXMLScanner::scanStartTagNS(bool& gotData)
         }
 
         if (fGrammarType == Grammar::SchemaGrammarType) {
-
             elemDecl = fGrammar->getElemDecl(
                 uriId, nameRawBuf, qnameRawBuf, currentScope
             );
@@ -2413,9 +2407,10 @@ bool IGXMLScanner::scanStartTagNS(bool& gotData)
 
     //  We do something different here according to whether we found the
     //  element or not.
+    bool bXsiTypeSet= (fValidator && fGrammarType == Grammar::SchemaGrammarType)?((SchemaValidator*)fValidator)->getIsXsiTypeSet():false;
     if (wasAdded)
     {
-        if (laxThisOne) {
+        if (laxThisOne && !bXsiTypeSet) {
             fValidate = false;
             fElemStack.setValidationFlag(fValidate);
         }
@@ -2427,15 +2422,19 @@ bool IGXMLScanner::scanStartTagNS(bool& gotData)
             // faulted-in, was not an element in the grammar pool originally
             elemDecl->setCreateReason(XMLElementDecl::JustFaultIn);
 
-            fValidator->emitError
-            (
-                XMLValid::ElementNotDefined
-                , elemDecl->getFullName()
-            );
-
-            if(fGrammarType == Grammar::SchemaGrammarType)
+            // xsi:type was specified, don't complain about missing definition
+            if(!bXsiTypeSet)
             {
-                fPSVIElemContext.fErrorOccurred = true;
+                fValidator->emitError
+                (
+                    XMLValid::ElementNotDefined
+                    , elemDecl->getFullName()
+                );
+
+                if(fGrammarType == Grammar::SchemaGrammarType)
+                {
+                    fPSVIElemContext.fErrorOccurred = true;
+                }
             }
         }
     }
@@ -2444,7 +2443,7 @@ bool IGXMLScanner::scanStartTagNS(bool& gotData)
         // If its not marked declared and validating, then emit an error
         if (!elemDecl->isDeclared()) {
             if(elemDecl->getCreateReason() == XMLElementDecl::NoReason) {
-                if(fGrammarType == Grammar::SchemaGrammarType) {
+                if(!bXsiTypeSet && fGrammarType == Grammar::SchemaGrammarType) {
                     fPSVIElemContext.fErrorOccurred = true;
                 }
             }
@@ -2453,7 +2452,7 @@ bool IGXMLScanner::scanStartTagNS(bool& gotData)
                 fValidate = false;
                 fElemStack.setValidationFlag(fValidate);
             }
-            else if (fValidate)
+            else if (fValidate && !bXsiTypeSet)
             {
                 fValidator->emitError
                 (
@@ -2602,7 +2601,6 @@ bool IGXMLScanner::scanStartTagNS(bool& gotData)
         // clean up after ourselves:
         // clear the map used to detect duplicate attributes
         fUndeclaredAttrRegistry->removeAll();
-        fUndeclaredAttrRegistryNS->removeAll();
     }
 
     // activate identity constraints
@@ -2618,6 +2616,7 @@ bool IGXMLScanner::scanStartTagNS(bool& gotData)
                         , fPrefixBuf.getRawBuffer()
                         , *fAttrList
                         , attCount
+                        , fValidationContext
                         );
     }
 
@@ -2726,13 +2725,15 @@ bool IGXMLScanner::scanStartTagNS(bool& gotData)
                                    (
                                     (SchemaElementDecl *) elemDecl
                                   , fContent.getRawBuffer()
+                                  , fValidationContext
+                                  , fPSVIElemContext.fCurrentDV
                                    );
                 }
 
             }
         }
         else if (fGrammarType == Grammar::SchemaGrammarType) {
-            ((SchemaValidator*)fValidator)->setNillable(false);
+            ((SchemaValidator*)fValidator)->resetNillable();
         }
 
         if (fGrammarType == Grammar::SchemaGrammarType)
@@ -2846,76 +2847,6 @@ bool IGXMLScanner::scanStartTagNS(bool& gotData)
     return true;
 }
 
-
-unsigned int
-IGXMLScanner::resolveQName(const   XMLCh* const qName
-                           ,       XMLBuffer&   prefixBuf
-                           , const short        mode
-                           ,       int&         prefixColonPos)
-{
-    prefixColonPos = XMLString::indexOf(qName, chColon);
-    return resolveQNameWithColon(qName, prefixBuf, mode, prefixColonPos);
-}
-
-unsigned int
-IGXMLScanner::resolveQNameWithColon(const   XMLCh* const qName
-                                    ,       XMLBuffer&   prefixBuf
-                                    , const short        mode
-                                    , const int          prefixColonPos)
-{
-    //  Lets split out the qName into a URI and name buffer first. The URI
-    //  can be empty.
-    if (prefixColonPos == -1)
-    {
-        //  Its all name with no prefix, so put the whole thing into the name
-        //  buffer. Then map the empty string to a URI, since the empty string
-        //  represents the default namespace. This will either return some
-        //  explicit URI which the default namespace is mapped to, or the
-        //  the default global namespace.
-        bool unknown = false;
-
-        prefixBuf.reset();
-        return fElemStack.mapPrefixToURI(XMLUni::fgZeroLenString, (ElemStack::MapModes) mode, unknown);
-    }
-    else
-    {
-        //  Copy the chars up to but not including the colon into the prefix
-        //  buffer.
-        prefixBuf.set(qName, prefixColonPos);
-
-        //  Watch for the special namespace prefixes. We always map these to
-        //  special URIs. 'xml' gets mapped to the official URI that its defined
-        //  to map to by the NS spec. xmlns gets mapped to a special place holder
-        //  URI that we define (so that it maps to something checkable.)
-        const XMLCh* prefixRawBuf = prefixBuf.getRawBuffer();
-        if (XMLString::equals(prefixRawBuf, XMLUni::fgXMLNSString)) {
-
-            // if this is an element, it is an error to have xmlns as prefix
-            if (mode == ElemStack::Mode_Element)
-                emitError(XMLErrs::NoXMLNSAsElementPrefix, qName);
-
-            return fXMLNSNamespaceId;
-        }
-        else if (XMLString::equals(prefixRawBuf, XMLUni::fgXMLString)) {
-            return  fXMLNamespaceId;
-        }
-        else
-        {
-            bool unknown = false;
-            unsigned int uriId = fElemStack.mapPrefixToURI(prefixRawBuf, (ElemStack::MapModes) mode, unknown);
-
-            if (unknown)
-                emitError(XMLErrs::UnknownPrefix, prefixRawBuf);
-
-            // check to see if uriId is empty
-            if (fXMLVersion != XMLReader::XMLV1_0 &&
-                uriId == fElemStack.getEmptyNamespaceId())
-                emitError(XMLErrs::UnknownPrefix, prefixRawBuf);
-
-            return uriId;
-        }
-    }
-}
 
 // ---------------------------------------------------------------------------
 //  IGXMLScanner: Helper methos
@@ -3073,6 +3004,11 @@ Grammar* IGXMLScanner::loadGrammar(const   InputSource& src
     return loadedGrammar;
 }
 
+void IGXMLScanner::resetCachedGrammar ()
+{
+  fCachedSchemaInfoList->removeAll ();
+}
+
 Grammar* IGXMLScanner::loadDTDGrammar(const InputSource& src,
                                       const bool toCache)
 {
@@ -3137,6 +3073,7 @@ Grammar* IGXMLScanner::loadDTDGrammar(const InputSource& src,
         , XMLReader::Type_General
         , XMLReader::Source_External
         , fCalculateSrcOfs
+        , fLowWaterMark
     );
     if (!newReader) {
         if (src.getIssueFatalErrorIfNotFound())

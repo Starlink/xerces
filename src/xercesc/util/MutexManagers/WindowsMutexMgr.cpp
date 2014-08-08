@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,24 +16,15 @@
  */
 
 /*
- * $Id: WindowsMutexMgr.cpp 745390 2009-02-18 05:51:29Z borisk $
+ * $Id: WindowsMutexMgr.cpp 471747 2006-11-06 14:31:56Z amassari $
  */
 
 #include <windows.h>
 
-#include <xercesc/util/XMemory.hpp>
 #include <xercesc/util/MutexManagers/WindowsMutexMgr.hpp>
 #include <xercesc/framework/MemoryManager.hpp>
 
 XERCES_CPP_NAMESPACE_BEGIN
-
-// Wrap up the critical section with XMemory
-//
-class CSWrap: public XMemory
-{
-public:
-  CRITICAL_SECTION cs;
-};
 
 WindowsMutexMgr::WindowsMutexMgr()
 {
@@ -48,38 +39,33 @@ WindowsMutexMgr::~WindowsMutexMgr()
 XMLMutexHandle
 WindowsMutexMgr::create(MemoryManager* const manager)
 {
-    CSWrap* mutex = new (manager) CSWrap;
-    InitializeCriticalSection(&mutex->cs);
-    return mutex;
+    CRITICAL_SECTION* newCS=(CRITICAL_SECTION*)manager->allocate(sizeof(CRITICAL_SECTION));
+    InitializeCriticalSection(newCS);
+    return newCS;
 }
 
 
 void
-WindowsMutexMgr::destroy(XMLMutexHandle mtx, MemoryManager* const)
+WindowsMutexMgr::destroy(XMLMutexHandle mtx, MemoryManager* const manager)
 {
-    CSWrap* mutex = (CSWrap*)mtx;
-    if (mutex != 0)
-    {
-      ::DeleteCriticalSection(&mutex->cs);
-      delete mutex;
-    }
+    ::DeleteCriticalSection((LPCRITICAL_SECTION)mtx);
+    manager->deallocate(mtx);
 }
 
 
 void
 WindowsMutexMgr::lock(XMLMutexHandle mtx)
 {
-    CSWrap* mutex = (CSWrap*)mtx;
-    ::EnterCriticalSection(&mutex->cs);
+    ::EnterCriticalSection((LPCRITICAL_SECTION)mtx);
 }
 
 
 void
 WindowsMutexMgr::unlock(XMLMutexHandle mtx)
 {
-    CSWrap* mutex = (CSWrap*)mtx;
-    ::LeaveCriticalSection(&mutex->cs);
+    ::LeaveCriticalSection((LPCRITICAL_SECTION)mtx);
 }
 
 
 XERCES_CPP_NAMESPACE_END
+

@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMElementImpl.hpp 641193 2008-03-26 08:06:57Z borisk $
+ * $Id: DOMElementImpl.hpp 792236 2009-07-08 17:22:35Z amassari $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_DOMELEMENTIMPL_HPP)
@@ -114,9 +114,22 @@ public:
     // helper function for DOM Level 3 renameNode
     virtual DOMNode* rename(const XMLCh* namespaceURI, const XMLCh* name);
 
+    // DOMElementTraversal
+    virtual DOMElement *         getFirstElementChild() const;
+    virtual DOMElement *         getLastElementChild() const;
+    virtual DOMElement *         getPreviousElementSibling() const;
+    virtual DOMElement *         getNextElementSibling() const;
+    virtual XMLSize_t            getChildElementCount() const;
+
 protected:
     // default attribute helper functions
     virtual void setupDefaultAttributes();
+
+    // helper function for DOMElementTraversal methods
+    DOMElement* getFirstElementChild(const DOMNode* n) const;
+    DOMElement* getLastElementChild(const DOMNode* n) const;
+    DOMNode* getNextLogicalSibling(const DOMNode* n) const;
+    DOMNode* getPreviousLogicalSibling(const DOMNode* n) const;
 
 private:
     // -----------------------------------------------------------------------

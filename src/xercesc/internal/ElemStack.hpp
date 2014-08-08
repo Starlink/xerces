@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ElemStack.hpp 676911 2008-07-15 13:27:32Z amassari $
+ * $Id: ElemStack.hpp 830538 2009-10-28 13:41:11Z amassari $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_ELEMSTACK_HPP)
@@ -138,8 +138,8 @@ public :
     // -----------------------------------------------------------------------
     //  Stack access
     // -----------------------------------------------------------------------
-    unsigned int addLevel();
-    unsigned int addLevel(XMLElementDecl* const toSet, const XMLSize_t readerNum);
+    XMLSize_t addLevel();
+    XMLSize_t addLevel(XMLElementDecl* const toSet, const XMLSize_t readerNum);
     const StackElem* popTop();
 
 
@@ -177,6 +177,11 @@ public :
     // -----------------------------------------------------------------------
     //  Prefix map methods
     // -----------------------------------------------------------------------
+    void addGlobalPrefix
+    (
+        const   XMLCh* const    prefixToAdd
+        , const unsigned int    uriId
+    );
     void addPrefix
     (
         const   XMLCh* const    prefixToAdd
@@ -185,7 +190,6 @@ public :
     unsigned int mapPrefixToURI
     (
         const   XMLCh* const    prefixToMap
-        , const MapModes        mode
         ,       bool&           unknown
     )   const;
     ValueVectorOf<PrefMapElem*>* getNamespaceMap() const;
@@ -239,6 +243,9 @@ private :
     //      This is the prefix pool where prefixes are hashed and given unique
     //      ids. These ids are used to track prefixes in the element stack.
     //
+    //  fGlobalNamespaces
+    //      This object contains the namespace bindings that are globally valid 
+    //
     //  fStack
     //  fStackCapacity
     //  fStackTop
@@ -263,9 +270,10 @@ private :
     unsigned int                 fEmptyNamespaceId;
     unsigned int                 fGlobalPoolId;
     XMLStringPool                fPrefixPool;
+    StackElem*                   fGlobalNamespaces;
     StackElem**                  fStack;
     XMLSize_t                    fStackCapacity;
-    unsigned int                 fStackTop;
+    XMLSize_t                    fStackTop;
     unsigned int                 fUnknownNamespaceId;
     unsigned int                 fXMLNamespaceId;
     unsigned int                 fXMLPoolId;
@@ -334,8 +342,8 @@ public :
     // -----------------------------------------------------------------------
     //  Stack access
     // -----------------------------------------------------------------------
-    unsigned int addLevel();
-    unsigned int addLevel(const XMLCh* const toSet, const unsigned int toSetLen,
+    XMLSize_t addLevel();
+    XMLSize_t addLevel(const XMLCh* const toSet, const unsigned int toSetLen,
                           const unsigned int readerNum);
     const StackElem* popTop();
 
@@ -361,7 +369,6 @@ public :
     unsigned int mapPrefixToURI
     (
         const   XMLCh* const    prefixToMap
-        , const MapModes        mode
         ,       bool&           unknown
     )   const;
 
@@ -435,14 +442,14 @@ private :
     // -----------------------------------------------------------------------
     unsigned int    fEmptyNamespaceId;
     unsigned int    fGlobalPoolId;
-    unsigned int    fStackCapacity;
-    unsigned int    fStackTop;
+    XMLSize_t       fStackCapacity;
+    XMLSize_t       fStackTop;
     unsigned int    fUnknownNamespaceId;
     unsigned int    fXMLNamespaceId;
     unsigned int    fXMLPoolId;
     unsigned int    fXMLNSNamespaceId;
     unsigned int    fXMLNSPoolId;
-    unsigned int    fMapCapacity;
+    XMLSize_t       fMapCapacity;
     PrefMapElem*    fMap;
     StackElem**     fStack;
     XMLStringPool   fPrefixPool;
@@ -466,7 +473,6 @@ inline bool ElemStack::getValidationFlag()
 inline void ElemStack::setValidationFlag(bool validationFlag)
 {
     fStack[fStackTop-1]->fValidationFlag = validationFlag;
-    return;
 }
 
 inline bool ElemStack::getCommentOrPISeen() const
@@ -477,7 +483,6 @@ inline bool ElemStack::getCommentOrPISeen() const
 inline void ElemStack::setCommentOrPISeen()
 {
     fStack[fStackTop-1]->fCommentOrPISeen = true;
-    return;
 }
 
 inline bool ElemStack::getReferenceEscaped() const
@@ -488,13 +493,12 @@ inline bool ElemStack::getReferenceEscaped() const
 inline void ElemStack::setReferenceEscaped()
 {
     fStack[fStackTop-1]->fReferenceEscaped = true;
-    return;
 }
 
 inline void ElemStack::setCurrentSchemaElemName(const XMLCh * const schemaElemName)
 {
     XMLSize_t schemaElemNameLen = XMLString::stringLen(schemaElemName);
-    unsigned int stackPos = fStackTop-1;
+    XMLSize_t stackPos = fStackTop-1;
     
     if(fStack[stackPos]->fSchemaElemNameMaxLen <= schemaElemNameLen)
     {
@@ -519,7 +523,6 @@ inline int ElemStack::getCurrentScope()
 inline void ElemStack::setCurrentScope(int currentScope)
 {
     fStack[fStackTop-1]->fCurrentScope = currentScope;
-    return;
 }
 
 inline Grammar* ElemStack::getCurrentGrammar()
@@ -530,7 +533,6 @@ inline Grammar* ElemStack::getCurrentGrammar()
 inline void ElemStack::setCurrentGrammar(Grammar* currentGrammar)
 {
     fStack[fStackTop-1]->fCurrentGrammar = currentGrammar;
-    return;
 }
 
 inline unsigned int ElemStack::getCurrentURI()
@@ -541,7 +543,6 @@ inline unsigned int ElemStack::getCurrentURI()
 inline void ElemStack::setCurrentURI(unsigned int uri)
 {
     fStack[fStackTop-1]->fCurrentURI = uri;
-    return;
 }
 
 inline unsigned int ElemStack::getPrefixId(const XMLCh* const prefix) const
@@ -583,7 +584,6 @@ inline unsigned int WFElemStack::getCurrentURI()
 inline void WFElemStack::setCurrentURI(unsigned int uri)
 {
     fStack[fStackTop-1]->fCurrentURI = uri;
-    return;
 }
 
 

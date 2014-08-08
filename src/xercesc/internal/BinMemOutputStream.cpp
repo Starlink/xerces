@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: BinMemOutputStream.cpp 553915 2007-07-06 14:57:08Z amassari $
+ * $Id: BinMemOutputStream.cpp 932887 2010-04-11 13:04:59Z borisk $
  */
 
 #include <xercesc/internal/BinMemOutputStream.hpp>
@@ -53,7 +53,7 @@ void BinMemOutputStream::writeBytes( const XMLByte*     const      toGo
 
     if (maxToWrite) 
     {
-        insureCapacity(maxToWrite);
+        ensureCapacity(maxToWrite);
         memcpy(&fDataBuf[fIndex], toGo, maxToWrite * sizeof(XMLByte));
         fIndex += maxToWrite;
     }
@@ -91,7 +91,7 @@ XMLFilePos BinMemOutputStream::getSize() const
 // ---------------------------------------------------------------------------
 //  BinMemOutputStream: Private helper methods
 // ---------------------------------------------------------------------------
-void BinMemOutputStream::insureCapacity(const XMLSize_t extraNeeded)
+void BinMemOutputStream::ensureCapacity(const XMLSize_t extraNeeded)
 {
     // If we can handle it, do nothing yet
     if (fIndex + extraNeeded < fCapacity)
