@@ -159,6 +159,9 @@
 /* Define to 1 if you have the `setlocale' function. */
 #undef HAVE_SETLOCALE
 
+/* Define to 1 if you have the `snprintf' function. */
+#undef HAVE_SNPRINTF
+
 /* Define to 1 if you have the `socket' function. */
 #undef HAVE_SOCKET
 
@@ -283,6 +286,12 @@
    char*. */
 #undef ICONV_USES_CONST_POINTER
 
+/* Definition of Xerces interface major version */
+#undef INTERFACE_VERSION_MAJOR
+
+/* Definition of Xerces interface minor version */
+#undef INTERFACE_VERSION_MINOR
+
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #undef LT_OBJDIR
 
@@ -341,6 +350,9 @@
 /* Define to true if autoconf is used in this configuration */
 #undef XERCES_AUTOCONF
 
+/* Definition of Xerces grammar serialization level */
+#undef XERCES_GRAMMAR_SERIALIZATION_LEVEL
+
 /* Define if namespaces is supported by the compiler */
 #undef XERCES_HAS_CPP_NAMESPACE
 
@@ -372,9 +384,6 @@
 
 /* Define to 1 if we have sys/types.h */
 #undef XERCES_HAVE_SYS_TYPES_H
-
-/* Define to have Xerces_autoconf_config.hpp include wchar.h */
-#undef XERCES_INCLUDE_WCHAR_H
 
 /* Define if there is support for L"widestring" */
 #undef XERCES_LSTRSUPPORT
@@ -431,9 +440,6 @@
 /* An appropriate unsigned 64 bit integer type */
 #undef XERCES_U64BIT_INT
 
-/* Define if the C++11 char16_t type is to be used */
-#undef XERCES_USE_CHAR16_T
-
 /* Define to use the POSIX file mgr */
 #undef XERCES_USE_FILEMGR_POSIX
 
@@ -484,6 +490,15 @@
 
 /* Define to use the Windows transcoder */
 #undef XERCES_USE_TRANSCODER_WINDOWS
+
+/* Definition of Xerces major version */
+#undef XERCES_VERSION_MAJOR
+
+/* Definition of Xerces minor version */
+#undef XERCES_VERSION_MINOR
+
+/* Definition of Xerces patch version */
+#undef XERCES_VERSION_REVISION
 
 /* Define to the 16 bit type used to represent Xerces UTF-16 characters */
 #undef XERCES_XMLCH_T

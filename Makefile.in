@@ -110,6 +110,7 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/acx_pthread.m4 \
 	$(top_srcdir)/m4/xerces_no_threads.m4 \
 	$(top_srcdir)/m4/xerces_path_delimiters.m4 \
 	$(top_srcdir)/m4/xerces_transcoder_selection.m4 \
+	$(top_srcdir)/m4/xerces_xmlch_selection.m4 \
 	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
@@ -119,8 +120,10 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = config.h \
-	$(top_builddir)/src/xercesc/util/Xerces_autoconf_config.hpp
-CONFIG_CLEAN_FILES = xerces-c.pc scripts/run-test
+	$(top_builddir)/src/xercesc/util/Xerces_autoconf_config.hpp \
+	$(top_builddir)/src/xercesc/util/XercesVersion.hpp
+CONFIG_CLEAN_FILES = doc/style/dtd/entities.ent xerces-c.pc \
+	scripts/run-test
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -213,7 +216,10 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
 	$(top_srcdir)/config/config.guess \
 	$(top_srcdir)/config/config.sub \
 	$(top_srcdir)/config/install-sh $(top_srcdir)/config/ltmain.sh \
-	$(top_srcdir)/config/missing $(top_srcdir)/scripts/run-test.in \
+	$(top_srcdir)/config/missing \
+	$(top_srcdir)/doc/style/dtd/entities.ent.in \
+	$(top_srcdir)/scripts/run-test.in \
+	$(top_srcdir)/src/xercesc/util/XercesVersion.hpp.in \
 	$(top_srcdir)/src/xercesc/util/Xerces_autoconf_config.hpp.in \
 	INSTALL README config/compile config/config.guess \
 	config/config.sub config/install-sh config/ltmain.sh \
@@ -307,6 +313,10 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+INTERFACE_VERSION_D = @INTERFACE_VERSION_D@
+INTERFACE_VERSION_MAJOR = @INTERFACE_VERSION_MAJOR@
+INTERFACE_VERSION_MINOR = @INTERFACE_VERSION_MINOR@
+INTERFACE_VERSION_U = @INTERFACE_VERSION_U@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -344,6 +354,9 @@ SHELL = @SHELL@
 SHREXT = @SHREXT@
 STRIP = @STRIP@
 VERSION = @VERSION@
+XERCES_VERSION_MAJOR = @XERCES_VERSION_MAJOR@
+XERCES_VERSION_MINOR = @XERCES_VERSION_MINOR@
+XERCES_VERSION_REVISION = @XERCES_VERSION_REVISION@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
@@ -401,9 +414,8 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = src tests samples
-EXTRA_DIST = version.incl \
-             CMakeLists.txt \
+SUBDIRS = doc src tests samples
+EXTRA_DIST = CMakeLists.txt \
              cmake \
              config.h.cmake.in \
              xerces-c.spec \
@@ -415,7 +427,6 @@ EXTRA_DIST = version.incl \
              NOTICE \
              README \
              config/pretty-make \
-             doc \
              reconf \
              scripts/createBindingsFormatFromHPP.pl \
              scripts/makeStringDefinition.pl \
@@ -482,8 +493,18 @@ src/xercesc/util/stamp-h2: $(top_srcdir)/src/xercesc/util/Xerces_autoconf_config
 	@rm -f src/xercesc/util/stamp-h2
 	cd $(top_builddir) && $(SHELL) ./config.status src/xercesc/util/Xerces_autoconf_config.hpp
 
+src/xercesc/util/XercesVersion.hpp: src/xercesc/util/stamp-h3
+	@test -f $@ || rm -f src/xercesc/util/stamp-h3
+	@test -f $@ || $(MAKE) $(AM_MAKEFLAGS) src/xercesc/util/stamp-h3
+
+src/xercesc/util/stamp-h3: $(top_srcdir)/src/xercesc/util/XercesVersion.hpp.in $(top_builddir)/config.status
+	@rm -f src/xercesc/util/stamp-h3
+	cd $(top_builddir) && $(SHELL) ./config.status src/xercesc/util/XercesVersion.hpp
+
 distclean-hdr:
-	-rm -f config.h stamp-h1 src/xercesc/util/Xerces_autoconf_config.hpp src/xercesc/util/stamp-h2
+	-rm -f config.h stamp-h1 src/xercesc/util/Xerces_autoconf_config.hpp src/xercesc/util/stamp-h2 src/xercesc/util/XercesVersion.hpp src/xercesc/util/stamp-h3
+doc/style/dtd/entities.ent: $(top_builddir)/config.status $(top_srcdir)/doc/style/dtd/entities.ent.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 xerces-c.pc: $(top_builddir)/config.status $(srcdir)/xerces-c.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 scripts/run-test: $(top_builddir)/config.status $(top_srcdir)/scripts/run-test.in

@@ -32,7 +32,7 @@
 #
 
 #
-# $Id: Makefile.am 1801700 2017-07-12 08:45:00Z rleigh $
+# $Id: Makefile.am 1824713 2018-02-18 23:07:07Z rleigh $
 #
 
 
@@ -185,6 +185,7 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/acx_pthread.m4 \
 	$(top_srcdir)/m4/xerces_no_threads.m4 \
 	$(top_srcdir)/m4/xerces_path_delimiters.m4 \
 	$(top_srcdir)/m4/xerces_transcoder_selection.m4 \
+	$(top_srcdir)/m4/xerces_xmlch_selection.m4 \
 	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
@@ -192,7 +193,8 @@ DIST_COMMON = $(srcdir)/Makefile.am \
 	$(am__nobase_libxerces_c_la_HEADERS_DIST) $(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h \
-	$(top_builddir)/src/xercesc/util/Xerces_autoconf_config.hpp
+	$(top_builddir)/src/xercesc/util/Xerces_autoconf_config.hpp \
+	$(top_builddir)/src/xercesc/util/XercesVersion.hpp
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
@@ -994,7 +996,7 @@ am__nobase_libxerces_c_la_HEADERS_DIST =  \
 	xercesc/util/ValueHashTableOf.c xercesc/util/ValueStackOf.hpp \
 	xercesc/util/ValueStackOf.c xercesc/util/ValueVectorOf.hpp \
 	xercesc/util/ValueVectorOf.c xercesc/util/XercesDefs.hpp \
-	xercesc/util/XercesVersion.hpp xercesc/util/XMemory.hpp \
+	xercesc/util/XMemory.hpp \
 	xercesc/util/XML256TableTranscoder.hpp \
 	xercesc/util/XML88591Transcoder.hpp \
 	xercesc/util/XMLAbstractDoubleFloat.hpp \
@@ -1402,6 +1404,10 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+INTERFACE_VERSION_D = @INTERFACE_VERSION_D@
+INTERFACE_VERSION_MAJOR = @INTERFACE_VERSION_MAJOR@
+INTERFACE_VERSION_MINOR = @INTERFACE_VERSION_MINOR@
+INTERFACE_VERSION_U = @INTERFACE_VERSION_U@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -1439,6 +1445,9 @@ SHELL = @SHELL@
 SHREXT = @SHREXT@
 STRIP = @STRIP@
 VERSION = @VERSION@
+XERCES_VERSION_MAJOR = @XERCES_VERSION_MAJOR@
+XERCES_VERSION_MINOR = @XERCES_VERSION_MINOR@
+XERCES_VERSION_REVISION = @XERCES_VERSION_REVISION@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
@@ -1505,7 +1514,7 @@ lib_LTLIBRARIES = libxerces-c.la
 # make pretty-printing won't work.
 #
 AM_CPPFLAGS = $(am__append_3) $(am__append_12) $(am__append_25)
-libxerces_c_la_LDFLAGS = -release ${INTERFACE_VER_D}
+libxerces_c_la_LDFLAGS = -release @INTERFACE_VERSION_D@
 
 # This sets {install}/include as target for the headers
 libxerces_c_ladir = ${includedir}
@@ -1530,11 +1539,14 @@ nobase_libxerces_c_la_HEADERS = ${util_headers} ${dom_headers} \
 	$(am__append_31) $(am__append_33) $(am__append_35) \
 	$(am__append_37)
 
-# Make sure autoconf-generated Xerces_autoconf_config.hpp ends up in a
-# proper place when installed.
+# Make sure autoconf-generated Xerces_autoconf_config.hpp and
+# XercesVersion.hpp end up in a proper place when installed.
 #
 autoconfheadersdir = $(includedir)/xercesc/util
-nodist_autoconfheaders_HEADERS = ${top_builddir}/src/xercesc/util/Xerces_autoconf_config.hpp
+nodist_autoconfheaders_HEADERS = \
+	${top_builddir}/src/xercesc/util/Xerces_autoconf_config.hpp \
+	${top_builddir}/src/xercesc/util/XercesVersion.hpp
+
 
 # Compatibility library.
 #
@@ -1543,7 +1555,7 @@ EXTRA_DIST = CMakeLists.txt \
         stricmp.h strnicmp.h towlower.h towupper.h \
         xercesc/NLS \
         xercesc/util/Xerces_autoconf_config.hpp.cmake.in \
-	xercesc/util/MsgLoaders/Win32 \
+        xercesc/util/XercesVersion.hpp.cmake.in \
         xercesc/util/MsgLoaders/ICU/resources
 
 libxerces_c_la_LIBADD = ${LTLIBOBJS}
@@ -1553,7 +1565,7 @@ libxerces_c_la_LIBADD = ${LTLIBOBJS}
 @XERCES_USE_MSGLOADER_ICONV_TRUE@PKGNAME = XercesMessages
 
 # Resource shortname
-@XERCES_USE_MSGLOADER_ICU_TRUE@PKGNAME = xercesc_messages_${INTERFACE_VER_U}
+@XERCES_USE_MSGLOADER_ICU_TRUE@PKGNAME = xercesc_messages_@INTERFACE_VERSION_U@
 @XERCES_USE_MSGLOADER_ICU_TRUE@CLEANFILES = xercesc_messages.c root_res.c root.res
 @XERCES_USE_MSGLOADER_ICU_TRUE@BUILT_SOURCES = xercesc_messages.c root_res.c
 
@@ -2053,7 +2065,6 @@ util_headers = \
 	xercesc/util/ValueVectorOf.hpp \
 	xercesc/util/ValueVectorOf.c \
 	xercesc/util/XercesDefs.hpp \
-	xercesc/util/XercesVersion.hpp \
 	xercesc/util/XMemory.hpp \
 	xercesc/util/XML256TableTranscoder.hpp \
 	xercesc/util/XML88591Transcoder.hpp \
@@ -4383,8 +4394,6 @@ uninstall-am: uninstall-iconv_msgDATA uninstall-libLTLIBRARIES \
 
 .PRECIOUS: Makefile
 
-
-include ${top_srcdir}/version.incl
 @XERCES_USE_MSGLOADER_ICU_TRUE@xercesc_messages.c: ${top_srcdir}/src/xercesc/util/MsgLoaders/ICU/resources/res-file-list.txt
 @XERCES_USE_MSGLOADER_ICU_TRUE@	${ICU_SBIN}gencmn --name ${PKGNAME} -S ${PKGNAME}_dat.c -d . ${top_srcdir}/src/xercesc/util/MsgLoaders/ICU/resources/res-file-list.txt
 @XERCES_USE_MSGLOADER_ICU_TRUE@	@mv ${PKGNAME}_dat.c xercesc_messages.c

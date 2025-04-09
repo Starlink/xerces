@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: PlatformUtils.cpp 1798766 2017-06-14 21:27:20Z rleigh $
+ * $Id: PlatformUtils.cpp 1823971 2018-02-12 14:02:05Z rleigh $
  *
  */
 
@@ -100,9 +100,6 @@
 #endif
 #if XERCES_USE_MSGLOADER_INMEMORY
 #	include <xercesc/util/MsgLoaders/InMemory/InMemMsgLoader.hpp>
-#endif
-#if XERCES_USE_WIN32_MSGLOADER
-#	include <xercesc/util/MsgLoaders/Win32/Win32MsgLoader.hpp>
 #endif
 
 #include <xercesc/util/TransService.hpp>
@@ -445,8 +442,6 @@ XMLMsgLoader* XMLPlatformUtils::loadAMsgSet(const XMLCh* const msgDomain)
 		ms = new ICUMsgLoader(msgDomain);
 	#elif defined (XERCES_USE_MSGLOADER_ICONV)
 		ms = new MsgCatalogLoader(msgDomain);
-    #elif defined (XERCES_USE_WIN32_MSGLOADER)
-		ms = new Win32MsgLoader(msgDomain);
 	#elif defined (XERCES_USE_MSGLOADER_INMEMORY)
 		ms = new InMemMsgLoader(msgDomain);
 	#else
@@ -920,7 +915,10 @@ XMLCh* XMLPlatformUtils::weavePaths(const XMLCh* const    basePath
 
     XMLString::subString(tmpBuf, basePath, 0, (basePtr - basePath + 1), manager);
     tmpBuf[basePtr - basePath + 1] = 0;
-    XMLString::catString(tmpBuf, relativePath);
+    if (relativePath)
+    {
+        XMLString::catString(tmpBuf, relativePath);
+    }
 
     removeDotSlash(tmpBuf, manager);
 

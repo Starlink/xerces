@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLUni.cpp 1799525 2017-06-21 22:21:02Z scantor $
+ * $Id: XMLUni.cpp 1816391 2017-11-26 19:37:56Z scantor $
  */
 
 
@@ -1466,7 +1466,7 @@ const XMLCh XMLUni::fgDOMDisallowDoctype[] =
 {
         chLatin_d, chLatin_i, chLatin_s, chLatin_a, chLatin_l, chLatin_l, chLatin_o
     ,   chLatin_w, chDash, chLatin_d, chLatin_o, chLatin_c, chLatin_t, chLatin_y
-    ,   chLatin_e, chNull
+    ,   chLatin_p, chLatin_e, chNull
 };
 
 const XMLCh XMLUni::fgDOMElementContentWhitespace[] =

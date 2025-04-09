@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: Xerces_autoconf_config.hpp.in 1801083 2017-07-06 17:33:12Z scantor $
+ * $Id: Xerces_autoconf_config.hpp.in 1824295 2018-02-15 11:17:15Z rleigh $
  */
 
 //
@@ -48,6 +48,7 @@
 // ---------------------------------------------------------------------------
 //  These defines are set by configure as appropriate for the platform.
 // ---------------------------------------------------------------------------
+
 #undef XERCES_AUTOCONF
 #undef XERCES_HAVE_CSTDINT
 #undef XERCES_HAVE_STDINT_H

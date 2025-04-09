@@ -133,13 +133,15 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/acx_pthread.m4 \
 	$(top_srcdir)/m4/xerces_no_threads.m4 \
 	$(top_srcdir)/m4/xerces_path_delimiters.m4 \
 	$(top_srcdir)/m4/xerces_transcoder_selection.m4 \
+	$(top_srcdir)/m4/xerces_xmlch_selection.m4 \
 	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h \
-	$(top_builddir)/src/xercesc/util/Xerces_autoconf_config.hpp
+	$(top_builddir)/src/xercesc/util/Xerces_autoconf_config.hpp \
+	$(top_builddir)/src/xercesc/util/XercesVersion.hpp
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 @XERCES_USE_CHAR16_TRUE@am__EXEEXT_1 = Char16Test$(EXEEXT)
@@ -568,6 +570,10 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+INTERFACE_VERSION_D = @INTERFACE_VERSION_D@
+INTERFACE_VERSION_MAJOR = @INTERFACE_VERSION_MAJOR@
+INTERFACE_VERSION_MINOR = @INTERFACE_VERSION_MINOR@
+INTERFACE_VERSION_U = @INTERFACE_VERSION_U@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -605,6 +611,9 @@ SHELL = @SHELL@
 SHREXT = @SHREXT@
 STRIP = @STRIP@
 VERSION = @VERSION@
+XERCES_VERSION_MAJOR = @XERCES_VERSION_MAJOR@
+XERCES_VERSION_MINOR = @XERCES_VERSION_MINOR@
+XERCES_VERSION_REVISION = @XERCES_VERSION_REVISION@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@

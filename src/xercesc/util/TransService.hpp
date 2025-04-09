@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: TransService.hpp 1224891 2011-12-27 10:59:21Z amassari $
+ * $Id: TransService.hpp 1820126 2018-01-04 16:48:15Z rleigh $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_TRANSSERVICE_HPP)
@@ -460,6 +460,9 @@ private :
     XMLLCPTranscoder(const XMLLCPTranscoder&);
     XMLLCPTranscoder& operator=(const XMLLCPTranscoder&);
 };
+
+template class XMLUTIL_EXPORT ArrayJanitor<XMLByte>;
+template class XMLUTIL_EXPORT ArrayJanitor<XMLCh>;
 
 //
 // This class can be used to transcode to a target encoding. It manages the

@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: PlatformUtils.hpp 932889 2010-04-11 13:10:10Z borisk $
+ * $Id: PlatformUtils.hpp 1825016 2018-02-21 22:04:13Z rleigh $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_PLATFORMUTILS_HPP)
@@ -804,9 +804,9 @@ XMLPlatformUtils::alignPointerForNewBlockAllocation(XMLSize_t ptrSize)
     //    per-architecture basis. In the absense of that we
     //    take an educated guess.
 #ifdef XML_PLATFORM_NEW_BLOCK_ALIGNMENT
-    static const XMLSize_t alignment = XML_PLATFORM_NEW_BLOCK_ALIGNMENT;
+    const XMLSize_t alignment = XML_PLATFORM_NEW_BLOCK_ALIGNMENT;
 #else
-    static const XMLSize_t alignment = (sizeof(void*) >= sizeof(double)) ? sizeof(void*) : sizeof(double);
+    const XMLSize_t alignment = (sizeof(void*) >= sizeof(double)) ? sizeof(void*) : sizeof(double);
 #endif
 
     //    Calculate current alignment of pointer
