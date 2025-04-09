@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XSElementDeclaration.cpp 471747 2006-11-06 14:31:56Z amassari $
+ * $Id: XSElementDeclaration.cpp 1804272 2017-08-06 20:25:24Z scantor $
  */
 
 #include <xercesc/framework/psvi/XSElementDeclaration.hpp>
@@ -96,7 +96,7 @@ const XMLCh *XSElementDeclaration::getName() const
     return fSchemaElementDecl->getElementName()->getLocalPart();
 }
 
-const XMLCh *XSElementDeclaration::getNamespace() 
+const XMLCh *XSElementDeclaration::getNamespace() const
 {
     return fXSModel->getURIStringPool()->getValueForId(fSchemaElementDecl->getURI());
 }

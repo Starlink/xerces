@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XSNotationDeclaration.cpp 471747 2006-11-06 14:31:56Z amassari $
+ * $Id: XSNotationDeclaration.cpp 1804272 2017-08-06 20:25:24Z scantor $
  */
 
 #include <xercesc/framework/psvi/XSNotationDeclaration.hpp>
@@ -54,7 +54,7 @@ const XMLCh *XSNotationDeclaration::getName() const
     return fXMLNotationDecl->getName();
 }
 
-const XMLCh *XSNotationDeclaration::getNamespace() 
+const XMLCh *XSNotationDeclaration::getNamespace() const
 {
     return fXSModel->getURIStringPool()->getValueForId(fXMLNotationDecl->getNameSpaceId());
 }

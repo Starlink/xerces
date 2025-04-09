@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: LocalFileFormatTarget.cpp 1662880 2015-02-28 01:55:31Z scantor $
+ * $Id: LocalFileFormatTarget.cpp 1603373 2014-06-18 08:49:41Z amassari $
  */
 
 #include <xercesc/framework/LocalFileFormatTarget.hpp>

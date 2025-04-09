@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: Janitor.hpp 669844 2008-06-20 10:11:44Z borisk $
+ * $Id: Janitor.hpp 1449010 2013-02-22 12:02:22Z amassari $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_JANITOR_HPP)
@@ -86,7 +86,7 @@ public  :
     void orphan();
 
 	//	small amount of auto_ptr compatibility
-	T&	operator[](int index) const;
+	T&	operator[](XMLSize_t index) const;
 	T*	get() const;
 	T*	release();
 	void reset(T* p = 0);

@@ -15,8 +15,8 @@
 #
 #
 #
-# $Id: version.incl 1747617 2016-06-10 01:14:36Z scantor $
+# $Id: version.incl 1799382 2017-06-21 01:48:53Z scantor $
 #
-VER=3_1_4
-INTERFACE_VER_D=3.1
-INTERFACE_VER_U=3_1
+VER=3_2_0
+INTERFACE_VER_D=3.2
+INTERFACE_VER_U=3_2

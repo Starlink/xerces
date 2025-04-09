@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMChildNode.cpp 471747 2006-11-06 14:31:56Z amassari $
+ * $Id: DOMChildNode.cpp 1800911 2017-07-05 18:52:15Z scantor $
  */
 
 // This class only adds the ability to have siblings
@@ -64,7 +64,7 @@ DOMNode * DOMChildNode::getParentNode(const DOMNode *thisNode) const
 {
     // if we have an owner, ownerNode is our parent, otherwise it's
     // our ownerDocument and we don't have a parent
-    DOMNodeImpl *thisNodeImpl = castToNodeImpl(thisNode);
+    const DOMNodeImpl *thisNodeImpl = castToNodeImpl(thisNode);
     return thisNodeImpl->isOwned() ? thisNodeImpl->fOwnerNode : 0;
 }
 

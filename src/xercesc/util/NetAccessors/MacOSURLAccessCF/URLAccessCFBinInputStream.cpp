@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: URLAccessCFBinInputStream.cpp 936316 2010-04-21 14:19:58Z borisk $
+ * $Id: URLAccessCFBinInputStream.cpp 1803393 2017-07-29 20:43:21Z scantor $
  */
 
 #include <cstdlib>
@@ -44,7 +44,7 @@ URLAccessCFBinInputStream::URLAccessCFBinInputStream(const XMLURL& urlSource)
     {
         stringRef = CFStringCreateWithCharacters(
             kCFAllocatorDefault,
-            urlText,
+            reinterpret_cast<const UniChar *>(urlText),
             urlLength
             );
     }

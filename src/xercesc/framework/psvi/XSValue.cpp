@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XSValue.cpp 932887 2010-04-11 13:04:59Z borisk $
+ * $Id: XSValue.cpp 932889 2010-04-11 13:10:10Z borisk $
  */
 
 #include <limits.h>

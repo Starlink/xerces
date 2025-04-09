@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: MemoryManagerImpl.cpp 1662868 2015-02-28 00:52:04Z scantor $
+ * $Id: MemoryManagerImpl.cpp 1329216 2012-04-23 12:44:51Z amassari $
  */
 
 
@@ -42,7 +42,6 @@ void* MemoryManagerImpl::allocate(XMLSize_t size)
     catch(...) {
         throw OutOfMemoryException();
     }
-    
     if(memptr==NULL && size!=0)
         throw OutOfMemoryException();
     return memptr;

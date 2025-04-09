@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: BinFileInputStream.cpp 1662880 2015-02-28 01:55:31Z scantor $
+ * $Id: BinFileInputStream.cpp 1597057 2014-05-23 10:50:16Z amassari $
  */
 
 

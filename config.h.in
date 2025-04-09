@@ -66,6 +66,9 @@
 /* Define to 1 if you have the `gettimeofday' function. */
 #undef HAVE_GETTIMEOFDAY
 
+/* Define to 1 if you have the `gmtime_r' function. */
+#undef HAVE_GMTIME_R
+
 /* Define to 1 if you have the `iconv' function. */
 #undef HAVE_ICONV
 
@@ -234,6 +237,9 @@
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
 
+/* Define to 1 if you have the `timegm' function. */
+#undef HAVE_TIMEGM
+
 /* Define to 1 if you have the `towlower' function. */
 #undef HAVE_TOWLOWER
 
@@ -277,12 +283,8 @@
    char*. */
 #undef ICONV_USES_CONST_POINTER
 
-/* Define to the sub-directory in which libtool stores uninstalled libraries.
-   */
+/* Define to the sub-directory where libtool stores uninstalled libraries. */
 #undef LT_OBJDIR
-
-/* Define to 1 if your C compiler doesn't accept -c and -o together. */
-#undef NO_MINUS_C_MINUS_O
 
 /* Name of package */
 #undef PACKAGE
@@ -346,6 +348,9 @@
    */
 #undef XERCES_HAVE_CPUID_INTRINSIC
 
+/* Define to 1 if cstdint is functional. */
+#undef XERCES_HAVE_CSTDINT
+
 /* Define to 1 if you have emmintrin.h */
 #undef XERCES_HAVE_EMMINTRIN_H
 
@@ -361,6 +366,9 @@
 
 /* Define to have SSE2 instruction used at runtime */
 #undef XERCES_HAVE_SSE2_INTRINSIC
+
+/* Define to 1 if we have stdint.h */
+#undef XERCES_HAVE_STDINT_H
 
 /* Define to 1 if we have sys/types.h */
 #undef XERCES_HAVE_SYS_TYPES_H
@@ -399,8 +407,14 @@
 /* An appropriate signed 64 bit integer type */
 #undef XERCES_S64BIT_INT
 
+/* Define as the appropriate SIZE_MAX macro */
+#undef XERCES_SIZE_MAX
+
 /* Define as the appropriate size_t type */
 #undef XERCES_SIZE_T
+
+/* Define as the appropriate SSIZE_MAX macro */
+#undef XERCES_SSIZE_MAX
 
 /* Define as the appropriate ssize_t type */
 #undef XERCES_SSIZE_T
@@ -416,6 +430,9 @@
 
 /* An appropriate unsigned 64 bit integer type */
 #undef XERCES_U64BIT_INT
+
+/* Define if the C++11 char16_t type is to be used */
+#undef XERCES_USE_CHAR16_T
 
 /* Define to use the POSIX file mgr */
 #undef XERCES_USE_FILEMGR_POSIX

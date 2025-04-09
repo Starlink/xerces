@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: Janitor.c 669844 2008-06-20 10:11:44Z borisk $
+ * $Id: Janitor.c 1449010 2013-02-22 12:02:22Z amassari $
  */
 
 
@@ -134,7 +134,7 @@ ArrayJanitor<T>::orphan()
 
 //	Look, Ma! No hands! Don't call this with null data!
 template <class T> T&
-ArrayJanitor<T>::operator[](int index) const
+ArrayJanitor<T>::operator[](XMLSize_t index) const
 {
 	//	TODO: Add appropriate exception
 	return fData[index];

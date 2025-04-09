@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: BinHTTPURLInputStream.cpp 936316 2010-04-21 14:19:58Z borisk $
+ * $Id: BinHTTPURLInputStream.cpp 936317 2010-04-21 14:20:51Z borisk $
  */
 
 

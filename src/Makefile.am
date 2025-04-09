@@ -16,13 +16,12 @@
 #
 
 #
-# $Id: Makefile.am 1665567 2015-03-10 14:29:51Z scantor $
+# $Id: Makefile.am 1801700 2017-07-12 08:45:00Z rleigh $
 #
 
 include ${top_srcdir}/version.incl
 
 DEFS += -DXERCES_BUILDING_LIBRARY
-SUBDIRS =
 
 #
 #
@@ -56,11 +55,12 @@ nodist_autoconfheaders_HEADERS = ${top_builddir}/src/xercesc/util/Xerces_autocon
 
 # Compatibility library.
 #
-EXTRA_DIST = stricmp.h strnicmp.h towlower.h towupper.h \
+EXTRA_DIST = CMakeLists.txt \
+        XercesCConfig.cmake.in \
+        stricmp.h strnicmp.h towlower.h towupper.h \
         xercesc/NLS \
-	xercesc/util/Xerces_autoconf_config.msvc.hpp \
-	xercesc/util/Xerces_autoconf_config.borland.hpp \
-        xercesc/util/MsgLoaders/Win32 \
+        xercesc/util/Xerces_autoconf_config.hpp.cmake.in \
+	xercesc/util/MsgLoaders/Win32 \
         xercesc/util/MsgLoaders/ICU/resources
 
 libxerces_c_la_LIBADD = ${LTLIBOBJS}
@@ -150,8 +150,21 @@ if XERCES_USE_MSGLOADER_ICONV
 libxerces_c_la_SOURCES += ${msgiconv_sources}
 nobase_libxerces_c_la_HEADERS += ${msgiconv_headers}
 
-SUBDIRS += xercesc/util/MsgLoaders/MsgCatalog
+# Resource shortname
+PKGNAME=XercesMessages
+
+# Resource file
+RESFILE=$(PKGNAME)_en_US.cat
+
+# Resources
+XercesMessages_en_US.cat: @srcdir@/xercesc/util/MsgLoaders/MsgCatalog/XercesMessages_en_US.Msg
+	@echo "generating $@ from @srcdir@/xercesc/util/MsgLoaders/MsgCatalog/XercesMessages_en_US.Msg"
+	gencat $@ @srcdir@/xercesc/util/MsgLoaders/MsgCatalog/XercesMessages_en_US.Msg
+
+iconv_msgdir=$(prefix)/msg
+iconv_msg_DATA = $(RESFILE)
 endif
+
 
 # Mutex Managers, conditionally built based on settings from configure
 #
@@ -282,6 +295,7 @@ domimpl_headers	= \
 	xercesc/dom/impl/DOMImplementationListImpl.hpp \
 	xercesc/dom/impl/DOMLocatorImpl.hpp \
 	xercesc/dom/impl/DOMNamedNodeMapImpl.hpp \
+	xercesc/dom/impl/DOMNodeBase.hpp \
 	xercesc/dom/impl/DOMNodeIDMap.hpp \
 	xercesc/dom/impl/DOMNodeImpl.hpp \
 	xercesc/dom/impl/DOMNodeIteratorImpl.hpp \
@@ -1115,48 +1129,3 @@ winmmgr_headers = \
 
 winmmgr_sources = \
 	xercesc/util/MutexManagers/WindowsMutexMgr.cpp
-
-
-# Override generated rules to provide prettier make rules
-#
-# Warning: If Automake changes sufficiently, these rules may need to
-#          be regenerated from the (new) default output of Automake
-#
-if XERCES_PRETTY_MAKE
-
-.c.lo:
-@am__fastdepCC_TRUE@	@depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.lo$$||'`; \
-@am__fastdepCC_TRUE@	if $(LTCOMPILE) -MT $@ -MD -MP -MF "$$depbase.Tpo" -c -o $@ $<; \
-@am__fastdepCC_TRUE@	then $(am__mv) "$$depbase.Tpo" "$$depbase.Plo"; else rm -f "$$depbase.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	@source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
-
-.cpp.lo:
-@am__fastdepCXX_TRUE@	@depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.lo$$||'`; \
-@am__fastdepCXX_TRUE@	if $(LTCXXCOMPILE) -MT $@ -MD -MP -MF "$$depbase.Tpo" -c -o $@ $<; \
-@am__fastdepCXX_TRUE@	then $(am__mv) "$$depbase.Tpo" "$$depbase.Plo"; else rm -f "$$depbase.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	@source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
-
-PRETTY_MAKE=${top_srcdir}/config/pretty-make
-PRETTY_COMPILE=${PRETTY_MAKE} Compiling
-
-endif
-
-COMPILE = ${PRETTY_COMPILE} \
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-LTCOMPILE = ${PRETTY_COMPILE}  \
-	$(LIBTOOL) --quiet --tag=CC --mode=compile \
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-
-CXXCOMPILE = ${PRETTY_COMPILE} \
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-LTCXXCOMPILE = ${PRETTY_COMPILE}  \
-	$(LIBTOOL) --quiet --tag=CXX --mode=compile \
-	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)

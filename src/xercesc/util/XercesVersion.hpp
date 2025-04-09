@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XercesVersion.hpp 1747617 2016-06-10 01:14:36Z scantor $
+ * $Id: XercesVersion.hpp 1799382 2017-06-21 01:48:53Z scantor $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_XERCESVERSION_HPP)
@@ -127,8 +127,8 @@
  */
 
 #define XERCES_VERSION_MAJOR 3
-#define XERCES_VERSION_MINOR 1
-#define XERCES_VERSION_REVISION 4
+#define XERCES_VERSION_MINOR 2
+#define XERCES_VERSION_REVISION 0
 
 /***
  *

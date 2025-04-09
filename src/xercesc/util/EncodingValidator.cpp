@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: EncodingValidator.cpp 635560 2008-03-10 14:10:09Z borisk $
+ * $Id: EncodingValidator.cpp 1798771 2017-06-14 21:31:52Z rleigh $
  */
 
 // ---------------------------------------------------------------------------
@@ -76,7 +76,7 @@ void EncodingValidator::initializeRegistry() {
     fEncodingRegistry = new ValueHashTableOf<bool>(109);
 
     for (unsigned int i=0; i < gEncodingArraySize; i++) {
-        fEncodingRegistry->put((void*) gEncodingArray[i], true);
+        fEncodingRegistry->put(const_cast<void *>(reinterpret_cast<const void *>(gEncodingArray[i])), true);
     }
 }
 

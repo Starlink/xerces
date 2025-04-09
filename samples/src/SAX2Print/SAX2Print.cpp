@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: SAX2Print.cpp 833057 2009-11-05 15:25:10Z borisk $
+ * $Id: SAX2Print.cpp 1449010 2013-02-22 12:02:22Z amassari $
  */
 
 
@@ -271,7 +271,7 @@ int main(int argC, char* argV[])
     //  that propogate out
     //
 
-    int errorCount = 0;
+	XMLSize_t errorCount = 0;
     int errorCode = 0;
     try
     {

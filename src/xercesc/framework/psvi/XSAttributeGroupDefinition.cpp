@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XSAttributeGroupDefinition.cpp 471747 2006-11-06 14:31:56Z amassari $
+ * $Id: XSAttributeGroupDefinition.cpp 1804272 2017-08-06 20:25:24Z scantor $
  */
 
 #include <xercesc/framework/psvi/XSAttributeGroupDefinition.hpp>
@@ -60,7 +60,7 @@ const XMLCh *XSAttributeGroupDefinition::getName() const
     return fXSModel->getURIStringPool()->getValueForId(fXercesAttGroupInfo->getNameId());        
 }
 
-const XMLCh *XSAttributeGroupDefinition::getNamespace() 
+const XMLCh *XSAttributeGroupDefinition::getNamespace() const
 {
     return fXSModel->getURIStringPool()->getValueForId(fXercesAttGroupInfo->getNamespaceId());
 }

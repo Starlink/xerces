@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: Win32MsgLoader.cpp 570552 2007-08-28 19:57:36Z amassari $
+ * $Id: Win32MsgLoader.cpp 1803393 2017-07-29 20:43:21Z scantor $
  */
 
 
@@ -173,7 +173,11 @@ bool Win32MsgLoader::loadMsg(const  XMLMsgLoader::XMLMsgId  msgToLoad
     const XMLSize_t actualChars = ((maxChars < (XMLSize_t)*pBlock) ? maxChars : (XMLSize_t)*pBlock);
 
     // Ok, finally now copy as much as we can into the caller's buffer
+#if defined(XERCES_USE_CHAR16_T)
+    wcsncpy(reinterpret_cast<wchar_t *>(toFill), reinterpret_cast<const wchar_t *>(pBlock + 1), actualChars);
+#else
     wcsncpy(toFill, pBlock + 1, actualChars);
+#endif
     toFill[actualChars] = 0;
 
     return true;

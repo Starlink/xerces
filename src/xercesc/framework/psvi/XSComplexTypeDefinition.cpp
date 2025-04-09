@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XSComplexTypeDefinition.cpp 594002 2007-11-12 01:05:09Z cargilld $
+ * $Id: XSComplexTypeDefinition.cpp 1801237 2017-07-07 21:55:11Z scantor $
  */
 
 #include <xercesc/framework/psvi/XSComplexTypeDefinition.hpp>
@@ -159,7 +159,7 @@ const XMLCh *XSComplexTypeDefinition::getName() const
     return fComplexTypeInfo->getTypeLocalName();
 }
 
-const XMLCh *XSComplexTypeDefinition::getNamespace() 
+const XMLCh *XSComplexTypeDefinition::getNamespace() const
 {
     return fComplexTypeInfo->getTypeUri();
 }
