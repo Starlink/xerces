@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: RegularExpression.cpp 822158 2009-10-06 07:52:59Z amassari $
+ * $Id: RegularExpression.cpp 1662893 2015-02-28 02:39:33Z scantor $
  */
 
 // ---------------------------------------------------------------------------
@@ -1597,7 +1597,7 @@ bool RegularExpression::doTokenOverlap(const Op* op, Token* token)
             {
                 try
                 {
-                    RangeToken tempRange(Token::T_RANGE, fMemoryManager);
+                    RangeToken tempRange(t1->getTokenType(), fMemoryManager);
                     tempRange.mergeRanges(t1);
                     tempRange.intersectRanges((RangeToken*)token);
                     return !tempRange.empty();

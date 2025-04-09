@@ -16,7 +16,7 @@
 #
 
 #
-# $Id: Makefile.am 883272 2009-11-23 08:17:49Z borisk $
+# $Id: Makefile.am 1665397 2015-03-10 03:27:10Z scantor $
 #
 
 bin_PROGRAMS =                      ${sampleprogs}
@@ -30,7 +30,8 @@ EXTRA_DIST =                        data/personal.dtd \
                                     data/personal.xml \
                                     data/personal.xsd \
                                     data/personal-schema.xml \
-                                    data/redirect.dtd
+                                    data/redirect.dtd \
+                                    data/long.xml
 
 sampleprogs =
 

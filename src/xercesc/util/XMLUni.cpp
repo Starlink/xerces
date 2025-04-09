@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLUni.cpp 833045 2009-11-05 13:21:27Z borisk $
+ * $Id: XMLUni.cpp 1662878 2015-02-28 01:41:09Z scantor $
  */
 
 
@@ -1044,7 +1044,7 @@ const XMLCh XMLUni::fgXercesLoadSchema[] =
     ,   chLatin_v, chLatin_a, chLatin_l, chLatin_i, chLatin_d
     ,   chLatin_a, chLatin_t, chLatin_i, chLatin_n, chLatin_g, chForwardSlash
     ,   chLatin_l, chLatin_o, chLatin_a, chLatin_d, chDash
-    ,   chLatin_s, chLatin_c, chLatin_h, chLatin_e, chLatin_m, chLatin_a
+    ,   chLatin_s, chLatin_c, chLatin_h, chLatin_e, chLatin_m, chLatin_a, chNull
 };
 
 //Xerces: http://apache.org/xml/features/validation/identity-constraint-checking

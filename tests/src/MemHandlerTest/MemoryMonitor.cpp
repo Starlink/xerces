@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: MemoryMonitor.cpp 833057 2009-11-05 15:25:10Z borisk $
+ * $Id: MemoryMonitor.cpp 1027995 2010-10-27 15:09:39Z amassari $
  */
 
 
@@ -378,6 +378,11 @@ int main (int argC,  char *argV[])
                         XERCES_STD_QUALIFIER cout << "getElementsByTagName didn't return a valid DOMNodeList." << XERCES_STD_QUALIFIER endl;
                     else if(list->item(0)!=doc->getDocumentElement())
                         XERCES_STD_QUALIFIER cout << "getElementsByTagName didn't find the root element." << XERCES_STD_QUALIFIER endl;
+
+                    DOMTreeWalker* pWalker=doc->createTreeWalker(doc->getDocumentElement(), DOMNodeFilter::SHOW_TEXT, NULL, true);
+	                DOMText* textNode=(DOMText*)pWalker->nextNode();
+                    pWalker->release();
+                    const XMLCh* txt=(textNode!=NULL?textNode->getWholeText():NULL);
                 }
                 sax2parser->parse(xmlFile);
                 saxParser->parse(xmlFile);

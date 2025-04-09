@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ContentSpecNode.cpp 933155 2010-04-12 09:07:02Z amassari $
+ * $Id: ContentSpecNode.cpp 1662870 2015-02-28 00:56:55Z scantor $
  */
 
 
@@ -259,7 +259,7 @@ int ContentSpecNode::getMaxTotalRange() const {
             else {
 
                 if ((fType & 0x0f) == ContentSpecNode::Choice) {
-                    max = max * (maxFirst > maxSecond) ? maxFirst : maxSecond;
+                    max = max * ((maxFirst > maxSecond) ? maxFirst : maxSecond);
                 }
                 else {
                     max = max * (maxFirst + maxSecond);

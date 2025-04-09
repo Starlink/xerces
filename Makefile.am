@@ -1,12 +1,25 @@
 SUBDIRS = src tests samples
 
 EXTRA_DIST = version.incl \
+             xerces-c.spec \
+             xerces-c.pc.in \
+             CREDITS \
+             INSTALL \
+             KEYS \
+             LICENSE \
+             NOTICE \
+             README \
              config/pretty-make \
+             doc \
+             projects \
+             reconf \
              scripts/createBindingsFormatFromHPP.pl \
              scripts/makeStringDefinition.pl \
              scripts/sanityTest.pl \
-             scripts/sanityTest_ExpectedResult.log
+             scripts/sanityTest_ExpectedResult.log \
+             tools
 
+AUTOMAKE_OPTIONS = foreign dist-bzip2 dist-zip dist-xz
 ACLOCAL_AMFLAGS = -I m4
 
 CLEANFILES = test-results.log

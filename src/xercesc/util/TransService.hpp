@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: TransService.hpp 932887 2010-04-11 13:04:59Z borisk $
+ * $Id: TransService.hpp 1662885 2015-02-28 02:16:39Z scantor $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_TRANSSERVICE_HPP)
@@ -634,7 +634,7 @@ private:
     //  fString
     //      The transcoded string
     //
-    //  fBytesWritten
+    //  fCharsWritten
     //      The length of the transcoded string in characters
     // -----------------------------------------------------------------------
     XMLCh *fString;

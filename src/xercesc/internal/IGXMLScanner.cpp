@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: IGXMLScanner.cpp 882548 2009-11-20 13:44:14Z borisk $
+ * $Id: IGXMLScanner.cpp 1663359 2015-03-02 17:01:52Z scantor $
  */
 
 // ---------------------------------------------------------------------------
@@ -2398,7 +2398,11 @@ bool IGXMLScanner::scanStartTagNS(bool& gotData)
                 fSchemaElemNonDeclPool->put((void*)elemDecl->getBaseName()
                 , uriId, (int)Grammar::TOP_LEVEL_SCOPE, (SchemaElementDecl*)elemDecl)
             );
-        }
+        } else {
+             fValidator->emitError(
+                 XMLValid::GrammarNotFound, getURIText(uriId)
+             );
+	}
         wasAdded = true;
     }
 

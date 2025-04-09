@@ -16,7 +16,7 @@
 #
 
 #
-# $Id: Makefile.am 883272 2009-11-23 08:17:49Z borisk $
+# $Id: Makefile.am 1665567 2015-03-10 14:29:51Z scantor $
 #
 
 check_PROGRAMS =                                ${testprogs}
@@ -36,7 +36,9 @@ EXTRA_DIST =                                    src/DOM/Normalizer/expectedOutpu
                                                 src/DOM/TypeInfo/data/TypeInfo.xsd \
                                                 src/DOM/TypeInfo/data/TypeInfoJustDTD.xml \
                                                 src/DOM/TypeInfo/data/TypeInfoNoDTD.xml \
-                                                src/DOM/TypeInfo/data/TypeInfoNoDTD.xsd
+                                                src/DOM/TypeInfo/data/TypeInfoNoDTD.xsd \
+                                                src/XSTSHarness/regression \
+                                                src/xinclude
 
 testprogs =
 

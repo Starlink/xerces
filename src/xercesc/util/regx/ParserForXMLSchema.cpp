@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ParserForXMLSchema.cpp 678879 2008-07-22 20:05:05Z amassari $
+ * $Id: ParserForXMLSchema.cpp 1662882 2015-02-28 02:07:25Z scantor $
  */
 
 // ---------------------------------------------------------------------------
@@ -156,7 +156,7 @@ XMLInt32 ParserForXMLSchema::decodeEscaped() {
         break;
     default:
         {
-        XMLCh chString[] = {chBackSlash, ch, chNull};        
+        XMLCh chString[] = {chBackSlash, (XMLCh)ch, chNull};
         ThrowXMLwithMemMgr1(ParseException,XMLExcepts::Parser_Process2, chString, getMemoryManager());
         }
     }

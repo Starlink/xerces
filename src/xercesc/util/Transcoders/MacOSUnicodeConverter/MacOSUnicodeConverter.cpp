@@ -16,7 +16,7 @@
  */
 
 /*
- *	$Id: MacOSUnicodeConverter.cpp 695759 2008-09-16 08:04:55Z borisk $
+ *	$Id: MacOSUnicodeConverter.cpp 942561 2010-05-09 17:00:20Z borisk $
  */
  
  
@@ -458,9 +458,8 @@ MacOSUnicodeConverter::makeNewXMLTranscoder(const   XMLCh* const		encodingName
 bool
 MacOSUnicodeConverter::IsMacOSUnicodeConverterSupported(void)
 {
-    return UpgradeScriptInfoToTextEncoding != (void*)NULL
-        && CreateTextToUnicodeInfoByEncoding != (void*)NULL
-        ;
+    return UpgradeScriptInfoToTextEncoding != 0
+        && CreateTextToUnicodeInfoByEncoding != 0;
 }
 
 

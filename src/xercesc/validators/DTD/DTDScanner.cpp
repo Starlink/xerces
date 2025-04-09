@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DTDScanner.cpp 833045 2009-11-05 13:21:27Z borisk $
+ * $Id: DTDScanner.cpp 1663359 2015-03-02 17:01:52Z scantor $
  */
 
 
@@ -1219,7 +1219,7 @@ DTDScanner::scanChildren(const DTDElementDecl& elemDecl, XMLBuffer& bufToUse)
                     if ((curNode->getType() == ContentSpecNode::Choice)
                     ||  (curNode->getType() == ContentSpecNode::Sequence))
                     {
-                        if (!curNode->getSecond())
+                        if (!curNode->getSecond() && lastNode)
                         {
                             ContentSpecNode* saveFirst = curNode->orphanFirst();
                             lastNode->setSecond(saveFirst);

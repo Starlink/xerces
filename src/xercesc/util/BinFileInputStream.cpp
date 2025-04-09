@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: BinFileInputStream.cpp 670359 2008-06-22 13:43:45Z borisk $
+ * $Id: BinFileInputStream.cpp 1662880 2015-02-28 01:55:31Z scantor $
  */
 
 
@@ -61,7 +61,16 @@ BinFileInputStream::BinFileInputStream(const FileHandle toAdopt
 BinFileInputStream::~BinFileInputStream()
 {
     if (getIsOpen())
-        XMLPlatformUtils::closeFile(fSource, fMemoryManager);
+    {
+        try
+        {
+            XMLPlatformUtils::closeFile(fSource, fMemoryManager);
+        }
+        catch (...)
+        {
+            // There is nothing we can do about it here.
+        }
+    }
 }
 
 

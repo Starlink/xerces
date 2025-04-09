@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMDocumentImpl.hpp 679340 2008-07-24 10:28:29Z borisk $
+ * $Id: DOMDocumentImpl.hpp 1662888 2015-02-28 02:26:43Z scantor $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_DOMDOCUMENTIMPL_HPP)
@@ -380,7 +380,8 @@ inline const XMLCh*  DOMDocumentImpl::getPooledString(const XMLCh *in)
   // declared in the struct, so we don't need to add one again to
   // account for the trailing null.
   //
-  XMLSize_t sizeToAllocate = sizeof(DOMStringPoolEntry) + XMLString::stringLen(in)*sizeof(XMLCh);
+  XMLSize_t n = XMLString::stringLen(in);
+  XMLSize_t sizeToAllocate = sizeof(DOMStringPoolEntry) + n*sizeof(XMLCh);
   *pspe = spe = (DOMStringPoolEntry *)allocate(sizeToAllocate);
   spe->fNext = 0;
   XMLString::copyString((XMLCh*)spe->fString, in);
@@ -388,8 +389,7 @@ inline const XMLCh*  DOMDocumentImpl::getPooledString(const XMLCh *in)
   return spe->fString;
 }
 
-inline const XMLCh* DOMDocumentImpl::
-getPooledNString(const XMLCh *in, XMLSize_t n)
+inline const XMLCh* DOMDocumentImpl::getPooledNString(const XMLCh *in, XMLSize_t n)
 {
   if (in == 0)
     return 0;
@@ -401,7 +401,7 @@ getPooledNString(const XMLCh *in, XMLSize_t n)
   pspe = &fNameTable[inHash];
   while (*pspe != 0)
   {
-    if (XMLString::equalsN((*pspe)->fString, in, n))
+    if (XMLString::stringLen((*pspe)->fString) == n && XMLString::equalsN((*pspe)->fString, in, n))
       return (*pspe)->fString;
     pspe = &((*pspe)->fNext);
   }

@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: InMemMsgLoader.cpp 570552 2007-08-28 19:57:36Z amassari $
+ * $Id: InMemMsgLoader.cpp 1663359 2015-03-02 17:01:52Z scantor $
  */
 
 
@@ -101,6 +101,8 @@ bool InMemMsgLoader::loadMsg(const  XMLMsgLoader::XMLMsgId  msgToLoad
             return false;
          else
              srcPtr = gXMLDOMMsgArray[msgToLoad - 1];
+    } else {
+	return false;
     }
 
      while (*srcPtr && (outPtr < endPtr))
