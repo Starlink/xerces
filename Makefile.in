@@ -220,8 +220,8 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
 	$(top_srcdir)/src/xercesc/util/XercesVersion.hpp.in \
 	$(top_srcdir)/src/xercesc/util/Xerces_autoconf_config.hpp.in \
 	INSTALL README config/compile config/config.guess \
-	config/config.sub config/depcomp config/install-sh \
-	config/ltmain.sh config/missing
+	config/config.sub config/install-sh config/ltmain.sh \
+	config/missing
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
