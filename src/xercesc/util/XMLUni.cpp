@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XMLUni.cpp 1662878 2015-02-28 01:41:09Z scantor $
+ * $Id: XMLUni.cpp 1726088 2016-01-21 20:18:52Z scantor $
  */
 
 
@@ -337,7 +337,7 @@ const XMLCh XMLUni::fgUnknownURIName[] =
     ,   chForwardSlash, chLatin_a, chLatin_p, chLatin_a, chLatin_c
     ,   chLatin_h, chLatin_e, chPeriod, chLatin_o, chLatin_r, chLatin_g
     ,   chForwardSlash, chLatin_x, chLatin_m, chLatin_l, chForwardSlash
-    ,   chLatin_U, chLatin_k, chLatin_n, chLatin_o, chLatin_w, chLatin_n
+    ,   chLatin_U, chLatin_n, chLatin_k, chLatin_n, chLatin_o, chLatin_w, chLatin_n
     ,   chLatin_N, chLatin_S, chNull
 };
 

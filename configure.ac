@@ -20,11 +20,11 @@
 #
 
 #
-# $Id: configure.ac 1662881 2015-02-28 02:00:45Z scantor $
+# $Id: configure.ac 1725661 2016-01-20 02:06:34Z scantor $
 #
 
 AC_PREREQ(2.60)
-AC_INIT([xerces-c],[3.1.2])
+AC_INIT([xerces-c],[3.1.3])
 AC_CONFIG_SRCDIR([src/Makefile.am])
 AC_CONFIG_LIBOBJ_DIR([src])
 AC_CONFIG_AUX_DIR([config])
