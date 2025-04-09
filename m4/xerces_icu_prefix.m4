@@ -7,7 +7,7 @@ dnl @author James Berry
 dnl @version 2005-05-23
 dnl @license AllPermissive
 dnl
-dnl $Id: xerces_icu_prefix.m4 1801210 2017-07-07 20:44:16Z scantor $
+dnl $Id$
 
 AC_DEFUN([XERCES_ICU_PREFIX],
         [

@@ -21,7 +21,7 @@
 //
 
 /*
- * $Id: DOMMemTest.cpp 942563 2010-05-09 17:07:07Z borisk $
+ * $Id$
  */
 
 #include <stdio.h>

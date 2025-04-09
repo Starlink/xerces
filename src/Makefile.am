@@ -16,7 +16,7 @@
 #
 
 #
-# $Id: Makefile.am 1840539 2018-09-11 10:40:26Z rleigh $
+# $Id$
 #
 
 DEFS += -DXERCES_BUILDING_LIBRARY
@@ -62,6 +62,7 @@ EXTRA_DIST = CMakeLists.txt \
         xercesc/util/Xerces_autoconf_config.hpp.cmake.in \
         xercesc/util/XercesVersion.hpp.cmake.in \
         xercesc/util/version.rc.cmake.in \
+        xercesc/util/MsgLoaders/MsgCatalog/XercesMessages_en_US.Msg \
         xercesc/util/MsgLoaders/ICU/resources
 
 libxerces_c_la_LIBADD = ${LTLIBOBJS}

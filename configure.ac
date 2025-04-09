@@ -20,11 +20,11 @@
 #
 
 #
-# $Id: configure.ac 1840430 2018-09-09 18:57:49Z rleigh $
+# $Id$
 #
 
 AC_PREREQ(2.60)
-AC_INIT([xerces-c],[3.2.2])
+AC_INIT([xerces-c],[3.2.3])
 INTERFACE_VERSION=3.2
 GRAMMAR_SERIALIZATION_LEVEL=7
 

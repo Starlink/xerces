@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XSTSHarness.cpp 1798764 2017-06-14 21:22:42Z rleigh $
+ * $Id$
  */
 
 

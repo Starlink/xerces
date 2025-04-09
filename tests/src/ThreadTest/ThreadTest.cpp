@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: ThreadTest.cpp 1798752 2017-06-14 20:52:04Z rleigh $
+ * $Id$
  *
  * @author Andy Heninger, IBM
  */

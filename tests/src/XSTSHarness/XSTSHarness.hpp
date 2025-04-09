@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: XSTSHarness.hpp 1798764 2017-06-14 21:22:42Z rleigh $
+ * $Id$
  */
 
 #ifndef XSTS_HARNESS_HPP

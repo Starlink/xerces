@@ -16,7 +16,7 @@
 #
 
 #
-# $Id: Makefile.am 1803575 2017-07-31 21:54:02Z rleigh $
+# $Id$
 #
 
 check_PROGRAMS =                                ${testprogs}
