@@ -16,7 +16,7 @@
  */
 
 /**
- * $Id: XMLFormatter.cpp 901107 2010-01-20 08:45:02Z borisk $
+ * $Id: XMLFormatter.cpp 1747618 2016-06-10 01:28:38Z scantor $
  */
 
 
@@ -81,7 +81,7 @@ static const XMLCh gEscapeChars[XMLFormatter::EscapeFlags_Count][kEscapeCount] =
         { chNull      , chNull       , chNull        , chNull       , chNull        , chNull    , chNull }
     ,   { chAmpersand , chCloseAngle , chDoubleQuote , chOpenAngle  , chSingleQuote , chNull    , chNull }
     ,   { chAmpersand , chOpenAngle  , chDoubleQuote , chLF         , chCR          , chHTab    , chNull }
-    ,   { chAmpersand , chOpenAngle  , chCloseAngle  , chNull       , chNull        , chNull    , chNull }
+    ,   { chAmpersand , chOpenAngle  , chCloseAngle  , chCR         , chNull        , chNull    , chNull }
 };
 
 // ---------------------------------------------------------------------------
