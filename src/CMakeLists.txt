@@ -603,6 +603,7 @@ set(util_sources
   xercesc/util/EncodingValidator.cpp
   xercesc/util/HeaderDummy.cpp
   xercesc/util/HexBin.cpp
+  xercesc/util/JanitorExports.cpp
   xercesc/util/KVStringPair.cpp
   xercesc/util/Mutexes.cpp
   xercesc/util/PanicHandler.cpp
@@ -1008,6 +1009,14 @@ set(nothreadmmgr_sources
   xercesc/util/MutexManagers/NoThreadMutexMgr.cpp
 )
 
+set(stdmmgr_headers
+  xercesc/util/MutexManagers/StdMutexMgr.hpp
+)
+
+set(stdmmgr_sources
+  xercesc/util/MutexManagers/StdMutexMgr.cpp
+)
+
 set(posixmmgr_headers
   xercesc/util/MutexManagers/PosixMutexMgr.hpp
 )
@@ -1200,6 +1209,12 @@ if(XERCES_USE_MUTEXMGR_NOTHREAD)
   list(APPEND libxerces_c_HEADERS ${nothreadmmgr_headers})
 endif()
 
+if(XERCES_USE_MUTEXMGR_STD)
+  list(APPEND libxerces_c_SOURCES ${stdmmgr_sources})
+  list(APPEND libxerces_c_HEADERS ${stdmmgr_headers})
+  list(APPEND libxerces_c_DEPS Threads::Threads)
+endif()
+
 if(XERCES_USE_MUTEXMGR_POSIX)
   list(APPEND libxerces_c_SOURCES ${posixmmgr_sources})
   list(APPEND libxerces_c_HEADERS ${posixmmgr_headers})
@@ -1224,6 +1239,16 @@ if(XERCES_USE_FILEMGR_WINDOWS)
   list(APPEND libxerces_c_HEADERS ${winfmgr_headers})
 endif()
 
+# Windows resource.  With some additional work to clean it up, it
+# might be possible to use with Cygwin and MinGW.
+if(MSVC)
+  configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/xercesc/util/version.rc.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/xercesc/util/version.rc"
+    @ONLY)
+  list(APPEND libxerces_c_RESOURCES "${CMAKE_CURRENT_BINARY_DIR}/xercesc/util/version.rc")
+endif()
+
 # Definitions required for building
 add_definitions(
   -DHAVE_CONFIG_H=1
@@ -1244,7 +1269,8 @@ add_custom_target(xerces-c-headers SOURCES ${libxerces_c_HEADERS})
 set_target_properties(xerces-c-headers PROPERTIES FOLDER "Library")
 
 add_library(xerces-c
-  ${libxerces_c_SOURCES})
+  ${libxerces_c_SOURCES}
+  ${libxerces_c_RESOURCES})
 target_link_libraries(xerces-c ${libxerces_c_DEPS})
 if(XERCES_USE_NETACCESSOR_CURL)
   target_include_directories(xerces-c SYSTEM PRIVATE ${CURL_INCLUDE_DIRS})

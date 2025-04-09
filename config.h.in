@@ -186,6 +186,9 @@
 /* define if the compiler supports the std namespace */
 #undef HAVE_STD_NAMESPACE
 
+/* define if the compiler supports ISO C++11 <thread> and <mutex> */
+#undef HAVE_STD_THREAD
+
 /* Define to 1 if you have the `strcasecmp' function. */
 #undef HAVE_STRCASECMP
 
@@ -431,6 +434,9 @@
 /* Define if the std namespace is supported */
 #undef XERCES_STD_NAMESPACE
 
+/* Define as the platform's template extern attribute */
+#undef XERCES_TEMPLATE_EXTERN
+
 /* An appropriate unsigned 16 bit integer type */
 #undef XERCES_U16BIT_INT
 
@@ -460,6 +466,9 @@
 
 /* Define to use the POSIX mutex mgr */
 #undef XERCES_USE_MUTEXMGR_POSIX
+
+/* Define to use the C++ standard mutex mgr (requires C++11) */
+#undef XERCES_USE_MUTEXMGR_STD
 
 /* Define to use the Windows mutex mgr */
 #undef XERCES_USE_MUTEXMGR_WINDOWS

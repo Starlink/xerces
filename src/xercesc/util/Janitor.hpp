@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: Janitor.hpp 1449010 2013-02-22 12:02:22Z amassari $
+ * $Id: Janitor.hpp 1826420 2018-03-10 21:01:56Z rleigh $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_JANITOR_HPP)
@@ -155,6 +155,8 @@ private :
 };
 
 
+XERCES_TEMPLATE_EXTERN template class XMLUTIL_EXPORT ArrayJanitor<XMLByte>;
+XERCES_TEMPLATE_EXTERN template class XMLUTIL_EXPORT ArrayJanitor<XMLCh>;
 
 
 XERCES_CPP_NAMESPACE_END

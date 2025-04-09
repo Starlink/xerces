@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMNode.hpp 932889 2010-04-11 13:10:10Z borisk $
+ * $Id: DOMNode.hpp 1840502 2018-09-10 23:11:13Z scantor $
  */
 
 #if !defined(XERCESC_INCLUDE_GUARD_DOMNODE_HPP)
@@ -738,7 +738,10 @@ public:
     virtual short             compareDocumentPosition(const DOMNode* other) const = 0;
 
     /**
-     * This attribute returns the text content of this node and its
+     * <strong>WARNING:</strong> This method is known to be buggy and does
+     * not produce accurate results under a variety of conditions.
+     *
+     * <br>This attribute returns the text content of this node and its
      * descendants. No serialization is performed, the returned string
      * does not contain any markup. No whitespace normalization is
      * performed and the returned string does not contain the white

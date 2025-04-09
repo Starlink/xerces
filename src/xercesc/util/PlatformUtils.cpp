@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: PlatformUtils.cpp 1823971 2018-02-12 14:02:05Z rleigh $
+ * $Id: PlatformUtils.cpp 1826421 2018-03-10 21:07:56Z rleigh $
  *
  */
 
@@ -68,6 +68,9 @@
 #include <xercesc/util/XMLMutexMgr.hpp>
 #if XERCES_USE_MUTEXMGR_NOTHREAD
 #	include <xercesc/util/MutexManagers/NoThreadMutexMgr.hpp>
+#endif
+#if XERCES_USE_MUTEXMGR_STD
+#	include <xercesc/util/MutexManagers/StdMutexMgr.hpp>
 #endif
 #if XERCES_USE_MUTEXMGR_POSIX
 #	include <xercesc/util/MutexManagers/PosixMutexMgr.hpp>
@@ -721,6 +724,8 @@ XMLMutexMgr* XMLPlatformUtils::makeMutexMgr(MemoryManager* const memmgr)
 
 	#if XERCES_USE_MUTEXMGR_NOTHREAD
 		mgr = new (memmgr) NoThreadMutexMgr;
+	#elif XERCES_USE_MUTEXMGR_STD
+		mgr = new (memmgr) StdMutexMgr;
 	#elif XERCES_USE_MUTEXMGR_POSIX
 		mgr = new (memmgr) PosixMutexMgr;
 	#elif XERCES_USE_MUTEXMGR_WINDOWS

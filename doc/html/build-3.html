@@ -15,7 +15,7 @@
 
   <IMG border="0" height="6" hspace="0" src="resources/separator.gif" vspace="0" width="120"><BR>
 
-  <IMG alt="Xerces-C++ 3.2.1" border="0" height="17" hspace="0" name="side-sect-24" src="graphics/sect-24-label.jpg" vspace="0" width="120"><BR>
+  <IMG alt="Xerces-C++ 3.2.2" border="0" height="17" hspace="0" name="side-sect-24" src="graphics/sect-24-label.jpg" vspace="0" width="120"><BR>
 
      <A href="install-3.html" onMouseOut="rolloverOff('side-install-3');" onMouseOver="rolloverOn('side-install-3');"><IMG alt="Installation" border="0" height="12" hspace="0" name="side-install-3" onLoad="rolloverLoad('side-install-3','graphics/install-3-label-2.jpg','graphics/install-3-label-3.jpg');" src="graphics/install-3-label-3.jpg" vspace="0" width="120"></A><BR>
      <IMG alt="Build Instructions" border="0" height="12" hspace="0" src="graphics/build-3-label-1.jpg" vspace="0" width="120"><BR>
@@ -263,7 +263,41 @@
         <P>Thread support is enabled by default and can be disabled
            with the <CODE><FONT face="courier, monospaced">-Dthreads:BOOL=OFF</FONT></CODE> option.  If disabled,
            it will not be possible to select a mutex manager other than
-           <CODE><FONT face="courier, monospaced">nothreads</FONT></CODE>.</P>
+           <CODE><FONT face="courier, monospaced">nothreads</FONT></CODE>.  If enabled, one of the following
+           mutex managers may be selected:</P>
+
+        <TABLE border="0" cellpadding="2" cellspacing="2" width="100%">
+          <TR>
+            <TD align="center" bgcolor="#039acc" colspan="1" rowspan="1" valign="center"><FONT color="#ffffff" face="arial,helvetica,sanserif" size="-1"><B>Option</B>&nbsp;
+      </FONT></TD>
+            <TD align="center" bgcolor="#039acc" colspan="1" rowspan="1" valign="center"><FONT color="#ffffff" face="arial,helvetica,sanserif" size="-1"><B>Description</B>&nbsp;
+      </FONT></TD>
+          </TR>
+          <TR>
+            <TD align="" bgcolor="#a0ddf0" colspan="1" rowspan="1" valign="top"><FONT color="#000000" face="arial,helvetica,sanserif" size="-1"><CODE><FONT face="courier, monospaced">-Dmutex-manager=standard</FONT></CODE>&nbsp;
+      </FONT></TD>
+            <TD align="" bgcolor="#a0ddf0" colspan="1" rowspan="1" valign="top"><FONT color="#000000" face="arial,helvetica,sanserif" size="-1">Use Standard C++ mutex (requires a C++11 compiler)&nbsp;
+      </FONT></TD>
+          </TR>
+          <TR>
+            <TD align="" bgcolor="#a0ddf0" colspan="1" rowspan="1" valign="top"><FONT color="#000000" face="arial,helvetica,sanserif" size="-1"><CODE><FONT face="courier, monospaced">-Dmutex-manager=posix</FONT></CODE>&nbsp;
+      </FONT></TD>
+            <TD align="" bgcolor="#a0ddf0" colspan="1" rowspan="1" valign="top"><FONT color="#000000" face="arial,helvetica,sanserif" size="-1">Use POSIX threads (pthreads)  mutex (only on UNIX and Cygwin)&nbsp;
+      </FONT></TD>
+          </TR>
+          <TR>
+            <TD align="" bgcolor="#a0ddf0" colspan="1" rowspan="1" valign="top"><FONT color="#000000" face="arial,helvetica,sanserif" size="-1"><CODE><FONT face="courier, monospaced">-Dmutex-manager=windows</FONT></CODE>&nbsp;
+      </FONT></TD>
+            <TD align="" bgcolor="#a0ddf0" colspan="1" rowspan="1" valign="top"><FONT color="#000000" face="arial,helvetica,sanserif" size="-1">Use Windows threads mutex (Windows and MinGW only)&nbsp;
+      </FONT></TD>
+          </TR>
+          <TR>
+            <TD align="" bgcolor="#a0ddf0" colspan="1" rowspan="1" valign="top"><FONT color="#000000" face="arial,helvetica,sanserif" size="-1"><CODE><FONT face="courier, monospaced">-Dmutex-manager=nothreads</FONT></CODE>&nbsp;
+      </FONT></TD>
+            <TD align="" bgcolor="#a0ddf0" colspan="1" rowspan="1" valign="top"><FONT color="#000000" face="arial,helvetica,sanserif" size="-1">Use dummy implementation (default if threading is disabled)&nbsp;
+      </FONT></TD>
+          </TR>
+        </TABLE>
 
         <P>Shared libraries are built by default. You can use the
            <CODE><FONT face="courier, monospaced">-DBUILD_SHARED_LIBS:BOOL=OFF</FONT></CODE> option to build
@@ -411,7 +445,7 @@
         <P>As with all automake-based projects the build process is divided
            into two parts: configuration and building. The configuration
            part is performed using the <CODE><FONT face="courier, monospaced">configure</FONT></CODE> script that
-           can be found in the <CODE><FONT face="courier, monospaced">xerces-c-3.2.1</FONT></CODE> directory.
+           can be found in the <CODE><FONT face="courier, monospaced">xerces-c-3.2.2</FONT></CODE> directory.
            The build part is performed by invoking <CODE><FONT face="courier, monospaced">make</FONT></CODE>.</P>
 
         <P>Besides the standard <CODE><FONT face="courier, monospaced">configure</FONT></CODE> options which
@@ -570,7 +604,43 @@
         </TABLE>
 
         <P>Thread support is enabled by default and can be disabled with the
-           <CODE><FONT face="courier, monospaced">--disable-threads</FONT></CODE> option.</P>
+           <CODE><FONT face="courier, monospaced">--disable-threads</FONT></CODE> option.  If disabled,
+           it will not be possible to select a mutex manager other than
+           <CODE><FONT face="courier, monospaced">nothreads</FONT></CODE>.  If enabled, one of the following
+           mutex managers may be selected:</P>
+
+        <TABLE border="0" cellpadding="2" cellspacing="2" width="100%">
+          <TR>
+            <TD align="center" bgcolor="#039acc" colspan="1" rowspan="1" valign="center"><FONT color="#ffffff" face="arial,helvetica,sanserif" size="-1"><B>Option</B>&nbsp;
+      </FONT></TD>
+            <TD align="center" bgcolor="#039acc" colspan="1" rowspan="1" valign="center"><FONT color="#ffffff" face="arial,helvetica,sanserif" size="-1"><B>Description</B>&nbsp;
+      </FONT></TD>
+          </TR>
+          <TR>
+            <TD align="" bgcolor="#a0ddf0" colspan="1" rowspan="1" valign="top"><FONT color="#000000" face="arial,helvetica,sanserif" size="-1"><CODE><FONT face="courier, monospaced">--enable-mutexmgr-standard</FONT></CODE>&nbsp;
+      </FONT></TD>
+            <TD align="" bgcolor="#a0ddf0" colspan="1" rowspan="1" valign="top"><FONT color="#000000" face="arial,helvetica,sanserif" size="-1">Use Standard C++ mutex (requires a C++11 compiler)&nbsp;
+      </FONT></TD>
+          </TR>
+          <TR>
+            <TD align="" bgcolor="#a0ddf0" colspan="1" rowspan="1" valign="top"><FONT color="#000000" face="arial,helvetica,sanserif" size="-1"><CODE><FONT face="courier, monospaced">--enable-mutexmgr-posix</FONT></CODE>&nbsp;
+      </FONT></TD>
+            <TD align="" bgcolor="#a0ddf0" colspan="1" rowspan="1" valign="top"><FONT color="#000000" face="arial,helvetica,sanserif" size="-1">Use POSIX threads (pthreads)  mutex (only on UNIX and Cygwin)&nbsp;
+      </FONT></TD>
+          </TR>
+          <TR>
+            <TD align="" bgcolor="#a0ddf0" colspan="1" rowspan="1" valign="top"><FONT color="#000000" face="arial,helvetica,sanserif" size="-1"><CODE><FONT face="courier, monospaced">--enable-mutexmgr-windows</FONT></CODE>&nbsp;
+      </FONT></TD>
+            <TD align="" bgcolor="#a0ddf0" colspan="1" rowspan="1" valign="top"><FONT color="#000000" face="arial,helvetica,sanserif" size="-1">Use Windows threads mutex (Windows and MinGW only)&nbsp;
+      </FONT></TD>
+          </TR>
+          <TR>
+            <TD align="" bgcolor="#a0ddf0" colspan="1" rowspan="1" valign="top"><FONT color="#000000" face="arial,helvetica,sanserif" size="-1"><CODE><FONT face="courier, monospaced">--enable-mutexmgr-nothreads</FONT></CODE>&nbsp;
+      </FONT></TD>
+            <TD align="" bgcolor="#a0ddf0" colspan="1" rowspan="1" valign="top"><FONT color="#000000" face="arial,helvetica,sanserif" size="-1">Use dummy implementation (default if threading is disabled)&nbsp;
+      </FONT></TD>
+          </TR>
+        </TABLE>
 
         <P>By default <CODE><FONT face="courier, monospaced">configure</FONT></CODE> selects both shared and static
            libraries. You can use the <CODE><FONT face="courier, monospaced">--disable-shared</FONT></CODE> and
@@ -593,15 +663,15 @@
 
          <P>Once the configuration part is complete you can run
             <CODE><FONT face="courier, monospaced">make</FONT></CODE> (or <CODE><FONT face="courier, monospaced">gmake</FONT></CODE>). Running
-            <CODE><FONT face="courier, monospaced">make</FONT></CODE> from the <CODE><FONT face="courier, monospaced">xerces-c-3.2.1</FONT></CODE>
+            <CODE><FONT face="courier, monospaced">make</FONT></CODE> from the <CODE><FONT face="courier, monospaced">xerces-c-3.2.2</FONT></CODE>
             directory builds Xerces-C++ library and examples. The
             library is placed into the <CODE><FONT face="courier, monospaced">src/.libs</FONT></CODE> directory. If
             you like to build only the library, you can run make from
-            <CODE><FONT face="courier, monospaced">xerces-c-3.2.1/src</FONT></CODE>.</P>
+            <CODE><FONT face="courier, monospaced">xerces-c-3.2.2/src</FONT></CODE>.</P>
 
          <P>If you would like to build the tests and run the
             automated test suite, run <CODE><FONT face="courier, monospaced">make check</FONT></CODE>
-            from the <CODE><FONT face="courier, monospaced">xerces-c-3.2.1</FONT></CODE>
+            from the <CODE><FONT face="courier, monospaced">xerces-c-3.2.2</FONT></CODE>
             directory. The automated test suite required
             Perl and the <CODE><FONT face="courier, monospaced">diff</FONT></CODE> command.</P>
 
