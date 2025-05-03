@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: DOMCDATASectionImpl.cpp 678709 2008-07-22 10:56:56Z borisk $
+ * $Id$
  */
 
 #include "DOMCDATASectionImpl.hpp"
@@ -32,24 +32,22 @@
 
 XERCES_CPP_NAMESPACE_BEGIN
 
-DOMCDATASectionImpl::DOMCDATASectionImpl(DOMDocument *ownerDoc,
-                                   const XMLCh *dat)
-    : fNode(ownerDoc), fCharacterData(ownerDoc, dat)
+DOMCDATASectionImpl::DOMCDATASectionImpl(DOMDocument *ownerDoc, const XMLCh *dat)
+    : fNode(this, ownerDoc), fCharacterData(ownerDoc, dat)
 {
     fNode.setIsLeafNode(true);
 }
 
-DOMCDATASectionImpl::
-DOMCDATASectionImpl(DOMDocument *ownerDoc, const XMLCh* data, XMLSize_t n)
-    : fNode(ownerDoc), fCharacterData(ownerDoc, data, n)
+DOMCDATASectionImpl::DOMCDATASectionImpl(DOMDocument *ownerDoc, const XMLCh* data, XMLSize_t n)
+    : fNode(this, ownerDoc), fCharacterData(ownerDoc, data, n)
 {
     fNode.setIsLeafNode(true);
 }
 
 DOMCDATASectionImpl::DOMCDATASectionImpl(const DOMCDATASectionImpl &other, bool /*deep*/)
     : DOMCDATASection(other),
-    fNode(*castToNodeImpl(&other)),
-    fChild(*castToChildImpl(&other)),
+    fNode(this, other.fNode),
+    fChild(other.fChild),
     fCharacterData(other.fCharacterData)
 {
     // revisit.  Something nees to make "deep" work.
@@ -135,7 +133,12 @@ bool DOMCDATASectionImpl::getIsElementContentWhitespace() const
 const XMLCh* DOMCDATASectionImpl::getWholeText() const
 {
     DOMDocument *doc = getOwnerDocument();
-    DOMTreeWalker* pWalker=doc->createTreeWalker(doc->getDocumentElement(), DOMNodeFilter::SHOW_ALL, NULL, true);
+    if (!doc) {
+        throw DOMException(DOMException::NOT_SUPPORTED_ERR, 0, GetDOMNodeMemoryManager);
+        return 0;
+    }
+    DOMNode* root=doc->getDocumentElement();
+    DOMTreeWalker* pWalker=doc->createTreeWalker(root!=NULL?root:(DOMNode*)this, DOMNodeFilter::SHOW_ALL, NULL, true);
     pWalker->setCurrentNode((DOMNode*)this);
     // Logically-adjacent text nodes are Text or CDATASection nodes that can be visited sequentially in document order or in
     // reversed document order without entering, exiting, or passing over Element, Comment, or ProcessingInstruction nodes.
@@ -156,7 +159,7 @@ const XMLCh* DOMCDATASectionImpl::getWholeText() const
     }
     pWalker->release();
 
-    XMLCh* wholeString = (XMLCh*) (GetDOMNodeMemoryManager->allocate((buff.getLen()+1)*sizeof(XMLCh)));
+	XMLCh* wholeString = (XMLCh*)((DOMDocumentImpl*)doc)->allocate((buff.getLen()+1) * sizeof(XMLCh));
 	XMLString::copyString(wholeString, buff.getRawBuffer());
 	return wholeString;
 }
@@ -312,5 +315,9 @@ void DOMCDATASectionImpl::release()
                                                                                          {fCharacterData.replaceData(this, offset, count, arg);}
            void             DOMCDATASectionImpl::setData(const XMLCh *data)              {fCharacterData.setData(this, data);}
            void             DOMCDATASectionImpl::setNodeValue(const XMLCh  *nodeValue)   {fCharacterData.setNodeValue (this, nodeValue); }
+
+// Macro-in implementation accessors.
+DOMNODEIMPL_IMPL(DOMCDATASectionImpl);
+DOMCHILDIMPL_IMPL(DOMCDATASectionImpl);
 
 XERCES_CPP_NAMESPACE_END

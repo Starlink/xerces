@@ -16,7 +16,7 @@
  */
 
 /*
- *	$Id: MacOSUnicodeConverter.cpp 695759 2008-09-16 08:04:55Z borisk $
+ *	$Id$
  */
  
  
@@ -361,8 +361,8 @@ void
 MacOSUnicodeConverter::CopyCStringToPascal(const char* c, Str255 pas)
 {
 	int len = strlen(c);
-	if (len > sizeof(pas)-1)
-		len = sizeof(pas)-1;
+	if (len > sizeof(Str255)-1)
+		len = sizeof(Str255)-1;
 	memmove(&pas[1], c, len);
 	pas[0] = len;
 }
@@ -458,9 +458,8 @@ MacOSUnicodeConverter::makeNewXMLTranscoder(const   XMLCh* const		encodingName
 bool
 MacOSUnicodeConverter::IsMacOSUnicodeConverterSupported(void)
 {
-    return UpgradeScriptInfoToTextEncoding != (void*)NULL
-        && CreateTextToUnicodeInfoByEncoding != (void*)NULL
-        ;
+    return UpgradeScriptInfoToTextEncoding != 0
+        && CreateTextToUnicodeInfoByEncoding != 0;
 }
 
 

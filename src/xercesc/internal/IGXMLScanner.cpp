@@ -16,7 +16,7 @@
  */
 
 /*
- * $Id: IGXMLScanner.cpp 882548 2009-11-20 13:44:14Z borisk $
+ * $Id$
  */
 
 // ---------------------------------------------------------------------------
@@ -1374,7 +1374,14 @@ void IGXMLScanner::scanDocTypeDecl()
         // Get copies of the ids we got
         pubId = XMLString::replicate(bbPubId.getRawBuffer(), fMemoryManager);
         sysId = XMLString::replicate(bbSysId.getRawBuffer(), fMemoryManager);
+    }
 
+    // Insure that the ids get cleaned up, if they got allocated
+    ArrayJanitor<XMLCh> janSysId(sysId, fMemoryManager);
+    ArrayJanitor<XMLCh> janPubId(pubId, fMemoryManager);
+
+    if (hasExtSubset)
+    {
         // Skip spaces and check again for the opening of an internal subset
         fReaderMgr.skipPastSpaces();
 
@@ -1383,10 +1390,6 @@ void IGXMLScanner::scanDocTypeDecl()
             hasIntSubset = true;
         }
     }
-
-    // Insure that the ids get cleaned up, if they got allocated
-    ArrayJanitor<XMLCh> janSysId(sysId, fMemoryManager);
-    ArrayJanitor<XMLCh> janPubId(pubId, fMemoryManager);
 
     //  If we have a doc type handler and advanced callbacks are enabled,
     //  call the doctype event.
@@ -1532,13 +1535,12 @@ void IGXMLScanner::scanDocTypeDecl()
             DTDEntityDecl* declDTD = new (fMemoryManager) DTDEntityDecl(gDTDStr, false, fMemoryManager);
             declDTD->setSystemId(sysId);
             declDTD->setIsExternal(true);
-            Janitor<DTDEntityDecl> janDecl(declDTD);
 
             // Mark this one as a throw at end
             reader->setThrowAtEnd(true);
 
             // And push it onto the stack, with its pseudo name
-            fReaderMgr.pushReader(reader, declDTD);
+            fReaderMgr.pushReaderAdoptEntity(reader, declDTD);
 
             // Tell it its not in an include section
             dtdScanner.scanExtSubsetDecl(false, true);
@@ -2398,7 +2400,11 @@ bool IGXMLScanner::scanStartTagNS(bool& gotData)
                 fSchemaElemNonDeclPool->put((void*)elemDecl->getBaseName()
                 , uriId, (int)Grammar::TOP_LEVEL_SCOPE, (SchemaElementDecl*)elemDecl)
             );
-        }
+        } else {
+             fValidator->emitError(
+                 XMLValid::GrammarNotFound, getURIText(uriId)
+             );
+	}
         wasAdded = true;
     }
 
@@ -3091,13 +3097,12 @@ Grammar* IGXMLScanner::loadDTDGrammar(const InputSource& src,
     DTDEntityDecl* declDTD = new (fMemoryManager) DTDEntityDecl(gDTDStr, false, fMemoryManager);
     declDTD->setSystemId(src.getSystemId());
     declDTD->setIsExternal(true);
-    Janitor<DTDEntityDecl> janDecl(declDTD);
 
     // Mark this one as a throw at end
     newReader->setThrowAtEnd(true);
 
     // And push it onto the stack, with its pseudo name
-    fReaderMgr.pushReader(newReader, declDTD);
+    fReaderMgr.pushReaderAdoptEntity(newReader, declDTD);
 
     //  If we have a doc type handler and advanced callbacks are enabled,
     //  call the doctype event.

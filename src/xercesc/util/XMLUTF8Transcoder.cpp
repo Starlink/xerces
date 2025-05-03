@@ -16,7 +16,7 @@
  */
 
 /**
- * $Id: XMLUTF8Transcoder.cpp 932887 2010-04-11 13:04:59Z borisk $
+ * $Id$
  */
 
 // ---------------------------------------------------------------------------
@@ -178,7 +178,7 @@ XMLUTF8Transcoder::transcodeFrom(const  XMLByte* const          srcData
         if((gUTFByteIndicatorTest[trailingBytes] & *srcPtr) != gUTFByteIndicator[trailingBytes]) {
             char pos[2] = {(char)0x31, 0}; 
             char len[2] = {(char)(trailingBytes+0x31), 0};
-            char byte[2] = {*srcPtr,0};
+            char byte[2] = {(char)*srcPtr,0};
             ThrowXMLwithMemMgr3(UTFDataFormatException, XMLExcepts::UTF8_FormatError, pos, byte, len, getMemoryManager());
         }
 
@@ -246,8 +246,8 @@ XMLUTF8Transcoder::transcodeFrom(const  XMLByte* const          srcData
                 //
                 if (( *srcPtr == 0xE0) && ( *(srcPtr+1) < 0xA0)) 
                 {
-                    char byte0[2] = {*srcPtr    ,0};
-                    char byte1[2] = {*(srcPtr+1),0};
+                    char byte0[2] = {(char)*srcPtr    ,0};
+                    char byte1[2] = {(char)*(srcPtr+1),0};
 
                     ThrowXMLwithMemMgr2(UTFDataFormatException
                                       , XMLExcepts::UTF8_Invalid_3BytesSeq
@@ -284,8 +284,8 @@ XMLUTF8Transcoder::transcodeFrom(const  XMLByte* const          srcData
 
                 if ((*srcPtr == 0xED) && (*(srcPtr+1) >= 0xA0))
                 {
-                    char byte0[2] = {*srcPtr,    0};
-                    char byte1[2] = {*(srcPtr+1),0};
+                    char byte0[2] = {(char)*srcPtr,    0};
+                    char byte1[2] = {(char)*(srcPtr+1),0};
 
                      ThrowXMLwithMemMgr2(UTFDataFormatException
                               , XMLExcepts::UTF8_Irregular_3BytesSeq
@@ -310,8 +310,8 @@ XMLUTF8Transcoder::transcodeFrom(const  XMLByte* const          srcData
                 if (((*srcPtr == 0xF0) && (*(srcPtr+1) < 0x90)) ||
                     ((*srcPtr == 0xF4) && (*(srcPtr+1) > 0x8F))  )
                 {
-                    char byte0[2] = {*srcPtr    ,0};
-                    char byte1[2] = {*(srcPtr+1),0};
+                    char byte0[2] = {(char)*srcPtr    ,0};
+                    char byte1[2] = {(char)*(srcPtr+1),0};
 
                     ThrowXMLwithMemMgr2(UTFDataFormatException
                                       , XMLExcepts::UTF8_Invalid_4BytesSeq
@@ -344,7 +344,7 @@ XMLUTF8Transcoder::transcodeFrom(const  XMLByte* const          srcData
                  * surrogates, nor U+FFFE and U+FFFF (but it does allow other noncharacters).
                  ***/
                 char len[2]  = {(char)(trailingBytes+0x31), 0};
-                char byte[2] = {*srcPtr,0};
+                char byte[2] = {(char)*srcPtr,0};
 
                 ThrowXMLwithMemMgr2(UTFDataFormatException
                                   , XMLExcepts::UTF8_Exceeds_BytesLimit
@@ -391,12 +391,13 @@ XMLUTF8Transcoder::transcodeFrom(const  XMLByte* const          srcData
             //
             //  If we have enough room to store the leading and trailing
             //  chars, then lets do it. Else, pretend this one never
-            //  happened, and leave it for the next time. Since we don't
-            //  update the bytes read until the bottom of the loop, by
-            //  breaking out here its like it never happened.
+            //  happened, and leave it for the next time.
             //
             if (outPtr + 1 >= outEnd)
+            {
+                srcPtr -= (trailingBytes + 1);
                 break;
+            }
 
             // Store the leading surrogate char
             tmpVal -= 0x10000;
